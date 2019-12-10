@@ -112,6 +112,17 @@ export default {
               component: './merchantcard',
             },
             {
+              path: '/marketingActivity',
+              name: 'marketingActivity',
+              routes: [
+                {
+                  path: '/marketingActivity/addActivity',
+                  name: 'addActivity',
+                  component: './marketingActivity/addActivity',
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
