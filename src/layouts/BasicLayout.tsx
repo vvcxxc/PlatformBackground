@@ -3,20 +3,17 @@
  * You can view component api by:
  * https://github.com/ant-design/ant-design-pro-layout
  */
-
 import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
   DefaultFooter,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'umi/link';
 import { Dispatch } from 'redux';
 import { connect } from 'dva';
 import { Icon, Result, Button } from 'antd';
-import { formatMessage } from 'umi-plugin-react/locale';
-
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
 import { ConnectState } from '@/models/connect';
@@ -35,7 +32,6 @@ const noMatch = (
     }
   />
 );
-
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -51,18 +47,15 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
     [path: string]: MenuDataItem;
   };
 };
-
 /**
  * use Authorized check all menu item
  */
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map(item => {
-    const localItem = {
-      ...item,
-      children: item.children ? menuDataRender(item.children) : [],
-    };
-    return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-  });
+
+// const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
+//   menuList.map(item => {
+//     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+//     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
+//   });
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -94,6 +87,7 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
   if (!isAntDesignPro()) {
     return defaultFooterDom;
   }
+
   return (
     <>
       {defaultFooterDom}
@@ -116,21 +110,51 @@ const footerRender: BasicLayoutProps['footerRender'] = () => {
 };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  const { dispatch, children, settings, location = { pathname: '/' } } = props;
+  const [menuData, setMenuData] = useState([]);
+  const {
+    dispatch,
+    children,
+    settings,
+    location = {
+      pathname: '/',
+    },
+  } = props;
   /**
    * constructor
    */
-
-  useEffect(() => {
-    if (dispatch) {
-      dispatch({
-        type: 'user/fetchCurrent',
-      });
+  let data = [
+    {
+      "path": "/dashboard",
+      "name": "dashboard",
+      "icon": "dashboard",
+      "children": [
+        {
+          "path": "/dashboard/analysis",
+          "name": "analysis"
+        },
+        {
+          "path": "/dashboard/monitor",
+          "name": "monitor"
+        },
+        {
+          "path": "/dashboard/workplace",
+          "name": "workplace"
+        }
+      ]
     }
+  ]
+  useEffect(() => {
+    // if (dispatch) {
+    //   dispatch({
+    //     type: 'user/fetchCurrent',
+    //   });
+    // }
+    setMenuData(data)
   }, []);
   /**
    * init variables
    */
+
   const handleMenuCollapse = (payload: boolean): void => {
     if (dispatch) {
       dispatch({
@@ -138,12 +162,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         payload,
       });
     }
-  };
-  // get children authority
+  }; // get children authority
+
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
     authority: undefined,
   };
-
   return (
     <ProLayout
       logo={logo}
@@ -158,15 +181,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         if (menuItemProps.isUrl || menuItemProps.children) {
           return defaultDom;
         }
+
         return <Link to={menuItemProps.path}>{defaultDom}</Link>;
       }}
       breadcrumbRender={(routers = []) => [
         {
           path: '/',
-          breadcrumbName: formatMessage({
-            id: 'menu.home',
-            defaultMessage: 'Home',
-          }),
+          breadcrumbName: '首页',
         },
         ...routers,
       ]}
@@ -175,12 +196,11 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-          <span>{route.breadcrumbName}</span>
-        );
+            <span>{route.breadcrumbName}</span>
+          );
       }}
       footerRender={footerRender}
-      menuDataRender={menuDataRender}
-      formatMessage={formatMessage}
+      menuDataRender={() => menuData}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
       {...settings}
