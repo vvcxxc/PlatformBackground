@@ -107,6 +107,11 @@ export default {
               component: './Welcome',
             },
             {
+              path: '/merchantcard',
+              name: 'merchantcard',
+              component: './merchantcard',
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
