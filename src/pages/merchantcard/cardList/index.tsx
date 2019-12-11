@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
-import { Table, Button, Col, Divider, Form, Icon, Input, InputNumber, Row, Select } from 'antd';
+import {
+  Table,
+  Button,
+  Col,
+  Divider,
+  Form,
+  Icon,
+  Input,
+  Row,
+  Select,
+  Modal,
+  ConfigProvider,
+} from 'antd';
+import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
+import router from 'umi/router';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { TextArea } = Input;
 
 const data = [
   {
@@ -105,22 +120,134 @@ const data = [
     card_status: '未审核',
     card_num: 1000,
   },
+  {
+    key: '8',
+    num: '8',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '9',
+    num: '9',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '10',
+    num: '10',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '11',
+    num: '11',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '12',
+    num: '12',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '13',
+    num: '13',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
+  {
+    key: '14',
+    num: '14',
+    card_id: 'PC9527',
+    store_name: '多美蛋糕店',
+    address: '广东省广州市',
+    telphone: 13666666666,
+    card_time: '2019-10-10 15:30:30',
+    card_type: '现金券',
+    card_name: '50元代金券',
+    store_price: '50元',
+    card_status: '未审核',
+    card_num: 1000,
+  },
 ];
+
+interface Props {
+  dispatch: (opt: any) => any;
+  form: any;
+  cardID: any;
+  activityName: any;
+  storeName: any;
+  cardStatus: any;
+  expandForm: Boolean;
+  currentPage: Number;
+  currentPageSize: Number;
+}
 
 export default Form.create()(
   connect(({ merchantCard }: any) => merchantCard)(
-    class MerchantCard extends Component {
+    class MerchantCard extends Component<Props> {
       state = {
-        filteredInfo: null,
-        sortedInfo: null,
+        filteredInfo: {},
+        sortedInfo: {},
+        visible: false,
       };
 
-      handleChange = (pagination, filters, sorter) => {
-        // console.log('Various parameters', pagination, filters, sorter);
+      handleChange = (pagination: any, filters: any, sorter: any) => {
+        console.log('Various parameters', pagination, filters, sorter);
         this.props.dispatch({
           type: 'merchantCard/setPaginationCurrent',
           payload: {
             currentPage: pagination.current,
+            currentPageSize: pagination.pageSize,
           },
         });
         this.setState({
@@ -129,7 +256,7 @@ export default Form.create()(
         });
       };
 
-      handleSearch = e => {
+      handleSearch = (e: any) => {
         let cardID = this.props.form.getFieldValue('cardID');
         let storeName = this.props.form.getFieldValue('storeName');
         let activityName = this.props.form.getFieldValue('activityName');
@@ -144,6 +271,12 @@ export default Form.create()(
           },
         });
         e.preventDefault();
+      };
+
+      handleReject = () => {
+        this.setState({
+          visible: true,
+        });
       };
 
       handleFormReset = () => {
@@ -314,13 +447,28 @@ export default Form.create()(
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
-      handleDetails = record => {
-        console.log(record);
+      handleDetails = (record: any) => {
+        // console.log(record);
+        router.push('/merchantcard/detail');
+      };
+
+      handleOk = (e: any) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
+      };
+
+      handleCancel = (e: any) => {
+        console.log(e);
+        this.setState({
+          visible: false,
+        });
       };
 
       render() {
         let { sortedInfo, filteredInfo } = this.state;
-        const { currentPage } = this.props;
+        const { currentPage, currentPageSize } = this.props;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [
@@ -408,30 +556,52 @@ export default Form.create()(
             title: '操作',
             key: 'operation',
             width: 200,
-            render: (text, record) => (
+            render: (text: any, record: any) => (
               <span>
                 <a onClick={this.handleDetails.bind(this, record)}>查看</a>
                 <Divider type="vertical" />
                 <a>通过</a>
                 <Divider type="vertical" />
-                <a>拒绝</a>
+                <a onClick={this.handleReject.bind(this)}>拒绝</a>
               </span>
             ),
           },
         ];
         return (
-          <div>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
-            <Table
-              columns={columns}
-              dataSource={data}
-              onChange={this.handleChange}
-              pagination={{
-                defaultPageSize: 3,
-                defaultCurrent: currentPage,
-              }}
-            />
-          </div>
+          <ConfigProvider locale={zhCN}>
+            <div>
+              <div className={styles.tableListForm}>{this.renderForm()}</div>
+              <Table
+                columns={columns}
+                dataSource={data}
+                onChange={this.handleChange}
+                pagination={{
+                  defaultPageSize: currentPageSize,
+                  defaultCurrent: currentPage,
+                  showSizeChanger: true,
+                  showQuickJumper: true,
+                  showTotal: () => {
+                    return '共14条';
+                  },
+                  // onChange: (page:any,pageSize:any) => {
+                  //   console.log('page',page);
+                  //   console.log('pageSize',pageSize);
+                  // }
+                }}
+              />
+              <Modal
+                title="请输入拒绝原因"
+                centered
+                visible={this.state.visible}
+                onOk={this.handleOk}
+                onCancel={this.handleCancel}
+                okText="确定"
+                cancelText="取消"
+              >
+                <TextArea rows={4} />
+              </Modal>
+            </div>
+          </ConfigProvider>
         );
       }
     },
