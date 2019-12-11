@@ -32,7 +32,7 @@ export default class AddActivity extends Component {
             bordered={true}
           >
             <Descriptions.Item label="卡券名称">这是一个慕斯蛋糕券</Descriptions.Item>
-            <Descriptions.Item label="活动时间">2019-10-10 15:30:45</Descriptions.Item>
+            <Descriptions.Item label="发布时间">2019-10-10 15:30:45</Descriptions.Item>
             <Descriptions.Item label="活动图片">
               <img src={require('./timg.jpg')} />
             </Descriptions.Item>
@@ -48,15 +48,33 @@ export default class AddActivity extends Component {
             </Descriptions.Item>
           </Descriptions>
         </div>
-        <Button type="primary" size="large">
-          {' '}
-          Primary
-        </Button>
-        <Button type="danger" size="large">
-          {' '}
-          Primary
-        </Button>
-        {/* <Button type="Normal" size="large"> Primary</Button> */}
+        <div className={styles.detailPage}>
+          <Descriptions
+            title="卡券基本信息"
+            layout="horizontal"
+            column={1}
+            size={'small'}
+            bordered={true}
+          >
+            <Descriptions.Item label="卡券名称">50元代金券</Descriptions.Item>
+            <Descriptions.Item label="发布时间">2019-10-10 15:30:45</Descriptions.Item>
+            <Descriptions.Item label="卡券类型">现金券</Descriptions.Item>
+            <Descriptions.Item label="商品原价"> 99元</Descriptions.Item>
+            <Descriptions.Item label="卡券有效期"> 至2019年12月31日</Descriptions.Item>
+            <Descriptions.Item label="卡券数量"> 1000张</Descriptions.Item>
+          </Descriptions>
+        </div>
+        <div className={styles.buttonList}>
+          <div className={styles.clickList}>
+            <Button type="primary" size="large">
+              审核通过
+            </Button>
+            <Button type="danger" size="large">
+              拒绝通过
+            </Button>
+          </div>
+          <Button size="large"> 取消</Button>
+        </div>
       </div>
     );
   }
