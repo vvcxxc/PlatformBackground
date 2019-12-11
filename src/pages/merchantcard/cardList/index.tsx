@@ -230,6 +230,7 @@ interface Props {
   expandForm: Boolean;
   currentPage: Number;
   currentPageSize: Number;
+  location: any;
 }
 
 export default Form.create()(
@@ -239,6 +240,21 @@ export default Form.create()(
         filteredInfo: {},
         sortedInfo: {},
         visible: false,
+      };
+
+      componentDidMount = async () => {
+        const {
+          location: {
+            query: { go },
+          },
+          dispatch,
+        } = this.props;
+        if (go == 1) {
+          console.log('alert');
+          await dispatch({
+            type: 'merchantCard/resetPageModel',
+          });
+        }
       };
 
       handleChange = (pagination: any, filters: any, sorter: any) => {

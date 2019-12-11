@@ -5,8 +5,8 @@ const Model = {
     activityName: '', // 活动名称
     storeName: undefined, // 商家名称
     cardStatus: undefined, // 卡券状态
-    currentPage: 0, // 当前页
-    currentPageSize: 0, // 每页数量
+    currentPage: 1, // 当前页
+    currentPageSize: 10, // 每页数量
     expandForm: false, // 展开还是折叠
   },
   reducers: {
@@ -39,6 +39,17 @@ const Model = {
         ...state,
         currentPage: action.payload.currentPage,
         currentPageSize: action.payload.currentPageSize,
+      };
+    },
+    resetPageModel(state: any, action: any) {
+      return {
+        cardID: '', // 卡券ID
+        activityName: '', // 活动名称
+        storeName: undefined, // 商家名称
+        cardStatus: undefined, // 卡券状态
+        currentPage: 1, // 当前页
+        currentPageSize: 10, // 每页数量
+        expandForm: false, // 展开还是折叠
       };
     },
   },

@@ -111,6 +111,11 @@ export default {
               name: 'merchantcard',
               routes: [
                 {
+                  path: '/merchantcard/cardManage',
+                  name: 'cardManage',
+                  component: './merchantcard/cardManage',
+                },
+                {
                   path: '/merchantcard/cardList',
                   name: 'cardList',
                   component: './merchantcard/cardList',
@@ -119,6 +124,17 @@ export default {
                   path: '/merchantcard/detail',
                   name: 'detail',
                   component: './merchantcard/detail',
+                },
+              ],
+            },
+            {
+              path: '/activityinfo',
+              name: 'activityinfo',
+              routes: [
+                {
+                  path: '/activityinfo/cardlist',
+                  name: 'cardList',
+                  component: './activityInfo/cardList',
                 },
               ],
             },
