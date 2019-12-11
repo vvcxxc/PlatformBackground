@@ -1,11 +1,23 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Descriptions, Button, Radio, Icon } from 'antd';
+import { Descriptions, Modal, Button, Radio, Icon } from 'antd';
 import { createRequire } from 'module';
 
 export default class AddActivity extends Component {
-  state = {};
+  state = {
+    visible: false,
+  };
+  showModal = () => {
+    this.setState({
+      visible: true,
+    });
+  };
 
+  hideModal = () => {
+    this.setState({
+      visible: false,
+    });
+  };
   render() {
     return (
       <div className={styles.detail}>
@@ -34,7 +46,7 @@ export default class AddActivity extends Component {
             <Descriptions.Item label="卡券名称">这是一个慕斯蛋糕券</Descriptions.Item>
             <Descriptions.Item label="发布时间">2019-10-10 15:30:45</Descriptions.Item>
             <Descriptions.Item label="活动图片">
-              <img src={require('./timg.jpg')} />
+              <img src={require('./timg.jpg')} onClick={this.showModal} />
             </Descriptions.Item>
             <Descriptions.Item label="卡券类型">兑换券</Descriptions.Item>
             <Descriptions.Item label="商品原价"> 99元</Descriptions.Item>
@@ -75,6 +87,20 @@ export default class AddActivity extends Component {
           </div>
           <Button size="large"> 取消</Button>
         </div>
+        <Modal
+          title="活动图片"
+          visible={this.state.visible}
+          onOk={this.hideModal}
+          onCancel={this.hideModal}
+          okText="确认"
+          cancelText="取消"
+          centered
+          destroyOnClose
+          width={'auto'}
+          footer={null}
+        >
+          <img src={require('./timg.jpg')} />
+        </Modal>
       </div>
     );
   }
