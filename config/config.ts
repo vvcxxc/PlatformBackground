@@ -110,6 +110,13 @@ export default {
               path: '/merchantcard',
               name: 'merchantcard',
               component: './merchantcard',
+              routes: [
+                {
+                  path: '/merchantcard/detail',
+                  name: 'detail',
+                  component: './merchantcard/detail',
+                },
+              ],
             },
             {
               path: '/marketingActivity',
@@ -119,8 +126,8 @@ export default {
                   path: '/marketingActivity/addActivity',
                   name: 'addActivity',
                   component: './marketingActivity/addActivity',
-                }
-              ]
+                },
+              ],
             },
             {
               path: '/admin',
