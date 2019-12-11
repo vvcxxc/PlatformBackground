@@ -109,8 +109,12 @@ export default {
             {
               path: '/merchantcard',
               name: 'merchantcard',
-              component: './merchantcard',
               routes: [
+                {
+                  path: '/merchantcard/cardList',
+                  name: 'cardList',
+                  component: './merchantcard/cardList',
+                },
                 {
                   path: '/merchantcard/detail',
                   name: 'detail',

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Descriptions } from 'antd';
+import { Descriptions, Button, Radio, Icon } from 'antd';
 import { createRequire } from 'module';
 
 export default class AddActivity extends Component {
@@ -48,6 +48,15 @@ export default class AddActivity extends Component {
             </Descriptions.Item>
           </Descriptions>
         </div>
+        <Button type="primary" size="large">
+          {' '}
+          Primary
+        </Button>
+        <Button type="danger" size="large">
+          {' '}
+          Primary
+        </Button>
+        {/* <Button type="Normal" size="large"> Primary</Button> */}
       </div>
     );
   }
