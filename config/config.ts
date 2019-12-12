@@ -18,14 +18,14 @@ const plugins: IPlugin[] = [
       dva: {
         hmr: true,
       },
-      // locale: {
-      //   // default false
-      //   enable: true,
-      //   // default zh-CN
-      //   default: 'zh-CN',
-      //   // default true, when it is true, will use `navigator.language` overwrite default
-      //   baseNavigator: true,
-      // },
+      locale: {
+        // default false
+        enable: true,
+        // default zh-CN
+        default: 'zh-CN',
+        // default true, when it is true, will use `navigator.language` overwrite default
+        baseNavigator: true,
+      },
       dynamicImport: {
         loadingComponent: './components/PageLoading/index',
         webpackChunkName: true,
@@ -119,6 +119,11 @@ export default {
                   path: '/marketingActivity/addActivity',
                   name: 'addActivity',
                   component: './marketingActivity/addActivity',
+                },
+                {
+                  path: '/marketingActivity/viewActivity',
+                  name: 'viewActivity',
+                  component: './marketingActivity/viewActivity',
                 }
               ]
             },
