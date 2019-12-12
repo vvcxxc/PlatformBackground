@@ -137,10 +137,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           name: 'monitor',
         },
         {
-          "path": "/dashboard/workplace",
-          "name": "workplace"
-        }
-      ]
+          path: '/dashboard/workplace',
+          name: 'workplace',
+        },
+      ],
     },
     {
       path: '/marketingActivity',
@@ -152,13 +152,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           component: './marketingActivity/activityInfo/cardlist',
         },
         {
-          path: '/marketingActivity/merchantcard/cardlist',
+          path: '/marketingActivity/merchantcard/cardmanage',
           name: '卡券信息管理',
-          component: './marketingActivity/merchantcard/cardlist',
-        }
-      ]
+          component: './marketingActivity/merchantcard/cardmanage',
+        },
+      ],
     },
-  ]
+  ];
   useEffect(() => {
     // if (dispatch) {
     //   dispatch({

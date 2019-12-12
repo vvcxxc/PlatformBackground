@@ -4,6 +4,7 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
 import router from 'umi/router';
+import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -20,181 +21,57 @@ interface Props {
   currentPageSize: Number;
 }
 
-const data = [
-  {
-    key: '1',
-    num: '1',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '2',
-    num: '2',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '3',
-    num: '3',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '4',
-    num: '4',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '5',
-    num: '5',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '6',
-    num: '6',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '7',
-    num: '7',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '8',
-    num: '8',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '9',
-    num: '9',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '10',
-    num: '10',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '11',
-    num: '11',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '12',
-    num: '12',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '13',
-    num: '13',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '14',
-    num: '14',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '15',
-    num: '15',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '16',
-    num: '16',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '17',
-    num: '17',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '18',
-    num: '18',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '19',
-    num: '19',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-  {
-    key: '20',
-    num: '20',
-    activityName: '2019双11鹰潭区域集卡抽奖',
-    activityArea: '江西省鹰潭市',
-    enlistTime: '2019.09.09至2019.09.29',
-    activityStatus: '未生效',
-  },
-];
-
 export default Form.create()(
   connect(({ cardManage }: any) => cardManage)(
     class CardManage extends Component<Props> {
       state = {
         filteredInfo: {},
         sortedInfo: {},
+        dataList: [],
+        areaList: [],
+        loading: false,
+        total: 0,
       };
 
       componentDidMount() {
         // 设置已存在此组件
         window.sessionStorage.setItem('cardmanage', 'true');
+
+        const { activityName, storeName, status } = this.props;
+        this.getListData(activityName, storeName, status);
+
+        this.getAreaList();
       }
+
+      getListData = (name: string, area_id: string, status: string) => {
+        this.setState({
+          loading: true,
+        });
+        request('/api/v1/activity/recruit', {
+          method: 'GET',
+          params: {
+            name,
+            area_id,
+            status,
+          },
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            total: res.pagination.total,
+          });
+        });
+      };
+
+      getAreaList = () => {
+        request('/api/common/area', {
+          method: 'GET',
+        }).then(res => {
+          this.setState({
+            areaList: res.data,
+          });
+        });
+      };
 
       handleSearch = async (e: any) => {
         let ID = this.props.form.getFieldValue('ID');
@@ -211,6 +88,8 @@ export default Form.create()(
             status,
           },
         });
+
+        this.getListData(activityName, storeName, status);
       };
       handleFormReset = async () => {
         const { form, dispatch } = this.props;
@@ -235,6 +114,7 @@ export default Form.create()(
           form: { getFieldDecorator },
         } = this.props;
         const { ID, activityName, storeName, status } = this.props;
+        const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline" ref="fussy_search_form">
             <Row
@@ -244,11 +124,11 @@ export default Form.create()(
                 xl: 48,
               }}
             >
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="ID">
                   {getFieldDecorator('ID', { initialValue: ID })(<Input placeholder="请输入" />)}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
                 <FormItem label="活动名称">
                   {getFieldDecorator('activityName', { initialValue: activityName })(
@@ -256,14 +136,6 @@ export default Form.create()(
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row
-              gutter={{
-                md: 8,
-                lg: 24,
-                xl: 48,
-              }}
-            >
               <Col md={8} sm={24}>
                 <FormItem label="商家名称">
                   {getFieldDecorator('storeName', { initialValue: storeName })(
@@ -273,23 +145,9 @@ export default Form.create()(
                         width: '100%',
                       }}
                     >
-                      <Option value="0">关闭</Option>
-                      <Option value="1">运行中</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={8} sm={24}>
-                <FormItem label="活动状态">
-                  {getFieldDecorator('status', { initialValue: status })(
-                    <Select
-                      placeholder="请选择"
-                      style={{
-                        width: '100%',
-                      }}
-                    >
-                      <Option value="0">关闭</Option>
-                      <Option value="1">运行中</Option>
+                      {areaList.map((item: any) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
                     </Select>,
                   )}
                 </FormItem>
@@ -318,6 +176,30 @@ export default Form.create()(
                 </span>
               </Col>
             </Row>
+            <Row
+              gutter={{
+                md: 8,
+                lg: 24,
+                xl: 48,
+              }}
+            >
+              <Col md={8} sm={24}>
+                <FormItem label="活动状态">
+                  {getFieldDecorator('status', { initialValue: status })(
+                    <Select
+                      placeholder="请选择"
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      <Option value="0">未生效</Option>
+                      <Option value="1">招募中</Option>
+                      <Option value="2">已结束</Option>
+                    </Select>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
         );
       }
@@ -326,7 +208,8 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { ID, activityName } = this.props;
+        const { ID, activityName, storeName } = this.props;
+        const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -336,15 +219,31 @@ export default Form.create()(
                 xl: 48,
               }}
             >
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="ID">
                   {getFieldDecorator('ID', { initialValue: ID })(<Input placeholder="请输入" />)}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
                 <FormItem label="活动名称">
                   {getFieldDecorator('activityName', { initialValue: activityName })(
                     <Input placeholder="请输入" />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem label="商家名称">
+                  {getFieldDecorator('storeName', { initialValue: storeName })(
+                    <Select
+                      placeholder="请选择"
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      {areaList.map((item: any) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>,
                   )}
                 </FormItem>
               </Col>
@@ -394,50 +293,59 @@ export default Form.create()(
       handleCheckStoreActivity = (record: any) => {
         // console.log(record);
         router.push({
-          pathname: '/merchantcard/cardList',
-          // query: {
-          //   go: 1, // 是否为前进页面
-          // },
+          pathname: '/marketingActivity/merchantcard/cardList',
+          query: {
+            // go: 1, // 是否为前进页面
+            activity_id: record.id,
+          },
         });
       };
 
       render() {
-        let { sortedInfo, filteredInfo } = this.state;
+        let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [
           {
             title: '编号',
-            dataIndex: 'num',
-            key: 'num',
-            sorter: (a, b) => a.num.length - b.num.length,
-            sortOrder: sortedInfo.columnKey === 'num' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'id',
+            key: 'id',
+            // sorter: (a, b) => a.num.length - b.num.length,
+            // sortOrder: sortedInfo.columnKey === 'num' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '活动名称',
-            dataIndex: 'activityName',
-            key: 'activityName',
-            sorter: (a, b) => a.activityName.length - b.activityName.length,
-            sortOrder: sortedInfo.columnKey === 'activityName' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'name',
+            key: 'name',
+            // sorter: (a, b) => a.activityName.length - b.activityName.length,
+            // sortOrder: sortedInfo.columnKey === 'activityName' && sortedInfo.order,
+            // ellipsis: true,
+          },
+          {
+            title: '活动商圈',
+            dataIndex: 'area_name',
+            key: 'area_name',
+            // sorter: (a, b) => a.area_name.length - b.area_name.length,
+            // sortOrder: sortedInfo.columnKey === 'area_name' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '招募时间',
             dataIndex: 'enlistTime',
             key: 'enlistTime',
-            sorter: (a, b) => a.enlistTime.length - b.enlistTime.length,
-            sortOrder: sortedInfo.columnKey === 'enlistTime' && sortedInfo.order,
-            ellipsis: true,
+            // sorter: (a, b) => a.enlistTime.length - b.enlistTime.length,
+            // sortOrder: sortedInfo.columnKey === 'enlistTime' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '活动状态',
-            dataIndex: 'activityStatus',
-            key: 'activityStatus',
-            sorter: (a, b) => a.activityStatus.length - b.activityStatus.length,
-            sortOrder: sortedInfo.columnKey === 'activityStatus' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'status_name',
+            key: 'status_name',
+            // sorter: (a, b) => a.activityStatus.length - b.activityStatus.length,
+            // sortOrder: sortedInfo.columnKey === 'activityStatus' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '操作',
@@ -456,7 +364,8 @@ export default Form.create()(
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={dataList}
+                loading={loading}
                 onChange={this.handleChange}
                 pagination={{
                   defaultPageSize: currentPageSize,
@@ -464,7 +373,7 @@ export default Form.create()(
                   showSizeChanger: true,
                   showQuickJumper: true,
                   showTotal: () => {
-                    return '共4条';
+                    return `共${total}条`;
                   },
                 }}
               />
