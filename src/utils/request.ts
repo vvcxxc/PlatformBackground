@@ -56,13 +56,13 @@ const request = extend({
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
   // console.log(url)
-  let c_token = localStorage.getItem("x-auth-token");
+  let token = localStorage.getItem("token");
   let Url = 'http://192.168.2.112:8890' + url
-  if (c_token) {
+  if (token) {
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'x-auth-token': c_token
+      'x-auth-token': token
     };
     return (
       {
@@ -74,7 +74,6 @@ request.interceptors.request.use((url, options) => {
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      // 'x-auth-token': c_token
     };
     return (
       {
@@ -87,12 +86,12 @@ request.interceptors.request.use((url, options) => {
 })
 
 // // response拦截器, 处理response
-// request.interceptors.response.use((response, options) => {
-//   let token = response.headers.get("x-auth-token");
-//   if (token) {
-//     localStorage.setItem("x-auth-token", token);
-//   }
-//   return response;
-// });
+request.interceptors.response.use((response, options) => {
+  // let token = response.headers.get("x-auth-token");
+  // if (token) {
+  //   localStorage.setItem("x-auth-token", token);
+  // }
+  return response;
+});
 
 export default request;
