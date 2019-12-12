@@ -62,7 +62,7 @@ request.interceptors.request.use((url, options) => {
     const headers = {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'x-auth-token': token
+      'Authorization': token
     };
     return (
       {
