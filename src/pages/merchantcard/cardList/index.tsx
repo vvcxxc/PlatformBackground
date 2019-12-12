@@ -478,8 +478,8 @@ export default Form.create()(
       }
 
       handleDetails = (record: any) => {
-        // console.log(record);
-        router.push('/merchantcard/detail');
+        console.log(record.card_id);
+        router.push('/merchantcard/detail?id=' + record.card_id);
       };
 
       handleOk = (e: any) => {
