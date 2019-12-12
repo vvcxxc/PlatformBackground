@@ -1,26 +1,62 @@
-import { Alert, Checkbox, Icon } from 'antd';
+import { Input, Icon, Button } from 'antd';
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import styles from './style.less';
-import { ConnectState } from '@/models/connect';
+import { Dispatch } from 'redux';
 
+interface LoginProps {
+  dispatch: Dispatch<any>;
+}
+@connect(({ userLogin }: any) => userLogin)
+class Login extends Component<LoginProps> {
 
-
-@connect(({ login, loading }: ConnectState) => ({
-  userLogin: login,
-  submitting: loading.effects['login/login'],
-}))
-class Login extends Component {
-
-  state: {
-
+  state= {
+    username: '',
+    password: ''
+  }
+  componentDidMount (){
+    // console.log(this.props)
   }
 
+  inputChange = (type: string) => ({ target: { value } }) => {
+    this.setState({
+      [type]: value
+    })
+  }
+
+  login = () => {
+    const {username, password} = this.state
+    this.props.dispatch({
+      type: 'userLogin/login',
+      payload: {
+        username,
+        password
+      }
+    })
+  }
 
   render() {
+    const {username, password} = this.state
     return (
       <div className={styles.main}>
-
+        <div className={styles.box}>
+          <div className={styles.title}>平台管理后台</div>
+          <div className={styles.inputBox}>
+            <Input
+              value={username}
+              onChange={this.inputChange('username')}
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+            />
+            <Input
+              value={password}
+              type='password'
+              onChange={this.inputChange('password')}
+              prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              style={{marginTop: '20px'}}
+            />
+            <Button onClick={this.login} style={{marginTop: '20px', width: '100%'}} type='primary'>登录</Button>
+          </div>
+        </div>
       </div>
     );
   }

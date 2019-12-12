@@ -137,12 +137,28 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           name: 'monitor',
         },
         {
-          path: '/dashboard/workplace',
-          name: 'workplace',
-        },
-      ],
+          "path": "/dashboard/workplace",
+          "name": "workplace"
+        }
+      ]
     },
-  ];
+    {
+      path: '/marketingActivity',
+      name: '营销活动管理',
+      children: [
+        {
+          path: '/marketingActivity/addActivity',
+          name: 'addActivity',
+          component: './marketingActivity/addActivity',
+        },
+        {
+          path: '/marketingActivity/viewActivity',
+          name: 'viewActivity',
+          component: './marketingActivity/viewActivity',
+        }
+      ]
+    },
+  ]
   useEffect(() => {
     // if (dispatch) {
     //   dispatch({

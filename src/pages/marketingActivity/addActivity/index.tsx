@@ -1,22 +1,25 @@
 import React, {Component} from 'react'
 import styles from './index.less';
-import { Input, Select, DatePicker, Upload, Icon, List  } from 'antd'
+import { Input, Select, DatePicker, Upload, Icon, List, Button  } from 'antd'
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 import locale from 'antd/es/date-picker/locale/zh_CN';
-
-const data = [
-  'Racing car sprays burning fuel into crowd.',
-  'Japanese princess to wed commoner.',
-  'Australian walks 100km after outback crash.',
-  'Man charged over missing wedding girl.',
-  'Los Angeles battles huge wildfires.',
-];
+import upload from '@/services/oss'
+import moment from 'moment'
 
 export default class AddActivity extends Component {
   state = {
     imageUrl: '',
     loading: false,
+    rules: [], // 规则
+    name: '', // 活动名称
+    num: 0, // 卡券限制
+    brief: '', // 简介
+    cover_image: '', // 活动图片
+    area_id: '', // 区域id
+    start_date: '', // 开始时间
+    end_date: '', // 结束时间
+
   };
 
   // 选择商圈
@@ -25,8 +28,11 @@ export default class AddActivity extends Component {
   }
 
   // 选择日期
-  selectDate = (value: string) => {
-    console.log(value)
+  selectDate = (time: any) => {
+    this.setState({
+      start_date: moment(time[0]).format('YYYY-MM-DD'),
+      end_date: moment(time[1]).format('YYYY-MM-DD')
+    })
   }
 
   // 将图片转为base64
@@ -43,25 +49,57 @@ export default class AddActivity extends Component {
       return;
     }
     if (info.file.status === 'done') {
-      // Get this url from response in real world.
-      this.getBase64(info.file.originFileObj, ((imageUrl: string) =>
-        this.setState({
-          imageUrl,
-          loading: false,
-        })),
-      );
+      this.getBase64(info.file.originFileObj,(imageUrl: string) => {
+        upload(imageUrl).then(res => {
+          console.log(res)
+          this.setState({
+            imageUrl,
+            loading: false,
+            cover_image: res.data.path
+          })
+        }).catch(err => {
+          this.setState({imageUrl: '', loading: false})
+        })
+      });
     }
   }
 
   // 使用须知删除操作
   deleteItem = (index: number) => {
-    console.log(index)
+    let {rules} = this.state
+    let list:Array<string> = []
+    rules.forEach((item,idx)=>{
+      if(idx != index){
+        list.push(rules[idx])
+      }
+    })
+    this.setState({rules: list})
+  }
+
+  // 添加使用规则
+  addRules = () => {
+    let rule = document.getElementById('rule')
+    let value = rule.value
+    let {rules} = this.state
+    rules.push(value);
+    this.setState({rules})
+  }
+
+  // 输入
+  inputChange = (type: string) => ({ target: { value } }) => {
+    this.setState({[type]: value})
+  }
+
+  // 发布活动
+  submit = () => {
+    const {name, num, brief, cover_image, start_date, end_date, rules, area_id} = this.state
+    console.log(this.state)
   }
 
 
   render (){
 
-    const { imageUrl } = this.state
+    const { imageUrl, rules } = this.state
 
     const uploadButton = (
       <div className={styles.uploadDefault}>
@@ -75,12 +113,12 @@ export default class AddActivity extends Component {
         <div className={styles.header}>
           配置活动招募设置
         </div>
-
+        {/* 活动名称 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>设置活动名称</div>
-          <Input size='small' style={{width: '40%'}}/>
+          <Input size='small' style={{width: '650px'}} onChange={this.inputChange('name')}/>
         </div>
-
+        {/* 活动区域 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>设置活动区域</div>
           <Select defaultValue="lucy" style={{ width: 120 }} size='small' onChange={this.selectArea}>
@@ -92,7 +130,7 @@ export default class AddActivity extends Component {
             <Option value="Yiminghe">yiminghe</Option>
           </Select>
         </div>
-
+        {/* 活动时间 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>活动招募时间</div>
           <RangePicker
@@ -101,14 +139,14 @@ export default class AddActivity extends Component {
             locale={locale}
           />
         </div>
-
+        {/* 卡券限制 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>商家卡券限制</div>
           最多
-          <Input size='small' style={{width: '100px', margin: '0 5px'}} type='number'/>
+          <Input size='small' onChange={this.inputChange('num')} style={{width: '100px', margin: '0 5px'}} type='number'/>
           张
         </div>
-
+        {/* 上传图片 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>设置招募图片</div>
           <div style={{width: '248px', height: '122px'}}>
@@ -122,13 +160,14 @@ export default class AddActivity extends Component {
             </Upload>
           </div>
         </div>
-
+        {/* 招募规则 */}
         <div className={styles.add_layout}>
           <div className={styles.title}>设置招募规则</div>
           <div className={styles.ruleList}>
             <List
               bordered
-              dataSource={data}
+              locale={{emptyText: '暂无招募规则'}}
+              dataSource={rules}
               size='small'
               renderItem={(item,index) => (
                 <List.Item>
@@ -140,10 +179,22 @@ export default class AddActivity extends Component {
               )}
             >
             </List>
+            <div className={styles.addRule}>
+              <Input style={{width: '90%'}} id='rule'/>
+              <Button size='default' onClick={this.addRules}>添加</Button>
+            </div>
           </div>
         </div>
-
-
+        {/* 活动简介 */}
+        <div className={styles.add_layout}>
+          <div className={styles.title}>输入活动简介</div>
+          <Input size='small' style={{width: '650px'}} onChange={this.inputChange('brief')}/>
+        </div>
+        {/* 按钮 */}
+        <div className={styles.Buttons}>
+          <Button style={{marginRight: '100px', width: '100px'}} type="primary" onClick={this.submit}>发布活动</Button>
+          <Button style={{marginRight: '40px', width: '100px'}}>取消</Button>
+        </div>
       </div>
     )
   }
