@@ -128,31 +128,25 @@ export default {
               ],
             },
             {
-              path: '/activityinfo',
-              name: 'activityinfo',
-              routes: [
-                {
-                  path: '/activityinfo/cardlist',
-                  name: 'cardList',
-                  component: './activityInfo/cardList',
-                },
-              ],
-            },
-            {
               path: '/marketingActivity',
               name: 'marketingActivity',
               routes: [
                 {
-                  path: '/marketingActivity/addActivity',
-                  name: 'addActivity',
-                  component: './marketingActivity/addActivity',
+                  path: '/marketingActivity/activityinfo/cardlist',
+                  name: 'cardList',
+                  component: './marketingActivity/activityInfo/cardList',
                 },
                 {
-                  path: '/marketingActivity/viewActivity',
+                  path: '/marketingActivity/activityinfo/addActivity',
+                  name: 'addActivity',
+                  component: './marketingActivity/activityinfo/addActivity',
+                },
+                {
+                  path: '/marketingActivity/activityinfo/viewActivity',
                   name: 'viewActivity',
-                  component: './marketingActivity/viewActivity',
+                  component: './marketingActivity/activityinfo/viewActivity',
                 }
-              ]
+              ],
             },
             {
               path: '/admin',
