@@ -6,6 +6,7 @@ const { RangePicker } = DatePicker;
 import locale from 'antd/es/date-picker/locale/zh_CN';
 import upload from '@/services/oss'
 import moment from 'moment'
+import request from '@/utils/request'
 
 export default class AddActivity extends Component {
   state = {
@@ -21,6 +22,13 @@ export default class AddActivity extends Component {
     end_date: '', // 结束时间
 
   };
+
+  componentDidMount (){
+    console.log(123)
+    request('/api/common/area',{method: 'get'}).then(res => {
+      console.log(res)
+    })
+  }
 
   // 选择商圈
   selectArea = (value: string) => {
@@ -94,6 +102,21 @@ export default class AddActivity extends Component {
   submit = () => {
     const {name, num, brief, cover_image, start_date, end_date, rules, area_id} = this.state
     console.log(this.state)
+    request('/api/v1/activity/recruit',{
+      method: 'post',
+      data: {
+        name,
+        area_id,
+        start_date,
+        end_date,
+        card_num: num,
+        cover_image,
+        rules,
+        introduce: brief
+      }
+    }).then(res => {
+      console.log(res)
+    })
   }
 
 

@@ -119,6 +119,10 @@ export default Form.create()(
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
+      addActivity (){
+        router.push('/marketingActivity/activityInfo/addActivity')
+      }
+
       renderAdvancedForm() {
         const {
           form: { getFieldDecorator },
@@ -358,7 +362,7 @@ export default Form.create()(
           <ConfigProvider locale={zhCN}>
             <div>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
-              <Button type="primary" icon="plus" className={styles.addActivity}>
+              <Button type="primary" icon="plus" className={styles.addActivity} onClick={this.addActivity}>
                 新增活动
               </Button>
               <Table

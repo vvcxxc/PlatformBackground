@@ -147,14 +147,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       name: '营销活动管理',
       children: [
         {
-          path: '/marketingActivity/addActivity',
-          name: 'addActivity',
-          component: './marketingActivity/addActivity',
+          path: '/marketingActivity/activityInfo/cardlist',
+          name: '活动信息管理',
+          component: './marketingActivity/activityInfo/cardlist',
         },
         {
-          path: '/marketingActivity/viewActivity',
-          name: 'viewActivity',
-          component: './marketingActivity/viewActivity',
+          path: '/marketingActivity/merchantcard/cardlist',
+          name: '卡券信息管理',
+          component: './marketingActivity/merchantcard/cardlist',
         }
       ]
     },
