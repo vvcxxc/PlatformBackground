@@ -7,7 +7,7 @@ import ProLayout, {
   MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
   Settings,
-  DefaultFooter,
+  // DefaultFooter,
 } from '@ant-design/pro-layout';
 import React, { useEffect, useState } from 'react';
 import Link from 'umi/link';
@@ -57,57 +57,57 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 //     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
 //   });
 
-const defaultFooterDom = (
-  <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
-    links={[
-      {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
-        blankTarget: true,
-      },
-      {
-        key: 'github',
-        title: <Icon type="github" />,
-        href: 'https://github.com/ant-design/ant-design-pro',
-        blankTarget: true,
-      },
-      {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
-        blankTarget: true,
-      },
-    ]}
-  />
-);
+// const defaultFooterDom = (
+//   <DefaultFooter
+//     copyright="2019 蚂蚁金服体验技术部出品"
+//     links={[
+//       {
+//         key: 'Ant Design Pro',
+//         title: 'Ant Design Pro',
+//         href: 'https://pro.ant.design',
+//         blankTarget: true,
+//       },
+//       {
+//         key: 'github',
+//         title: <Icon type="github" />,
+//         href: 'https://github.com/ant-design/ant-design-pro',
+//         blankTarget: true,
+//       },
+//       {
+//         key: 'Ant Design',
+//         title: 'Ant Design',
+//         href: 'https://ant.design',
+//         blankTarget: true,
+//       },
+//     ]}
+//   />
+// );
 
-const footerRender: BasicLayoutProps['footerRender'] = () => {
-  if (!isAntDesignPro()) {
-    return defaultFooterDom;
-  }
+// const footerRender: BasicLayoutProps['footerRender'] = () => {
+//   if (!isAntDesignPro()) {
+//     return defaultFooterDom;
+//   }
 
-  return (
-    <>
-      {defaultFooterDom}
-      <div
-        style={{
-          padding: '0px 24px 24px',
-          textAlign: 'center',
-        }}
-      >
-        <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-          <img
-            src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-            width="82px"
-            alt="netlify logo"
-          />
-        </a>
-      </div>
-    </>
-  );
-};
+//   return (
+//     <>
+//       {defaultFooterDom}
+//       <div
+//         style={{
+//           padding: '0px 24px 24px',
+//           textAlign: 'center',
+//         }}
+//       >
+//         <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
+//           <img
+//             src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
+//             width="82px"
+//             alt="netlify logo"
+//           />
+//         </a>
+//       </div>
+//     </>
+//   );
+// };
 
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const [menuData, setMenuData] = useState([]);
@@ -124,17 +124,17 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    */
   let data = [
     {
-      "path": "/dashboard",
-      "name": "dashboard",
-      "icon": "dashboard",
-      "children": [
+      path: '/dashboard',
+      name: 'dashboard',
+      icon: 'dashboard',
+      children: [
         {
-          "path": "/dashboard/analysis",
-          "name": "analysis"
+          path: '/dashboard/analysis',
+          name: 'analysis',
         },
         {
-          "path": "/dashboard/monitor",
-          "name": "monitor"
+          path: '/dashboard/monitor',
+          name: 'monitor',
         },
         {
           "path": "/dashboard/workplace",
@@ -165,7 +165,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     //     type: 'user/fetchCurrent',
     //   });
     // }
-    setMenuData(data)
+    setMenuData(data);
   }, []);
   /**
    * init variables
@@ -212,10 +212,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         return first ? (
           <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
         ) : (
-            <span>{route.breadcrumbName}</span>
-          );
+          <span>{route.breadcrumbName}</span>
+        );
       }}
-      footerRender={footerRender}
+      // footerRender={footerRender}
       menuDataRender={() => menuData}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
