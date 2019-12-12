@@ -4,6 +4,7 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
 import router from 'umi/router';
+import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -195,6 +196,10 @@ export default Form.create()(
         // 设置已存在此组件
         window.sessionStorage.setItem('cardmanage', 'true');
       }
+
+      getListData = () => {
+        // request('')
+      };
 
       handleSearch = async (e: any) => {
         let ID = this.props.form.getFieldValue('ID');
@@ -411,33 +416,33 @@ export default Form.create()(
             title: '编号',
             dataIndex: 'num',
             key: 'num',
-            sorter: (a, b) => a.num.length - b.num.length,
-            sortOrder: sortedInfo.columnKey === 'num' && sortedInfo.order,
-            ellipsis: true,
+            // sorter: (a, b) => a.num.length - b.num.length,
+            // sortOrder: sortedInfo.columnKey === 'num' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '活动名称',
             dataIndex: 'activityName',
             key: 'activityName',
-            sorter: (a, b) => a.activityName.length - b.activityName.length,
-            sortOrder: sortedInfo.columnKey === 'activityName' && sortedInfo.order,
-            ellipsis: true,
+            // sorter: (a, b) => a.activityName.length - b.activityName.length,
+            // sortOrder: sortedInfo.columnKey === 'activityName' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '招募时间',
             dataIndex: 'enlistTime',
             key: 'enlistTime',
-            sorter: (a, b) => a.enlistTime.length - b.enlistTime.length,
-            sortOrder: sortedInfo.columnKey === 'enlistTime' && sortedInfo.order,
-            ellipsis: true,
+            // sorter: (a, b) => a.enlistTime.length - b.enlistTime.length,
+            // sortOrder: sortedInfo.columnKey === 'enlistTime' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '活动状态',
             dataIndex: 'activityStatus',
             key: 'activityStatus',
-            sorter: (a, b) => a.activityStatus.length - b.activityStatus.length,
-            sortOrder: sortedInfo.columnKey === 'activityStatus' && sortedInfo.order,
-            ellipsis: true,
+            // sorter: (a, b) => a.activityStatus.length - b.activityStatus.length,
+            // sortOrder: sortedInfo.columnKey === 'activityStatus' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '操作',
