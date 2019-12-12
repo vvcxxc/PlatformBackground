@@ -2,7 +2,7 @@ const Model = {
   namespace: 'activityInfo',
   state: {
     ID: '', // 卡券ID
-    activityName: '', // 活动名称
+    activityName: undefined, // 活动名称
     storeName: undefined, // 商家名称
     status: undefined, // 卡券状态
     expandForm: false, // 展开还是折叠
@@ -23,7 +23,7 @@ const Model = {
       return {
         ...state,
         ID: '',
-        activityName: '',
+        activityName: undefined,
         storeName: undefined,
         status: undefined,
       };
