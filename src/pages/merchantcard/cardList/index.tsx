@@ -464,8 +464,8 @@ export default Form.create()(
       }
 
       handleDetails = (record: any) => {
-        // console.log(record);
-        router.push('/merchantcard/detail');
+        console.log(record);
+        // router.push('/merchantcard/detail');
       };
 
       handleOk = (e: any) => {
