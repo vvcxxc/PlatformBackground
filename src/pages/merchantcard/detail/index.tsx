@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Descriptions, Modal, Button, Radio, Icon, message, notification } from 'antd';
+import {
+  Descriptions,
+  Modal,
+  Button,
+  Radio,
+  Icon,
+  message,
+  notification,
+  Input,
+  Spin,
+  Alert,
+} from 'antd';
 import request from '@/utils/request';
 import { router } from 'umi';
 export default class AddActivity extends Component {
   state = {
+    showLoading: false,
     visible: false,
     type: 1,
     closeVisible: false,
     confirmLoading: false,
+    refuseReason: '',
     store: {
       supplier_id: 0,
       name: '',
@@ -36,9 +49,6 @@ export default class AddActivity extends Component {
   handleOk = () => {
     this.setState({ confirmLoading: true });
     this.recruit(2);
-    setTimeout(() => {
-      this.setState({ closeVisible: false, confirmLoading: false });
-    }, 1000);
   };
   handleCancel = () => {
     this.setState({ closeVisible: false });
@@ -50,41 +60,71 @@ export default class AddActivity extends Component {
   hideModal = () => {
     this.setState({ visible: false });
   };
+  //拒绝原因
+  handleReason = (e: any) => {
+    this.setState({ refuseReason: e.target.value });
+  };
 
   componentDidMount() {
+    this.setState({ showLoading: true });
     console.log(this.props.location.query.id);
-    // let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
-    let url = '/api/v1/activity/recruit/card/1';
-    request(url, { method: 'get' }).then(res => {
-      console.log(res);
-      if (res.status_code == 200) {
-        this.setState({ store: res.data.store, card: res.data.card });
-      } else {
-        notification.open({ message: res.message });
-        // setTimeout(() => {router.goBack();}, 1500);
-      }
-    });
+    let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
+    // let url = '/api/v1/activity/recruit/card/1';
+    request(url, { method: 'get' })
+      .then(res => {
+        this.setState({ showLoading: false });
+        if (res.status_code == 200) {
+          this.setState({ store: res.data.store, card: res.data.card });
+        } else {
+          notification.open({ message: res.message });
+          setTimeout(() => {
+            router.goBack();
+          }, 1500);
+        }
+      })
+      .catch(err => {
+        this.setState({ showLoading: false });
+      });
   }
   recruit = (type: Number) => {
-    // let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
-    let url = '/api/v1/activity/recruit/card/1';
+    this.setState({ showLoading: true });
+    let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
+    // let url = '/api/v1/activity/recruit/card/1';
     request(url, {
-      method: 'get',
-      data: { status: type },
-    }).then(res => {
-      console.log(res);
-      if (res.status_code == 200) {
-        console.log(res);
-      } else {
-        notification.open({ message: res.message });
-      }
-    });
+      method: 'put',
+      data: { status: type, reason: type == 2 ? this.state.refuseReason : undefined },
+    })
+      .then(res => {
+        this.setState({ closeVisible: false, confirmLoading: false, showLoading: false });
+        if (res.status_code == 200) {
+          notification.open({ message: res.message });
+          setTimeout(() => {
+            router.goBack();
+          }, 1500);
+        } else {
+          notification.open({ message: res.message });
+        }
+      })
+      .catch(err => {
+        this.setState({ closeVisible: false, confirmLoading: false, showLoading: false });
+      });
   };
 
   render() {
     const { store, card } = this.state;
     return (
       <div className={styles.detail}>
+        {this.state.showLoading ? (
+          <div
+            className={styles.detailLoading}
+            onClick={e => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+          >
+            <Spin tip="Loading..." />
+          </div>
+        ) : null}
         <div className={styles.detailPage}>
           <Descriptions
             title="商家基本信息"
@@ -197,13 +237,17 @@ export default class AddActivity extends Component {
           <img src={'http://oss.tdianyi.com/' + card.image} />
         </Modal>
         <Modal
-          title="拒绝审批"
+          title="拒绝理由"
           visible={this.state.closeVisible}
           onOk={this.handleOk}
           confirmLoading={this.state.confirmLoading}
           onCancel={this.handleCancel}
         >
-          确定拒绝审批吗？
+          <Input
+            placeholder="请输入拒绝理由"
+            onChange={this.handleReason.bind(this)}
+            value={this.state.refuseReason}
+          />
         </Modal>
       </div>
     );
