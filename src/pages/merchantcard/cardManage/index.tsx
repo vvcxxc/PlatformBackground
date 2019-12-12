@@ -191,6 +191,11 @@ export default Form.create()(
         sortedInfo: {},
       };
 
+      componentDidMount() {
+        // 设置已存在此组件
+        window.sessionStorage.setItem('cardmanage', 'true');
+      }
+
       handleSearch = async (e: any) => {
         let ID = this.props.form.getFieldValue('ID');
         let storeName = this.props.form.getFieldValue('storeName');
@@ -390,9 +395,9 @@ export default Form.create()(
         // console.log(record);
         router.push({
           pathname: '/merchantcard/cardList',
-          query: {
-            go: 1, // 是否为前进页面
-          },
+          // query: {
+          //   go: 1, // 是否为前进页面
+          // },
         });
       };
 

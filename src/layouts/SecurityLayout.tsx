@@ -42,12 +42,12 @@ class SecurityLayout extends React.Component<SecurityLayoutProps, SecurityLayout
       redirect: window.location.href,
     });
 
-    if ((!isLogin && loading) || !isReady) {
-      return <PageLoading />;
-    }
-    if (!isLogin) {
-      return <Redirect to={`/user/login?${queryString}`}></Redirect>;
-    }
+    // if ((!isLogin && loading) || !isReady) {
+    //   return <PageLoading />;
+    // }
+    // if (!isLogin) {
+    //   return <Redirect to={`/user/login?${queryString}`}></Redirect>;
+    // }
     return children;
   }
 }
