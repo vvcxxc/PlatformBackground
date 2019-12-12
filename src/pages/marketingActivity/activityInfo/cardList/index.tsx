@@ -34,7 +34,8 @@ export default Form.create()(
       };
 
       componentDidMount = () => {
-        this.getListData();
+        const { activityName, storeName, status } = this.props;
+        this.getListData(activityName, storeName, status);
         this.getAreaList();
       };
 
@@ -119,8 +120,8 @@ export default Form.create()(
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
-      addActivity (){
-        router.push('/marketingActivity/activityInfo/addActivity')
+      addActivity() {
+        router.push('/marketingActivity/activityInfo/addActivity');
       }
 
       renderAdvancedForm() {
@@ -362,7 +363,12 @@ export default Form.create()(
           <ConfigProvider locale={zhCN}>
             <div>
               <div className={styles.tableListForm}>{this.renderForm()}</div>
-              <Button type="primary" icon="plus" className={styles.addActivity} onClick={this.addActivity}>
+              <Button
+                type="primary"
+                icon="plus"
+                className={styles.addActivity}
+                onClick={this.addActivity}
+              >
                 新增活动
               </Button>
               <Table
