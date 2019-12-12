@@ -243,19 +243,33 @@ export default Form.create()(
       };
 
       componentDidMount = async () => {
-        const {
-          location: {
-            query: { go },
-          },
-          dispatch,
-        } = this.props;
-        if (go == 1) {
-          console.log('alert');
-          await dispatch({
-            type: 'merchantCard/resetPageModel',
-          });
-        }
+        /**
+         * 判断 sessionStorage 有没 cardmanage
+         * true -- 清除数据再重新请求列表数据
+         */
+        // const { dispatch } = this.props;
+        // if (window.sessionStorage.getItem("cardmanage")) {
+        //   await dispatch({
+        //     type: "merchantCard/resetPageModel"
+        //   })
+        //   // 请求列表数据
+        // }
       };
+
+      // componentWillReceiveProps = async () => {
+      //   const {
+      //     location: {
+      //       query: { go },
+      //     },
+      //     dispatch,
+      //   } = this.props;
+      //   if (go == 1) {
+      //     console.log('alert');
+      //     await dispatch({
+      //       type: 'merchantCard/resetPageModel',
+      //     });
+      //   }
+      // };
 
       handleChange = (pagination: any, filters: any, sorter: any) => {
         console.log('Various parameters', pagination, filters, sorter);
