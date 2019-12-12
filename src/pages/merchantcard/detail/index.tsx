@@ -1,30 +1,88 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Descriptions, Modal, Button, Radio, Icon } from 'antd';
-import { createRequire } from 'module';
-import Request from '@/utils/request';
+import { Descriptions, Modal, Button, Radio, Icon, message, notification } from 'antd';
+import request from '@/utils/request';
+import { router } from 'umi';
 export default class AddActivity extends Component {
   state = {
     visible: false,
     type: 1,
+    closeVisible: false,
+    confirmLoading: false,
+    store: {
+      supplier_id: 0,
+      name: '',
+      area_name: '',
+      address: '',
+      tel: '',
+    },
+    card: {
+      name: '',
+      youhui_type: 0,
+      youhui_type_name: '',
+      price: 0,
+      total_num: 0,
+      begin_time: 0,
+      end_time: 0,
+      description: [],
+      image: '',
+      create_time: '',
+    },
   };
+  //拒绝审批
+  showCloseModal = () => {
+    this.setState({ closeVisible: true });
+  };
+  handleOk = () => {
+    this.setState({ confirmLoading: true });
+    this.recruit(2);
+    setTimeout(() => {
+      this.setState({ closeVisible: false, confirmLoading: false });
+    }, 1000);
+  };
+  handleCancel = () => {
+    this.setState({ closeVisible: false });
+  };
+  //放大图片
   showModal = () => {
-    this.setState({
-      visible: true,
+    this.setState({ visible: true });
+  };
+  hideModal = () => {
+    this.setState({ visible: false });
+  };
+
+  componentDidMount() {
+    console.log(this.props.location.query.id);
+    // let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
+    let url = '/api/v1/activity/recruit/card/1';
+    request(url, { method: 'get' }).then(res => {
+      console.log(res);
+      if (res.status_code == 200) {
+        this.setState({ store: res.data.store, card: res.data.card });
+      } else {
+        notification.open({ message: res.message });
+        // setTimeout(() => {router.goBack();}, 1500);
+      }
+    });
+  }
+  recruit = (type: Number) => {
+    // let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
+    let url = '/api/v1/activity/recruit/card/1';
+    request(url, {
+      method: 'get',
+      data: { status: type },
+    }).then(res => {
+      console.log(res);
+      if (res.status_code == 200) {
+        console.log(res);
+      } else {
+        notification.open({ message: res.message });
+      }
     });
   };
 
-  hideModal = () => {
-    this.setState({
-      visible: false,
-    });
-  };
-  componentDidMount() {
-    // Request(
-    //   url:'api/v1/activity/recruit/card/[:id]'
-    // )
-  }
   render() {
+    const { store, card } = this.state;
     return (
       <div className={styles.detail}>
         <div className={styles.detailPage}>
@@ -35,13 +93,13 @@ export default class AddActivity extends Component {
             size={'small'}
             bordered={true}
           >
-            <Descriptions.Item label="商家名称">Zhou Maomao</Descriptions.Item>
-            <Descriptions.Item label="所属区域">Hangzhou</Descriptions.Item>
-            <Descriptions.Item label="商家地址">Hangzhou, Zhejiang</Descriptions.Item>
-            <Descriptions.Item label="商家电话"> 13577778888</Descriptions.Item>
+            <Descriptions.Item label="商家名称">{store.name}</Descriptions.Item>
+            <Descriptions.Item label="所属区域">{store.area_name}</Descriptions.Item>
+            <Descriptions.Item label="商家地址">{store.address}</Descriptions.Item>
+            <Descriptions.Item label="商家电话"> {store.tel}</Descriptions.Item>
           </Descriptions>
         </div>
-        {this.state.type == 1 ? (
+        {card.youhui_type == 0 ? (
           <div className={styles.detailPage}>
             <Descriptions
               title="卡券基本信息"
@@ -50,19 +108,31 @@ export default class AddActivity extends Component {
               size={'small'}
               bordered={true}
             >
-              <Descriptions.Item label="卡券名称">这是一个慕斯蛋糕券</Descriptions.Item>
-              <Descriptions.Item label="发布时间">2019-10-10 15:30:45</Descriptions.Item>
+              <Descriptions.Item label="卡券名称">{card.name}</Descriptions.Item>
+              <Descriptions.Item label="发布时间">{card.create_time}</Descriptions.Item>
               <Descriptions.Item label="活动图片">
-                <img src={require('./timg.jpg')} onClick={this.showModal} />
+                <img
+                  src={'http://oss.tdianyi.com/' + card.image}
+                  onClick={this.showModal.bind(this, card.image)}
+                />
               </Descriptions.Item>
-              <Descriptions.Item label="卡券类型">兑换券</Descriptions.Item>
-              <Descriptions.Item label="商品原价"> 99元</Descriptions.Item>
-              <Descriptions.Item label="卡券有效期"> 至2019年12月31日</Descriptions.Item>
+              <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
+              <Descriptions.Item label="商品原价"> {card.price}元</Descriptions.Item>
+              <Descriptions.Item label="卡券有效期">
+                {' '}
+                {new Date(card.begin_time).getFullYear()}年
+                {Number(new Date(card.begin_time).getMonth()) + 1}月
+                {new Date(card.begin_time).getDate()}日至{new Date(card.end_time).getFullYear()}年
+                {Number(new Date(card.end_time).getMonth()) + 1}月
+                {new Date(card.end_time).getDate()}日
+              </Descriptions.Item>
               <Descriptions.Item label="使用须知">
                 <ul>
-                  <li>1111111111111</li>
-                  <li>2222222222222</li>
-                  <li>3333333333333</li>
+                  {card.description && card.description.length > 0
+                    ? card.description.map((item, index) => {
+                        return <li key={index}>{item}</li>;
+                      })
+                    : null}
                 </ul>
               </Descriptions.Item>
             </Descriptions>
@@ -76,25 +146,40 @@ export default class AddActivity extends Component {
               size={'small'}
               bordered={true}
             >
-              <Descriptions.Item label="卡券名称">50元代金券</Descriptions.Item>
-              <Descriptions.Item label="发布时间">2019-10-10 15:30:45</Descriptions.Item>
-              <Descriptions.Item label="卡券类型">现金券</Descriptions.Item>
-              <Descriptions.Item label="商品原价"> 99元</Descriptions.Item>
-              <Descriptions.Item label="卡券有效期"> 至2019年12月31日</Descriptions.Item>
-              <Descriptions.Item label="卡券数量"> 1000张</Descriptions.Item>
+              <Descriptions.Item label="卡券名称">{card.name}</Descriptions.Item>
+              <Descriptions.Item label="发布时间">{card.create_time}</Descriptions.Item>
+              <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
+              <Descriptions.Item label="商品原价"> {card.price}元</Descriptions.Item>
+              <Descriptions.Item label="卡券有效期">
+                {' '}
+                {new Date(card.begin_time).getFullYear()}年
+                {Number(new Date(card.begin_time).getMonth()) + 1}月
+                {new Date(card.begin_time).getDate()}日至{new Date(card.end_time).getFullYear()}年
+                {Number(new Date(card.end_time).getMonth()) + 1}月
+                {new Date(card.end_time).getDate()}日
+              </Descriptions.Item>
+              <Descriptions.Item label="卡券数量"> {card.total_num}张</Descriptions.Item>
             </Descriptions>
           </div>
         )}
         <div className={styles.buttonList}>
           <div className={styles.clickList}>
-            <Button type="primary" size="large">
+            <Button type="primary" size="large" onClick={this.recruit.bind(this, 1)}>
               审核通过
             </Button>
-            <Button type="danger" size="large">
+            <Button type="danger" size="large" onClick={this.showCloseModal}>
               拒绝通过
             </Button>
           </div>
-          <Button size="large"> 取消</Button>
+          <Button
+            size="large"
+            onClick={() => {
+              router.goBack();
+            }}
+          >
+            {' '}
+            取消
+          </Button>
         </div>
 
         <Modal
@@ -109,7 +194,16 @@ export default class AddActivity extends Component {
           width={'auto'}
           footer={null}
         >
-          <img src={require('./timg.jpg')} />
+          <img src={'http://oss.tdianyi.com/' + card.image} />
+        </Modal>
+        <Modal
+          title="拒绝审批"
+          visible={this.state.closeVisible}
+          onOk={this.handleOk}
+          confirmLoading={this.state.confirmLoading}
+          onCancel={this.handleCancel}
+        >
+          确定拒绝审批吗？
         </Modal>
       </div>
     );
