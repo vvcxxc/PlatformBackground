@@ -145,7 +145,22 @@ export default {
                   path: '/marketingActivity/activityinfo/viewActivity',
                   name: 'viewActivity',
                   component: './marketingActivity/activityinfo/viewActivity',
-                }
+                },
+                {
+                  path: '/marketingActivity/merchantcard/cardlist',
+                  name: 'cardlist',
+                  component: './marketingActivity/merchantcard/cardlist',
+                },
+                {
+                  path: '/marketingActivity/merchantcard/cardManage',
+                  name: 'cardManage',
+                  component: './marketingActivity/merchantcard/cardManage',
+                },
+                {
+                  path: '/marketingActivity/merchantcard/detail',
+                  name: 'detail',
+                  component: './marketingActivity/merchantcard/detail',
+                },
               ],
             },
             {
