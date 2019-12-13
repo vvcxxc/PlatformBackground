@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
-import { Table, Button, Col, Form, Icon, Input, Row, Select, ConfigProvider, Divider } from 'antd';
+import {
+  Table,
+  Button,
+  Col,
+  Form,
+  Icon,
+  Input,
+  Row,
+  Select,
+  ConfigProvider,
+  Divider,
+  notification,
+  Modal,
+} from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
@@ -8,6 +21,7 @@ import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { confirm } = Modal;
 
 interface Props {
   dispatch: (opt: any) => any;
@@ -326,6 +340,36 @@ export default Form.create()(
           </Form>
         );
       }
+      deletsActivity = (record: any) => {
+        console.log(record);
+        let url = '/api/v1/activity/recruit/' + record.id;
+        request(url, { method: 'DELETE' }).then(res => {
+          console.log(res);
+          if (res.status_code == 200) {
+            notification.success({ message: res.message });
+            const { activityName, storeName, status } = this.props;
+            this.getListData(activityName, storeName, status);
+          } else {
+            notification.open({ message: res.message });
+          }
+        });
+      };
+      showDeleteConfirm = (record: any) => {
+        let that = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            that.deletsActivity(record);
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      };
 
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
@@ -383,7 +427,7 @@ export default Form.create()(
                   <span>
                     <a onClick={this.handleCheckActivity.bind(this, record)}>查看活动</a>
                     <Divider type="vertical" />
-                    <a>删除活动</a>
+                    <a onClick={this.showDeleteConfirm.bind(this, record)}>删除活动</a>
                   </span>
                 ) : record.status == 1 ? (
                   <span>
