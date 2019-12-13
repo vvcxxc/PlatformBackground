@@ -533,7 +533,7 @@ export default Form.create()(
 
       handleDetails = (record: any) => {
         router.push({
-          pathname: '/merchantcard/detail',
+          pathname: '/marketingActivity/merchantcard/detail',
           query: {
             id: record.id,
           },
