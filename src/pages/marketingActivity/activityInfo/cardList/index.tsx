@@ -33,10 +33,11 @@ interface Props {
   expandForm: Boolean;
   currentPage: Number;
   currentPageSize: Number;
+  activityInfo: any;
 }
 
 export default Form.create()(
-  connect(({ activityInfo }: any) => activityInfo)(
+  connect(({ activityInfo, merchantCard }: any) => ({ activityInfo, merchantCard }))(
     class ActivityInfo extends Component<Props> {
       state = {
         filteredInfo: {},
@@ -48,9 +49,17 @@ export default Form.create()(
       };
 
       componentDidMount = () => {
-        const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+        const {
+          activityName,
+          storeName,
+          status,
+          currentPage,
+          currentPageSize,
+        } = this.props.activityInfo;
         this.getListData(activityName, storeName, status, currentPage, currentPageSize);
         this.getAreaList();
+
+        console.log(this.props);
       };
 
       handleEnlist = (record: any) => {
@@ -60,7 +69,13 @@ export default Form.create()(
             status: record.status == 1 ? 2 : 1,
           },
         }).then(res => {
-          const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+          const {
+            activityName,
+            storeName,
+            status,
+            currentPage,
+            currentPageSize,
+          } = this.props.activityInfo;
           this.getListData(activityName, storeName, status, currentPage, currentPageSize);
         });
       };
@@ -127,7 +142,7 @@ export default Form.create()(
         //   filteredInfo: filters,
         //   sortedInfo: sorter,
         // });
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.activityInfo;
         let storeName = this.props.form.getFieldValue('storeName');
         let activityName = this.props.form.getFieldValue('activityName');
         let status = this.props.form.getFieldValue('status');
@@ -150,7 +165,7 @@ export default Form.create()(
           },
         });
 
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.activityInfo;
 
         this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
@@ -168,7 +183,7 @@ export default Form.create()(
       };
 
       renderForm() {
-        const { expandForm } = this.props;
+        const { expandForm } = this.props.activityInfo;
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
@@ -176,7 +191,10 @@ export default Form.create()(
         router.push('/marketingActivity/activityInfo/addActivity');
       }
 
-      handleCheckStoreActivity = (record: any) => {
+      handleCheckStoreActivity = async (record: any) => {
+        await this.props.dispatch({
+          type: 'merchantCard/resetPageModel',
+        });
         router.push({
           pathname: '/marketingActivity/merchantcard/cardList',
           query: {
@@ -189,7 +207,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { ID, activityName, storeName, status } = this.props;
+        const { ID, activityName, storeName, status } = this.props.activityInfo;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline" ref="fussy_search_form">
@@ -279,7 +297,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { ID, activityName, storeName } = this.props;
+        const { ID, activityName, storeName } = this.props.activityInfo;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
@@ -347,8 +365,14 @@ export default Form.create()(
           console.log(res);
           if (res.status_code == 200) {
             notification.success({ message: res.message });
-            const { activityName, storeName, status } = this.props;
-            this.getListData(activityName, storeName, status);
+            const {
+              activityName,
+              storeName,
+              status,
+              currentPage,
+              currentPageSize,
+            } = this.props.activityInfo;
+            this.getListData(activityName, storeName, status, currentPage, currentPageSize);
           } else {
             notification.open({ message: res.message });
           }
@@ -373,14 +397,14 @@ export default Form.create()(
 
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.activityInfo;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [
           {
             title: '编号',
             dataIndex: 'id',
-            key: 'id',
+            // key: 'id',
             // sorter: (a, b) => a.id - b.id,
             // sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
             // ellipsis: true,
@@ -388,7 +412,7 @@ export default Form.create()(
           {
             title: '活动名称',
             dataIndex: 'name',
-            key: 'name',
+            // key: 'name',
             // sorter: (a, b) => a.name.length - b.name.length,
             // sortOrder: sortedInfo.columnKey === 'name' && sortedInfo.order,
             // ellipsis: true,
@@ -396,7 +420,7 @@ export default Form.create()(
           {
             title: '活动商圈',
             dataIndex: 'area_name',
-            key: 'area_name',
+            // key: 'area_name',
             // sorter: (a, b) => a.area_name.length - b.area_name.length,
             // sortOrder: sortedInfo.columnKey === 'area_name' && sortedInfo.order,
             // ellipsis: true,
@@ -404,7 +428,7 @@ export default Form.create()(
           {
             title: '招募时间',
             dataIndex: 'enlistTime',
-            key: 'enlistTime',
+            // key: 'enlistTime',
             // sorter: (a, b) => a.enlistTime - b.enlistTime,
             // sortOrder: sortedInfo.columnKey === 'enlistTime' && sortedInfo.order,
             // ellipsis: true,
@@ -412,14 +436,14 @@ export default Form.create()(
           {
             title: '活动状态',
             dataIndex: 'status_name',
-            key: 'status_name',
+            // key: 'status_name',
             // sorter: (a, b) => a.status_name.length - b.status_name.length,
             // sortOrder: sortedInfo.columnKey === 'status_name' && sortedInfo.order,
             // ellipsis: true,
           },
           {
             title: '操作',
-            key: 'operation',
+            // key: 'operation',
             width: 350,
             render: (text: any, record: any) => (
               <span>
@@ -466,6 +490,7 @@ export default Form.create()(
                 columns={columns}
                 dataSource={dataList}
                 onChange={this.handleChange}
+                rowKey="id"
                 loading={loading}
                 pagination={{
                   current: currentPage,

@@ -232,10 +232,11 @@ interface Props {
   currentPage: Number;
   currentPageSize: Number;
   location: any;
+  merchantCard: any;
 }
 
 export default Form.create()(
-  connect(({ merchantCard }: any) => merchantCard)(
+  connect(({ merchantCard, cardManage }: any) => ({ merchantCard, cardManage }))(
     class MerchantCard extends Component<Props> {
       state = {
         filteredInfo: {},
@@ -263,10 +264,18 @@ export default Form.create()(
         //   // 请求列表数据
         // }
 
-        const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+        const {
+          activityName,
+          storeName,
+          cardStatus,
+          currentPage,
+          currentPageSize,
+        } = this.props.merchantCard;
         this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
 
         this.getAreaList();
+
+        console.log(this.props);
       };
 
       handlePass = (record: any) => {
@@ -276,7 +285,13 @@ export default Form.create()(
             status: 1,
           },
         }).then(res => {
-          const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+          const {
+            activityName,
+            storeName,
+            cardStatus,
+            currentPage,
+            currentPageSize,
+          } = this.props.merchantCard;
           this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
         });
       };
@@ -338,7 +353,7 @@ export default Form.create()(
         //   filteredInfo: filters,
         //   sortedInfo: sorter,
         // });
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.merchantCard;
         let storeName = this.props.form.getFieldValue('storeName');
         let activityName = this.props.form.getFieldValue('activityName');
         let cardStatus = this.props.form.getFieldValue('cardStatus');
@@ -360,7 +375,7 @@ export default Form.create()(
             cardStatus,
           },
         });
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.merchantCard;
 
         this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
       };
@@ -390,7 +405,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { cardID, activityName, storeName, cardStatus } = this.props;
+        const { cardID, activityName, storeName, cardStatus } = this.props.merchantCard;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch} layout="inline" ref="fussy_search_form">
@@ -486,7 +501,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { cardID, activityName, storeName } = this.props;
+        const { cardID, activityName, storeName } = this.props.merchantCard;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch} layout="inline">
@@ -556,7 +571,7 @@ export default Form.create()(
       }
 
       renderForm() {
-        const { expandForm } = this.props;
+        const { expandForm } = this.props.merchantCard;
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
@@ -582,7 +597,13 @@ export default Form.create()(
             reason: rejectReason,
           },
         }).then(res => {
-          const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+          const {
+            activityName,
+            storeName,
+            cardStatus,
+            currentPage,
+            currentPageSize,
+          } = this.props.merchantCard;
           this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
         });
       };
@@ -601,7 +622,7 @@ export default Form.create()(
 
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.merchantCard;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [

@@ -19,10 +19,11 @@ interface Props {
   expandForm: Boolean;
   currentPage: Number;
   currentPageSize: Number;
+  cardManage: any;
 }
 
 export default Form.create()(
-  connect(({ cardManage }: any) => cardManage)(
+  connect(({ cardManage, merchantCard }: any) => ({ cardManage, merchantCard }))(
     class CardManage extends Component<Props> {
       state = {
         filteredInfo: {},
@@ -37,10 +38,18 @@ export default Form.create()(
         // 设置已存在此组件
         window.sessionStorage.setItem('cardmanage', 'true');
 
-        const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+        const {
+          activityName,
+          storeName,
+          status,
+          currentPage,
+          currentPageSize,
+        } = this.props.cardManage;
         this.getListData(activityName, storeName, status, currentPage, currentPageSize);
 
         this.getAreaList();
+
+        console.log(this.props);
       }
 
       getListData = (
@@ -97,12 +106,13 @@ export default Form.create()(
           },
         });
 
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.cardManage;
 
         this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
       handleFormReset = async () => {
-        const { form, dispatch } = this.props;
+        const { form } = this.props;
+        const { dispatch } = this.props;
         form.resetFields();
         await dispatch({
           type: 'cardManage/resetFussySearch',
@@ -115,7 +125,7 @@ export default Form.create()(
       };
 
       renderForm() {
-        const { expandForm } = this.props;
+        const { expandForm } = this.props.cardManage;
         return expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
       }
 
@@ -123,7 +133,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { ID, activityName, storeName, status } = this.props;
+        const { ID, activityName, storeName, status } = this.props.cardManage;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline" ref="fussy_search_form">
@@ -218,7 +228,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { ID, activityName, storeName } = this.props;
+        const { ID, activityName, storeName } = this.props.cardManage;
         const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
@@ -298,15 +308,18 @@ export default Form.create()(
         //   filteredInfo: filters,
         //   sortedInfo: sorter,
         // });
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.cardManage;
         let storeName = this.props.form.getFieldValue('storeName');
         let activityName = this.props.form.getFieldValue('activityName');
         let status = this.props.form.getFieldValue('status');
         this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
 
-      handleCheckStoreActivity = (record: any) => {
+      handleCheckStoreActivity = async (record: any) => {
         // console.log(record);
+        await this.props.dispatch({
+          type: 'merchantCard/resetPageModel',
+        });
         router.push({
           pathname: '/marketingActivity/merchantcard/cardList',
           query: {
@@ -318,7 +331,7 @@ export default Form.create()(
 
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
-        const { currentPage, currentPageSize } = this.props;
+        const { currentPage, currentPageSize } = this.props.cardManage;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [
