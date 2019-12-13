@@ -124,25 +124,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
    */
   let data = [
     {
-      path: '/dashboard',
-      name: 'dashboard',
-      icon: 'dashboard',
-      children: [
-        {
-          path: '/dashboard/analysis',
-          name: 'analysis',
-        },
-        {
-          path: '/dashboard/monitor',
-          name: 'monitor',
-        },
-        {
-          "path": "/dashboard/workplace",
-          "name": "workplace"
-        }
-      ]
-    },
-    {
       path: '/marketingActivity',
       name: '营销活动管理',
       children: [

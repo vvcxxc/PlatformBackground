@@ -106,27 +106,27 @@ export default {
               icon: 'smile',
               component: './Welcome',
             },
-            {
-              path: '/merchantcard',
-              name: 'merchantcard',
-              routes: [
-                {
-                  path: '/merchantcard/cardManage',
-                  name: 'cardManage',
-                  component: './merchantcard/cardManage',
-                },
-                {
-                  path: '/merchantcard/cardList',
-                  name: 'cardList',
-                  component: './merchantcard/cardList',
-                },
-                {
-                  path: '/merchantcard/detail',
-                  name: 'detail',
-                  component: './merchantcard/detail',
-                },
-              ],
-            },
+            // {
+            //   path: '/merchantcard',
+            //   name: 'merchantcard',
+            //   routes: [
+            //     {
+            //       path: '/merchantcard/cardManage',
+            //       name: 'cardManage',
+            //       component: './merchantcard/cardManage',
+            //     },
+            //     {
+            //       path: '/merchantcard/cardList',
+            //       name: 'cardList',
+            //       component: './merchantcard/cardList',
+            //     },
+            //     {
+            //       path: '/merchantcard/detail',
+            //       name: 'detail',
+            //       component: './merchantcard/detail',
+            //     },
+            //   ],
+            // },
             {
               path: '/marketingActivity',
               name: 'marketingActivity',
