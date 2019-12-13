@@ -5,8 +5,7 @@ import request from '@/utils/request'
 function ViewActivity (Props:any) {
   const [info, setInfo] = useState({rules: []})
   useEffect(()=>{
-    request('/api/v1/activity/recruit/'+ 1, {method: 'get'}).then(res => {
-      console.log(res)
+    request('/api/v1/activity/recruit/'+ Props.location.query.activity_id, {method: 'get'}).then(res => {
       setInfo(res.data)
     })
   },[])
