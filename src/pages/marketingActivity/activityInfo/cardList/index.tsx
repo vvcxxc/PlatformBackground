@@ -34,12 +34,40 @@ export default Form.create()(
       };
 
       componentDidMount = () => {
-        const { activityName, storeName, status } = this.props;
-        this.getListData(activityName, storeName, status);
+        const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
         this.getAreaList();
       };
 
-      getListData = (name: string, area_id: string, status: string) => {
+      handleEnlist = (record: any) => {
+        request(`/api/v1/activity/recruit/${record.id}`, {
+          method: 'PUT',
+          params: {
+            status: record.status == 1 ? 2 : 1,
+          },
+        }).then(res => {
+          const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+          this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+        });
+      };
+
+      handleCheckActivity = (record: any) => {
+        // console.log(record);
+        router.push({
+          pathname: '/marketingActivity/activityInfo/viewActivity',
+          query: {
+            activity_id: record.id,
+          },
+        });
+      };
+
+      getListData = (
+        name: string,
+        area_id: string,
+        status: string,
+        currentPage: any,
+        currentPageSize: any,
+      ) => {
         this.setState({
           loading: true,
         });
@@ -49,6 +77,8 @@ export default Form.create()(
             name,
             area_id,
             status,
+            page: currentPage,
+            count: currentPageSize,
           },
         }).then(res => {
           this.setState({
@@ -69,19 +99,25 @@ export default Form.create()(
         });
       };
 
-      handleChange = (pagination: any, filters: any, sorter: any) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.props.dispatch({
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        // console.log('Various parameters', pagination, filters, sorter);
+        console.log(pagination);
+        await this.props.dispatch({
           type: 'activityInfo/setPaginationCurrent',
           payload: {
             currentPage: pagination.current,
             currentPageSize: pagination.pageSize,
           },
         });
-        this.setState({
-          filteredInfo: filters,
-          sortedInfo: sorter,
-        });
+        // this.setState({
+        //   filteredInfo: filters,
+        //   sortedInfo: sorter,
+        // });
+        const { currentPage, currentPageSize } = this.props;
+        let storeName = this.props.form.getFieldValue('storeName');
+        let activityName = this.props.form.getFieldValue('activityName');
+        let status = this.props.form.getFieldValue('status');
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
 
       handleSearch = async (e: any) => {
@@ -100,7 +136,9 @@ export default Form.create()(
           },
         });
 
-        this.getListData(activityName, storeName, status);
+        const { currentPage, currentPageSize } = this.props;
+
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
       handleFormReset = async () => {
         const { form, dispatch } = this.props;
@@ -123,6 +161,15 @@ export default Form.create()(
       addActivity() {
         router.push('/marketingActivity/activityInfo/addActivity');
       }
+
+      handleCheckStoreActivity = (record: any) => {
+        router.push({
+          pathname: '/marketingActivity/merchantcard/cardList',
+          query: {
+            activity_id: record.id,
+          },
+        });
+      };
 
       renderAdvancedForm() {
         const {
@@ -334,23 +381,23 @@ export default Form.create()(
               <span>
                 {record.status == 0 ? (
                   <span>
-                    <a>查看活动</a>
+                    <a onClick={this.handleCheckActivity.bind(this, record)}>查看活动</a>
                     <Divider type="vertical" />
                     <a>删除活动</a>
                   </span>
                 ) : record.status == 1 ? (
                   <span>
-                    <a>查看活动</a>
+                    <a onClick={this.handleCheckActivity.bind(this, record)}>查看活动</a>
                     <Divider type="vertical" />
-                    <a>暂停招募</a>
+                    <a onClick={this.handleEnlist.bind(this, record)}>暂停招募</a>
                     <Divider type="vertical" />
-                    <a>查看商家活动</a>
+                    <a onClick={this.handleCheckStoreActivity.bind(this, record)}>查看商家活动</a>
                   </span>
                 ) : record.status == 2 ? (
                   <span>
-                    <a>查看活动</a>
+                    <a onClick={this.handleCheckActivity.bind(this, record)}>查看活动</a>
                     <Divider type="vertical" />
-                    <a>查看商家活动</a>
+                    <a onClick={this.handleCheckStoreActivity.bind(this, record)}>查看商家活动</a>
                   </span>
                 ) : (
                   ''
@@ -377,10 +424,12 @@ export default Form.create()(
                 onChange={this.handleChange}
                 loading={loading}
                 pagination={{
+                  current: currentPage,
+                  // defaultCurrent: currentPage,
                   defaultPageSize: currentPageSize,
-                  defaultCurrent: currentPage,
                   showSizeChanger: true,
                   showQuickJumper: true,
+                  total,
                   showTotal: () => {
                     return `共${total}条`;
                   },

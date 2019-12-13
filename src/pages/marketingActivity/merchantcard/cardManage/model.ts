@@ -6,8 +6,8 @@ const Model = {
     storeName: undefined, // 商家名称
     status: undefined, // 卡券状态
     expandForm: false, // 展开还是折叠
-    currentPage: 0, // 当前页
-    currentPageSize: 0, // 每页数量
+    currentPage: 1, // 当前页
+    currentPageSize: 10, // 每页数量
   },
   reducers: {
     setFussyForm(state: any, action: any) {
@@ -17,6 +17,7 @@ const Model = {
         activityName: action.payload.activityName,
         storeName: action.payload.storeName,
         status: action.payload.status,
+        currentPage: 1,
       };
     },
     resetFussySearch(state: any) {
