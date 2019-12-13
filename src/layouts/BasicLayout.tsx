@@ -51,64 +51,6 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
  * use Authorized check all menu item
  */
 
-// const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-//   menuList.map(item => {
-//     const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
-//     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-//   });
-
-// const defaultFooterDom = (
-//   <DefaultFooter
-//     copyright="2019 蚂蚁金服体验技术部出品"
-//     links={[
-//       {
-//         key: 'Ant Design Pro',
-//         title: 'Ant Design Pro',
-//         href: 'https://pro.ant.design',
-//         blankTarget: true,
-//       },
-//       {
-//         key: 'github',
-//         title: <Icon type="github" />,
-//         href: 'https://github.com/ant-design/ant-design-pro',
-//         blankTarget: true,
-//       },
-//       {
-//         key: 'Ant Design',
-//         title: 'Ant Design',
-//         href: 'https://ant.design',
-//         blankTarget: true,
-//       },
-//     ]}
-//   />
-// );
-
-// const footerRender: BasicLayoutProps['footerRender'] = () => {
-//   if (!isAntDesignPro()) {
-//     return defaultFooterDom;
-//   }
-
-//   return (
-//     <>
-//       {defaultFooterDom}
-//       <div
-//         style={{
-//           padding: '0px 24px 24px',
-//           textAlign: 'center',
-//         }}
-//       >
-//         <a href="https://www.netlify.com" target="_blank" rel="noopener noreferrer">
-//           <img
-//             src="https://www.netlify.com/img/global/badges/netlify-color-bg.svg"
-//             width="82px"
-//             alt="netlify logo"
-//           />
-//         </a>
-//       </div>
-//     </>
-//   );
-// };
-
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const [menuData, setMenuData] = useState([]);
   const {
@@ -165,13 +107,16 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     authority: undefined,
   };
   return (
+    <>
     <ProLayout
-      logo={logo}
-      menuHeaderRender={(logoDom, titleDom) => (
+      menuHeaderRender={(logo, title) => (
         <Link to="/">
-          {logoDom}
-          {titleDom}
+          {logo}
+          <h1>平台管理后台</h1>
         </Link>
+        // <div>
+
+        // </div>
       )}
       onCollapse={handleMenuCollapse}
       menuItemRender={(menuItemProps, defaultDom) => {
@@ -197,6 +142,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         );
       }}
       // footerRender={footerRender}
+
       menuDataRender={() => menuData}
       rightContentRender={rightProps => <RightContent {...rightProps} />}
       {...props}
@@ -206,6 +152,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {children}
       </Authorized>
     </ProLayout>
+  </>
   );
 };
 

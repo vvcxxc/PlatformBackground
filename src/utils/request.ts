@@ -4,7 +4,7 @@
  */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-
+import configs from '../../env';
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -55,7 +55,8 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
-  // console.log(url)
+  console.log(configs[process.env.API_ENV].API)
+  let API = configs[process.env.API_ENV].API || 'http://test.admin.api.tdianyi.com'
   let token = localStorage.getItem('token');
   let Url = 'http://192.168.2.112:8890' + url;
   if (token) {

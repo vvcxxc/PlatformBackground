@@ -34,11 +34,18 @@ export interface UserModelType {
   };
 }
 
+
+/**
+ * 获取用户头像和信息要改这里
+ * */
 const UserModel: UserModelType = {
   namespace: 'user',
 
   state: {
-    currentUser: {},
+    currentUser: {
+      name: '123',
+      avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
+    },
   },
 
   effects: {
