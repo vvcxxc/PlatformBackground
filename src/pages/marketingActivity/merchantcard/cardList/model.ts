@@ -2,7 +2,7 @@ const Model = {
   namespace: 'merchantCard',
   state: {
     cardID: '', // 卡券ID
-    activityName: '', // 活动名称
+    activityName: undefined, // 活动名称
     storeName: undefined, // 商家名称
     cardStatus: undefined, // 卡券状态
     currentPage: 1, // 当前页
@@ -14,7 +14,7 @@ const Model = {
       return {
         ...state,
         cardID: '',
-        activityName: '',
+        activityName: undefined,
         storeName: undefined,
         cardStatus: undefined,
       };

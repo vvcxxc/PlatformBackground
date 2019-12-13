@@ -16,209 +16,210 @@ import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
 import router from 'umi/router';
+import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
 
-const data = [
-  {
-    key: '1',
-    num: '1',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '2',
-    num: '2',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '3',
-    num: '3',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '4',
-    num: '4',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '5',
-    num: '5',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '6',
-    num: '6',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '7',
-    num: '7',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '8',
-    num: '8',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '9',
-    num: '9',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '10',
-    num: '10',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '11',
-    num: '11',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '12',
-    num: '12',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '13',
-    num: '13',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-  {
-    key: '14',
-    num: '14',
-    card_id: 'PC9527',
-    store_name: '多美蛋糕店',
-    address: '广东省广州市',
-    telphone: 13666666666,
-    card_time: '2019-10-10 15:30:30',
-    card_type: '现金券',
-    card_name: '50元代金券',
-    store_price: '50元',
-    card_status: '未审核',
-    card_num: 1000,
-  },
-];
+// const data = [
+//   {
+//     key: '1',
+//     num: '1',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '2',
+//     num: '2',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '3',
+//     num: '3',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '4',
+//     num: '4',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '5',
+//     num: '5',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '6',
+//     num: '6',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '7',
+//     num: '7',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '8',
+//     num: '8',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '9',
+//     num: '9',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '10',
+//     num: '10',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '11',
+//     num: '11',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '12',
+//     num: '12',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '13',
+//     num: '13',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+//   {
+//     key: '14',
+//     num: '14',
+//     card_id: 'PC9527',
+//     store_name: '多美蛋糕店',
+//     address: '广东省广州市',
+//     telphone: 13666666666,
+//     card_time: '2019-10-10 15:30:30',
+//     card_type: '现金券',
+//     card_name: '50元代金券',
+//     store_price: '50元',
+//     card_status: '未审核',
+//     card_num: 1000,
+//   },
+// ];
 
 interface Props {
   dispatch: (opt: any) => any;
@@ -240,6 +241,11 @@ export default Form.create()(
         filteredInfo: {},
         sortedInfo: {},
         visible: false,
+
+        dataList: [],
+        loading: false,
+        areaList: [],
+        total: 0,
       };
 
       componentDidMount = async () => {
@@ -254,22 +260,48 @@ export default Form.create()(
         //   })
         //   // 请求列表数据
         // }
+
+        const { activityName, storeName, cardStatus } = this.props;
+        this.getListData(activityName, storeName, cardStatus);
+
+        this.getAreaList();
       };
 
-      // componentWillReceiveProps = async () => {
-      //   const {
-      //     location: {
-      //       query: { go },
-      //     },
-      //     dispatch,
-      //   } = this.props;
-      //   if (go == 1) {
-      //     console.log('alert');
-      //     await dispatch({
-      //       type: 'merchantCard/resetPageModel',
-      //     });
-      //   }
-      // };
+      getListData = (name: string, area_id: string, status: string) => {
+        this.setState({
+          loading: true,
+        });
+        const {
+          location: {
+            query: { activity_id },
+          },
+        } = this.props;
+        request('/api/v1/activity/recruit/card', {
+          method: 'GET',
+          params: {
+            activity_id,
+            name,
+            area_id,
+            status,
+          },
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            total: res.pagination.total,
+          });
+        });
+      };
+
+      getAreaList = () => {
+        request('/api/common/area', {
+          method: 'GET',
+        }).then(res => {
+          this.setState({
+            areaList: res.data,
+          });
+        });
+      };
 
       handleChange = (pagination: any, filters: any, sorter: any) => {
         console.log('Various parameters', pagination, filters, sorter);
@@ -301,6 +333,8 @@ export default Form.create()(
           },
         });
         e.preventDefault();
+
+        this.getListData(activityName, storeName, cardStatus);
       };
 
       handleReject = () => {
@@ -328,6 +362,7 @@ export default Form.create()(
           form: { getFieldDecorator },
         } = this.props;
         const { cardID, activityName, storeName, cardStatus } = this.props;
+        const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch} layout="inline" ref="fussy_search_form">
             <Row
@@ -337,30 +372,22 @@ export default Form.create()(
                 xl: 48,
               }}
             >
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="卡券ID">
                   {getFieldDecorator('cardID', { initialValue: cardID })(
                     <Input placeholder="请输入" />,
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
-                <FormItem label="活动名称">
+                <FormItem label="卡券名称">
                   {getFieldDecorator('activityName', { initialValue: activityName })(
                     <Input placeholder="请输入" />,
                   )}
                 </FormItem>
               </Col>
-            </Row>
-            <Row
-              gutter={{
-                md: 8,
-                lg: 24,
-                xl: 48,
-              }}
-            >
               <Col md={8} sm={24}>
-                <FormItem label="商家名称">
+                <FormItem label="商圈名称">
                   {getFieldDecorator('storeName', { initialValue: storeName })(
                     <Select
                       placeholder="请选择"
@@ -368,23 +395,9 @@ export default Form.create()(
                         width: '100%',
                       }}
                     >
-                      <Option value="0">关闭</Option>
-                      <Option value="1">运行中</Option>
-                    </Select>,
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={8} sm={24}>
-                <FormItem label="卡券状态">
-                  {getFieldDecorator('cardStatus', { initialValue: cardStatus })(
-                    <Select
-                      placeholder="请选择"
-                      style={{
-                        width: '100%',
-                      }}
-                    >
-                      <Option value="0">关闭</Option>
-                      <Option value="1">运行中</Option>
+                      {areaList.map((item: any) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
                     </Select>,
                   )}
                 </FormItem>
@@ -413,6 +426,30 @@ export default Form.create()(
                 </span>
               </Col>
             </Row>
+            <Row
+              gutter={{
+                md: 8,
+                lg: 24,
+                xl: 48,
+              }}
+            >
+              <Col md={8} sm={24}>
+                <FormItem label="卡券状态">
+                  {getFieldDecorator('cardStatus', { initialValue: cardStatus })(
+                    <Select
+                      placeholder="请选择"
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      <Option value="0">未审核</Option>
+                      <Option value="1">已通过</Option>
+                      <Option value="2">已拒绝</Option>
+                    </Select>,
+                  )}
+                </FormItem>
+              </Col>
+            </Row>
           </Form>
         );
       }
@@ -420,7 +457,8 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { cardID, activityName } = this.props;
+        const { cardID, activityName, storeName } = this.props;
+        const { areaList } = this.state;
         return (
           <Form onSubmit={this.handleSearch} layout="inline">
             <Row
@@ -430,17 +468,33 @@ export default Form.create()(
                 xl: 48,
               }}
             >
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="卡券ID">
                   {getFieldDecorator('cardID', { initialValue: cardID })(
                     <Input placeholder="请输入" />,
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
-                <FormItem label="活动名称">
+                <FormItem label="卡券名称">
                   {getFieldDecorator('activityName', { initialValue: activityName })(
                     <Input placeholder="请输入" />,
+                  )}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem label="商圈名称">
+                  {getFieldDecorator('storeName', { initialValue: storeName })(
+                    <Select
+                      placeholder="请选择"
+                      style={{
+                        width: '100%',
+                      }}
+                    >
+                      {areaList.map((item: any) => (
+                        <Option value={item.id}>{item.name}</Option>
+                      ))}
+                    </Select>,
                   )}
                 </FormItem>
               </Col>
@@ -478,8 +532,12 @@ export default Form.create()(
       }
 
       handleDetails = (record: any) => {
-        // console.log(record);
-        router.push('/merchantcard/detail');
+        router.push({
+          pathname: '/merchantcard/detail',
+          query: {
+            id: record.id,
+          },
+        });
       };
 
       handleOk = (e: any) => {
@@ -497,90 +555,98 @@ export default Form.create()(
       };
 
       render() {
-        let { sortedInfo, filteredInfo } = this.state;
+        let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [
           {
             title: '编号',
-            dataIndex: 'num',
-            key: 'num',
-            sorter: (a, b) => a.num.length - b.num.length,
-            sortOrder: sortedInfo.columnKey === 'num' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'id',
+            key: 'id',
+            // sorter: (a, b) => a.id.length - b.id.length,
+            // sortOrder: sortedInfo.columnKey === 'id' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '卡券ID',
-            dataIndex: 'card_id',
-            key: 'card_id',
-            sorter: (a, b) => a.card_id - b.card_id,
-            sortOrder: sortedInfo.columnKey === 'card_id' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_id',
+            key: 'youhui_id',
+            // sorter: (a, b) => a.card_id - b.card_id,
+            // sortOrder: sortedInfo.columnKey === 'card_id' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '商户名称',
-            dataIndex: 'store_name',
-            key: 'store_name',
-            sorter: (a, b) => a.store_name.length - b.store_name.length,
-            sortOrder: sortedInfo.columnKey === 'store_name' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'supplier_name',
+            key: 'supplier_name',
+            // sorter: (a, b) => a.store_name.length - b.store_name.length,
+            // sortOrder: sortedInfo.columnKey === 'store_name' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '所属商圈',
-            dataIndex: 'address',
-            key: 'address',
-            sorter: (a, b) => a.address.length - b.address.length,
-            sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'area_name',
+            key: 'area_name',
+            // sorter: (a, b) => a.address.length - b.address.length,
+            // sortOrder: sortedInfo.columnKey === 'address' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '联系电话',
-            dataIndex: 'telphone',
-            key: 'telphone',
-            sorter: (a, b) => a.telphone.length - b.telphone.length,
-            sortOrder: sortedInfo.columnKey === 'telphone' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'supplier_phone',
+            key: 'supplier_phone',
+            // sorter: (a, b) => a.telphone.length - b.telphone.length,
+            // sortOrder: sortedInfo.columnKey === 'telphone' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '发券时间',
-            dataIndex: 'card_time',
-            key: 'card_time',
-            sorter: (a, b) => a.card_time.length - b.card_time.length,
-            sortOrder: sortedInfo.columnKey === 'card_time' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_create_time',
+            key: 'youhui_create_time',
+            // sorter: (a, b) => a.card_time.length - b.card_time.length,
+            // sortOrder: sortedInfo.columnKey === 'card_time' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '卡券类型',
-            dataIndex: 'card_type',
-            key: 'card_type',
-            sorter: (a, b) => a.card_type.length - b.card_type.length,
-            sortOrder: sortedInfo.columnKey === 'card_type' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_type_name',
+            key: 'youhui_type_name',
+            // sorter: (a, b) => a.card_type.length - b.card_type.length,
+            // sortOrder: sortedInfo.columnKey === 'card_type' && sortedInfo.order,
+            // ellipsis: true,
+          },
+          {
+            title: '卡券名称',
+            dataIndex: 'youhui_name',
+            key: 'youhui_name',
+            // sorter: (a, b) => a.card_type.length - b.card_type.length,
+            // sortOrder: sortedInfo.columnKey === 'card_type' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '商品价值',
-            dataIndex: 'store_price',
-            key: 'store_price',
-            sorter: (a, b) => a.store_price.length - b.store_price.length,
-            sortOrder: sortedInfo.columnKey === 'store_price' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_price',
+            key: 'youhui_price',
+            // sorter: (a, b) => a.store_price.length - b.store_price.length,
+            // sortOrder: sortedInfo.columnKey === 'store_price' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '卡券状态',
-            dataIndex: 'card_status',
-            key: 'card_status',
-            sorter: (a, b) => a.card_status.length - b.card_status.length,
-            sortOrder: sortedInfo.columnKey === 'card_status' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_publish_wait',
+            key: 'youhui_publish_wait',
+            // sorter: (a, b) => a.card_status.length - b.card_status.length,
+            // sortOrder: sortedInfo.columnKey === 'card_status' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '数量',
-            dataIndex: 'card_num',
-            key: 'card_num',
-            sorter: (a, b) => a.card_num.length - b.card_num.length,
-            sortOrder: sortedInfo.columnKey === 'card_num' && sortedInfo.order,
-            ellipsis: true,
+            dataIndex: 'youhui_total_num',
+            key: 'youhui_total_num',
+            // sorter: (a, b) => a.card_num.length - b.card_num.length,
+            // sortOrder: sortedInfo.columnKey === 'card_num' && sortedInfo.order,
+            // ellipsis: true,
           },
           {
             title: '操作',
@@ -588,11 +654,32 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <a onClick={this.handleDetails.bind(this, record)}>查看</a>
+                {/* <a onClick={this.handleDetails.bind(this, record)}>查看</a>
                 <Divider type="vertical" />
                 <a>通过</a>
                 <Divider type="vertical" />
-                <a onClick={this.handleReject.bind(this)}>拒绝</a>
+                <a onClick={this.handleReject.bind(this)}>拒绝</a> */}
+                {record.youhui_publish_wait == '未审核' ? (
+                  <span>
+                    <a onClick={this.handleDetails.bind(this, record)}>查看</a>
+                    <Divider type="vertical" />
+                    <a>通过</a>
+                    <Divider type="vertical" />
+                    <a onClick={this.handleReject.bind(this)}>拒绝</a>
+                  </span>
+                ) : record.youhui_publish_wait == '已通过' ? (
+                  <span>
+                    <a onClick={this.handleDetails.bind(this, record)}>查看</a>
+                  </span>
+                ) : record.youhui_publish_wait == '已拒绝' ? (
+                  <span>
+                    <a onClick={this.handleDetails.bind(this, record)}>查看</a>
+                    <Divider type="vertical" />
+                    <a>通过</a>
+                  </span>
+                ) : (
+                  ''
+                )}
               </span>
             ),
           },
@@ -603,7 +690,8 @@ export default Form.create()(
               <div className={styles.tableListForm}>{this.renderForm()}</div>
               <Table
                 columns={columns}
-                dataSource={data}
+                dataSource={dataList}
+                loading={loading}
                 onChange={this.handleChange}
                 pagination={{
                   defaultPageSize: currentPageSize,
@@ -611,7 +699,7 @@ export default Form.create()(
                   showSizeChanger: true,
                   showQuickJumper: true,
                   showTotal: () => {
-                    return '共14条';
+                    return `共${total}条`;
                   },
                   // onChange: (page:any,pageSize:any) => {
                   //   console.log('page',page);
