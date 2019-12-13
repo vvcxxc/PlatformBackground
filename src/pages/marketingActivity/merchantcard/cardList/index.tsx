@@ -246,6 +246,8 @@ export default Form.create()(
         loading: false,
         areaList: [],
         total: 0,
+        rejectReason: '',
+        record: {},
       };
 
       componentDidMount = async () => {
@@ -261,13 +263,31 @@ export default Form.create()(
         //   // 请求列表数据
         // }
 
-        const { activityName, storeName, cardStatus } = this.props;
-        this.getListData(activityName, storeName, cardStatus);
+        const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+        this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
 
         this.getAreaList();
       };
 
-      getListData = (name: string, area_id: string, status: string) => {
+      handlePass = (record: any) => {
+        request(`/api/v1/activity/recruit/card/${record.id}`, {
+          method: 'PUT',
+          params: {
+            status: 1,
+          },
+        }).then(res => {
+          const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+          this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+        });
+      };
+
+      getListData = (
+        name: string,
+        area_id: string,
+        status: string,
+        currentPage: any,
+        currentPageSize: any,
+      ) => {
         this.setState({
           loading: true,
         });
@@ -283,6 +303,8 @@ export default Form.create()(
             name,
             area_id,
             status,
+            page: currentPage,
+            count: currentPageSize,
           },
         }).then(res => {
           this.setState({
@@ -303,27 +325,33 @@ export default Form.create()(
         });
       };
 
-      handleChange = (pagination: any, filters: any, sorter: any) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.props.dispatch({
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        // console.log('Various parameters', pagination, filters, sorter);
+        await this.props.dispatch({
           type: 'merchantCard/setPaginationCurrent',
           payload: {
             currentPage: pagination.current,
             currentPageSize: pagination.pageSize,
           },
         });
-        this.setState({
-          filteredInfo: filters,
-          sortedInfo: sorter,
-        });
+        // this.setState({
+        //   filteredInfo: filters,
+        //   sortedInfo: sorter,
+        // });
+        const { currentPage, currentPageSize } = this.props;
+        let storeName = this.props.form.getFieldValue('storeName');
+        let activityName = this.props.form.getFieldValue('activityName');
+        let cardStatus = this.props.form.getFieldValue('cardStatus');
+        this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
       };
 
-      handleSearch = (e: any) => {
+      handleSearch = async (e: any) => {
+        e.preventDefault();
         let cardID = this.props.form.getFieldValue('cardID');
         let storeName = this.props.form.getFieldValue('storeName');
         let activityName = this.props.form.getFieldValue('activityName');
         let cardStatus = this.props.form.getFieldValue('cardStatus');
-        this.props.dispatch({
+        await this.props.dispatch({
           type: 'merchantCard/setFussyForm',
           payload: {
             cardID,
@@ -332,13 +360,14 @@ export default Form.create()(
             cardStatus,
           },
         });
-        e.preventDefault();
+        const { currentPage, currentPageSize } = this.props;
 
-        this.getListData(activityName, storeName, cardStatus);
+        this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
       };
 
-      handleReject = () => {
+      handleReject = (record: any) => {
         this.setState({
+          record,
           visible: true,
         });
       };
@@ -541,16 +570,32 @@ export default Form.create()(
       };
 
       handleOk = (e: any) => {
-        console.log(e);
+        this.setState({
+          visible: false,
+          rejectReason: '',
+        });
+        const { rejectReason, record } = this.state;
+        request(`/api/v1/activity/recruit/card/${record.id}`, {
+          method: 'PUT',
+          params: {
+            status: 2,
+            reason: rejectReason,
+          },
+        }).then(res => {
+          const { activityName, storeName, cardStatus, currentPage, currentPageSize } = this.props;
+          this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+        });
+      };
+
+      handleCancel = (e: any) => {
         this.setState({
           visible: false,
         });
       };
 
-      handleCancel = (e: any) => {
-        console.log(e);
+      handleChangeRejectReason = (e: any) => {
         this.setState({
-          visible: false,
+          rejectReason: e.target.value,
         });
       };
 
@@ -663,9 +708,9 @@ export default Form.create()(
                   <span>
                     <a onClick={this.handleDetails.bind(this, record)}>查看</a>
                     <Divider type="vertical" />
-                    <a>通过</a>
+                    <a onClick={this.handlePass.bind(this, record)}>通过</a>
                     <Divider type="vertical" />
-                    <a onClick={this.handleReject.bind(this)}>拒绝</a>
+                    <a onClick={this.handleReject.bind(this, record)}>拒绝</a>
                   </span>
                 ) : record.youhui_publish_wait == '已通过' ? (
                   <span>
@@ -675,7 +720,7 @@ export default Form.create()(
                   <span>
                     <a onClick={this.handleDetails.bind(this, record)}>查看</a>
                     <Divider type="vertical" />
-                    <a>通过</a>
+                    <a onClick={this.handlePass.bind(this, record)}>通过</a>
                   </span>
                 ) : (
                   ''
@@ -694,10 +739,12 @@ export default Form.create()(
                 loading={loading}
                 onChange={this.handleChange}
                 pagination={{
+                  current: currentPage,
+                  // defaultCurrent: currentPage,
                   defaultPageSize: currentPageSize,
-                  defaultCurrent: currentPage,
                   showSizeChanger: true,
                   showQuickJumper: true,
+                  total,
                   showTotal: () => {
                     return `共${total}条`;
                   },
@@ -716,7 +763,7 @@ export default Form.create()(
                 okText="确定"
                 cancelText="取消"
               >
-                <TextArea rows={4} />
+                <TextArea rows={4} onChange={this.handleChangeRejectReason.bind(this)} />
               </Modal>
             </div>
           </ConfigProvider>

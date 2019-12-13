@@ -37,13 +37,19 @@ export default Form.create()(
         // 设置已存在此组件
         window.sessionStorage.setItem('cardmanage', 'true');
 
-        const { activityName, storeName, status } = this.props;
-        this.getListData(activityName, storeName, status);
+        const { activityName, storeName, status, currentPage, currentPageSize } = this.props;
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
 
         this.getAreaList();
       }
 
-      getListData = (name: string, area_id: string, status: string) => {
+      getListData = (
+        name: string,
+        area_id: string,
+        status: string,
+        currentPage: any,
+        currentPageSize: any,
+      ) => {
         this.setState({
           loading: true,
         });
@@ -53,6 +59,8 @@ export default Form.create()(
             name,
             area_id,
             status,
+            page: currentPage,
+            count: currentPageSize,
           },
         }).then(res => {
           this.setState({
@@ -89,7 +97,9 @@ export default Form.create()(
           },
         });
 
-        this.getListData(activityName, storeName, status);
+        const { currentPage, currentPageSize } = this.props;
+
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
       handleFormReset = async () => {
         const { form, dispatch } = this.props;
@@ -275,19 +285,24 @@ export default Form.create()(
         );
       }
 
-      handleChange = (pagination: any, filters: any, sorter: any) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.props.dispatch({
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        // console.log('Various parameters', pagination, filters, sorter);
+        await this.props.dispatch({
           type: 'cardManage/setPaginationCurrent',
           payload: {
             currentPage: pagination.current,
             currentPageSize: pagination.pageSize,
           },
         });
-        this.setState({
-          filteredInfo: filters,
-          sortedInfo: sorter,
-        });
+        // this.setState({
+        //   filteredInfo: filters,
+        //   sortedInfo: sorter,
+        // });
+        const { currentPage, currentPageSize } = this.props;
+        let storeName = this.props.form.getFieldValue('storeName');
+        let activityName = this.props.form.getFieldValue('activityName');
+        let status = this.props.form.getFieldValue('status');
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
 
       handleCheckStoreActivity = (record: any) => {
@@ -368,10 +383,12 @@ export default Form.create()(
                 loading={loading}
                 onChange={this.handleChange}
                 pagination={{
+                  current: currentPage,
+                  // defaultCurrent: currentPage,
                   defaultPageSize: currentPageSize,
-                  defaultCurrent: currentPage,
                   showSizeChanger: true,
                   showQuickJumper: true,
+                  total,
                   showTotal: () => {
                     return `共${total}条`;
                   },

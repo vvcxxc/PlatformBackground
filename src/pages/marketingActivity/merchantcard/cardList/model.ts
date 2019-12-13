@@ -17,6 +17,7 @@ const Model = {
         activityName: undefined,
         storeName: undefined,
         cardStatus: undefined,
+        currentPage: 1,
       };
     },
     setFussyForm(state, action) {
@@ -26,6 +27,7 @@ const Model = {
         activityName: action.payload.activityName,
         storeName: action.payload.storeName,
         cardStatus: action.payload.cardStatus,
+        currentPage: 1,
       };
     },
     switchExpandForm(state, action) {
