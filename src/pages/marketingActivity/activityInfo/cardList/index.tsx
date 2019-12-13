@@ -11,6 +11,7 @@ import {
   ConfigProvider,
   Divider,
   notification,
+  Modal,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -20,6 +21,7 @@ import request from '@/utils/request';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const { confirm } = Modal;
 
 interface Props {
   dispatch: (opt: any) => any;
@@ -291,7 +293,7 @@ export default Form.create()(
           </Form>
         );
       }
-      deletsActivity = (record: any, e: any) => {
+      deletsActivity = (record: any) => {
         console.log(record);
         let url = '/api/v1/activity/recruit/' + record.id;
         request(url, { method: 'DELETE' }).then(res => {
@@ -300,12 +302,28 @@ export default Form.create()(
             notification.success({ message: res.message });
             const { activityName, storeName, status } = this.props;
             this.getListData(activityName, storeName, status);
-            this.getAreaList();
           } else {
             notification.open({ message: res.message });
           }
         });
       };
+      showDeleteConfirm = (record: any) => {
+        let that = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该项吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            that.deletsActivity(record);
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      };
+
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props;
@@ -362,7 +380,7 @@ export default Form.create()(
                   <span>
                     <a>查看活动</a>
                     <Divider type="vertical" />
-                    <a onClick={this.deletsActivity.bind(this, record)}>删除活动</a>
+                    <a onClick={this.showDeleteConfirm.bind(this, record)}>删除活动</a>
                   </span>
                 ) : record.status == 1 ? (
                   <span>
