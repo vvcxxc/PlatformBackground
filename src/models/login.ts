@@ -67,16 +67,17 @@ const Model: LoginModelType = {
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
       // redirect
-      if (window.location.pathname !== '/user/login' && !redirect) {
-        yield put(
-          routerRedux.replace({
-            pathname: '/user/login',
-            search: stringify({
-              redirect: window.location.href,
-            }),
-          }),
-        );
-      }
+
+      // if (window.location.pathname !== '/user/login' && !redirect) {
+      //   yield put(
+      //     routerRedux.replace({
+      //       pathname: '/user/login',
+      //       search: stringify({
+      //         redirect: window.location.href,
+      //       }),
+      //     }),
+      //   );
+      // }
     },
   },
 
