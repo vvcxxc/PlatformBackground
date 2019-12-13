@@ -311,7 +311,7 @@ export default Form.create()(
         let that = this;
         confirm({
           title: '删除操作',
-          content: '确定要删除该项吗?',
+          content: '确定要删除该活动吗?',
           okText: '确定',
           okType: 'danger',
           cancelText: '取消',
