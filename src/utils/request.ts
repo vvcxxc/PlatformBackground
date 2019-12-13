@@ -56,34 +56,29 @@ const request = extend({
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
   // console.log(url)
-  let token = localStorage.getItem("token");
-  let Url = 'http://192.168.2.112:8890' + url
+  let token = localStorage.getItem('token');
+  let Url = 'http://192.168.2.112:8890' + url;
   if (token) {
     const headers = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': token
+      Accept: 'application/json',
+      Authorization: token,
     };
-    return (
-      {
-        url: Url,
-        options: { ...options, headers: headers },
-      }
-    );
+    return {
+      url: Url,
+      options: { ...options, headers: headers },
+    };
   } else {
     const headers = {
       'Content-Type': 'application/json',
-      'Accept': 'application/json',
+      Accept: 'application/json',
     };
-    return (
-      {
-        url: Url,
-        options: { ...options, headers: headers},
-      }
-    );
+    return {
+      url: Url,
+      options: { ...options, headers: headers },
+    };
   }
-
-})
+});
 
 // // response拦截器, 处理response
 request.interceptors.response.use((response, options) => {

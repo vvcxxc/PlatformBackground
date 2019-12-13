@@ -1,5 +1,17 @@
 import React, { Component } from 'react';
-import { Table, Button, Col, Form, Icon, Input, Row, Select, ConfigProvider, Divider } from 'antd';
+import {
+  Table,
+  Button,
+  Col,
+  Form,
+  Icon,
+  Input,
+  Row,
+  Select,
+  ConfigProvider,
+  Divider,
+  notification,
+} from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
 import styles from './index.less';
@@ -279,7 +291,21 @@ export default Form.create()(
           </Form>
         );
       }
-
+      deletsActivity = (record: any, e: any) => {
+        console.log(record);
+        let url = '/api/v1/activity/recruit/' + record.id;
+        request(url, { method: 'DELETE' }).then(res => {
+          console.log(res);
+          if (res.status_code == 200) {
+            notification.success({ message: res.message });
+            const { activityName, storeName, status } = this.props;
+            this.getListData(activityName, storeName, status);
+            this.getAreaList();
+          } else {
+            notification.open({ message: res.message });
+          }
+        });
+      };
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props;
@@ -336,7 +362,7 @@ export default Form.create()(
                   <span>
                     <a>查看活动</a>
                     <Divider type="vertical" />
-                    <a>删除活动</a>
+                    <a onClick={this.deletsActivity.bind(this, record)}>删除活动</a>
                   </span>
                 ) : record.status == 1 ? (
                   <span>
