@@ -152,6 +152,11 @@ export default {
                   component: './lotteryDrawActivity/containerTruck/containerTruckList',
                 },
                 {
+                  path: '/lotteryDrawActivity/containerTruck/addActivity',
+                  name: 'addActivity',
+                  component: './lotteryDrawActivity/containerTruck/addActivity',
+                },
+                {
                   path: '/lotteryDrawActivity/containerTruck/card',
                   name: 'containerTruckList',
                   routes: [
