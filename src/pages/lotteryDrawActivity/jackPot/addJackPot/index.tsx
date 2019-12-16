@@ -14,9 +14,11 @@ import {
   Table,
   Divider,
   Tag,
+  Modal,
 } from 'antd';
 import { router } from 'umi';
 import request from '@/utils/request';
+import TabList from './TabList';
 const { Title } = Typography;
 export default class AddJackPot extends Component {
   state = {
@@ -42,12 +44,19 @@ export default class AddJackPot extends Component {
         name: '小米充电宝',
       },
     ],
+    closeVisible: false,
   };
   handleMenuClick = (type: Number, e: any) => {
     this.setState({ menuCheck: type });
   };
   handleActiviutyClick = (Name: String, e: any) => {
     this.setState({ activityCheck: Name });
+  };
+  handleOk = () => {
+    this.setState({ closeVisible: false });
+  };
+  handleCancel = () => {
+    this.setState({ closeVisible: false });
   };
   render() {
     const menu = (
@@ -177,7 +186,15 @@ export default class AddJackPot extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="奖品数量">已选择X份</Descriptions.Item>
               <Descriptions.Item label="选择实物">
-                <Button type="link">点击选择卡券</Button>
+                <Button
+                  type="link"
+                  className={styles.showContentBtn}
+                  onClick={() => {
+                    this.setState({ closeVisible: true });
+                  }}
+                >
+                  点击选择卡券
+                </Button>
               </Descriptions.Item>
               <Descriptions.Item label="设定奖品中奖率">
                 <Table dataSource={this.state.dataSource} columns={columns} pagination={false} />
@@ -191,6 +208,16 @@ export default class AddJackPot extends Component {
           </Button>
           <Button className={styles.btn}>取消</Button>
         </div>
+
+        <Modal
+          title="请选择奖池实物奖品"
+          visible={this.state.closeVisible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          width={'800px'}
+        >
+          <TabList />
+        </Modal>
       </div>
     );
   }
