@@ -84,12 +84,12 @@ export default class TabList extends Component {
         dataSource={data}
         pagination={{
           current: 1,
-          defaultCurrent: 2,
+          defaultCurrent: 1,
           showSizeChanger: true,
           showQuickJumper: true,
-          total: 5,
+          total: 5, //总条数
           showTotal: () => {
-            return `共${5}条`;
+            return `共${5}条`; //总条数
           },
         }}
       />
