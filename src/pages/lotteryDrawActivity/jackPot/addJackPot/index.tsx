@@ -78,7 +78,7 @@ export default class AddJackPot extends Component {
         <Menu.Item key="2" onClick={this.handleActiviutyClick.bind(this, '活动2')}>
           活动2
         </Menu.Item>
-        <Menu.Item key="2" onClick={this.handleActiviutyClick.bind(this, '活动2')}>
+        <Menu.Item key="3" onClick={this.handleActiviutyClick.bind(this, '活动3')}>
           活动3
         </Menu.Item>
       </Menu>
