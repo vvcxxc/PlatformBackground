@@ -81,6 +81,44 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         },
       ],
     },
+    {
+      path: '/lotteryDrawActivity',
+      name: '抽奖活动管理',
+      children: [
+        {
+          path: '/lotteryDrawActivity/containerTruck/',
+          name: '集卡抽奖管理',
+          children: [
+            {
+              path: '/lotteryDrawActivity/containerTruck/containerTruckList',
+              name: '集卡抽奖管理',
+              component: './lotteryDrawActivity/containerTruck/containerTruckList',
+            },
+            {
+              path: '/lotteryDrawActivity/containerTruck/card',
+              name: '卡片管理',
+              children: [
+                {
+                  path: '/lotteryDrawActivity/containerTruck/card/cardList',
+                  name: '卡片管理',
+                  component: './lotteryDrawActivity/containerTruck/card/cardList',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          path: '/lotteryDrawActivity/jackPot/jackPotList',
+          name: '奖池管理',
+          component: './lotteryDrawActivity/jackPot/jackPotList',
+        },
+        {
+          path: '/lotteryDrawActivity/prizes/prizesList',
+          name: '奖品管理',
+          component: './lotteryDrawActivity/prizes/prizesList',
+        },
+      ],
+    },
   ];
   useEffect(() => {
     // if (dispatch) {
@@ -108,51 +146,51 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   };
   return (
     <>
-    <ProLayout
-      menuHeaderRender={(logo, title) => (
-        <Link to="/">
-          {logo}
-          <h1>平台管理后台</h1>
-        </Link>
-        // <div>
+      <ProLayout
+        menuHeaderRender={(logo, title) => (
+          <Link to="/">
+            {logo}
+            <h1>平台管理后台</h1>
+          </Link>
+          // <div>
 
-        // </div>
-      )}
-      onCollapse={handleMenuCollapse}
-      menuItemRender={(menuItemProps, defaultDom) => {
-        if (menuItemProps.isUrl || menuItemProps.children) {
-          return defaultDom;
-        }
+          // </div>
+        )}
+        onCollapse={handleMenuCollapse}
+        menuItemRender={(menuItemProps, defaultDom) => {
+          if (menuItemProps.isUrl || menuItemProps.children) {
+            return defaultDom;
+          }
 
-        return <Link to={menuItemProps.path}>{defaultDom}</Link>;
-      }}
-      breadcrumbRender={(routers = []) => [
-        {
-          path: '/',
-          breadcrumbName: '首页',
-        },
-        ...routers,
-      ]}
-      itemRender={(route, params, routes, paths) => {
-        const first = routes.indexOf(route) === 0;
-        return first ? (
-          <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
-        ) : (
-          <span>{route.breadcrumbName}</span>
-        );
-      }}
-      // footerRender={footerRender}
+          return <Link to={menuItemProps.path}>{defaultDom}</Link>;
+        }}
+        breadcrumbRender={(routers = []) => [
+          {
+            path: '/',
+            breadcrumbName: '首页',
+          },
+          ...routers,
+        ]}
+        itemRender={(route, params, routes, paths) => {
+          const first = routes.indexOf(route) === 0;
+          return first ? (
+            <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
+          ) : (
+            <span>{route.breadcrumbName}</span>
+          );
+        }}
+        // footerRender={footerRender}
 
-      menuDataRender={() => menuData}
-      rightContentRender={rightProps => <RightContent {...rightProps} />}
-      {...props}
-      {...settings}
-    >
-      <Authorized authority={authorized!.authority} noMatch={noMatch}>
-        {children}
-      </Authorized>
-    </ProLayout>
-  </>
+        menuDataRender={() => menuData}
+        rightContentRender={rightProps => <RightContent {...rightProps} />}
+        {...props}
+        {...settings}
+      >
+        <Authorized authority={authorized!.authority} noMatch={noMatch}>
+          {children}
+        </Authorized>
+      </ProLayout>
+    </>
   );
 };
 

@@ -33,11 +33,11 @@ const plugins: IPlugin[] = [
       },
       pwa: pwa
         ? {
-          workboxPluginMode: 'InjectManifest',
-          workboxOptions: {
-            importWorkboxFrom: 'local',
-          },
-        }
+            workboxPluginMode: 'InjectManifest',
+            workboxOptions: {
+              importWorkboxFrom: 'local',
+            },
+          }
         : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
@@ -143,6 +143,28 @@ export default {
               ],
             },
             {
+              path: '/lotteryDrawActivity',
+              name: 'lotteryDrawActivity',
+              routes: [
+                {
+                  path: '/lotteryDrawActivity/containerTruck/containerTruckList',
+                  name: 'containerTruckList',
+                  component: './lotteryDrawActivity/containerTruck/containerTruckList',
+                },
+                {
+                  path: '/lotteryDrawActivity/containerTruck/card',
+                  name: 'containerTruckList',
+                  routes: [
+                    {
+                      path: '/lotteryDrawActivity/containerTruck/card/cardList',
+                      name: 'cardList',
+                      component: './lotteryDrawActivity/containerTruck/card/cardList',
+                    },
+                  ],
+                },
+              ],
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
@@ -171,9 +193,9 @@ export default {
   define: {
     ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION:
       ANT_DESIGN_PRO_ONLY_DO_NOT_USE_IN_YOUR_PRODUCTION || '', // preview.pro.ant.design only do not use in your production ; preview.pro.ant.design 专用环境变量，请不要在你的项目中使用它。
-      'process.env': {
-        API_ENV: process.env.API_ENV,    // 这里是重点吧，获取配置
-        },
+    'process.env': {
+      API_ENV: process.env.API_ENV, // 这里是重点吧，获取配置
+    },
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
