@@ -110,11 +110,13 @@ export default Form.create()(
             count: currentPageSize,
           },
         }).then(res => {
-          this.setState({
-            dataList: res.data,
-            loading: false,
-            total: res.pagination.total,
-          });
+          if(res.status_code == 200){
+            this.setState({
+              dataList: res.data,
+              loading: false,
+              total: res.pagination.total,
+            });
+          }
         });
       };
 
