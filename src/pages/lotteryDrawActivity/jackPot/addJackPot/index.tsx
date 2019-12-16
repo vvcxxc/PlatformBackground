@@ -58,6 +58,10 @@ export default class AddJackPot extends Component {
   handleCancel = () => {
     this.setState({ closeVisible: false });
   };
+  selectChange = (query: any) => {
+    //弹出层选择
+    console.log(query);
+  };
   render() {
     const menu = (
       <Menu>
@@ -216,7 +220,7 @@ export default class AddJackPot extends Component {
           onCancel={this.handleCancel}
           width={'800px'}
         >
-          <TabList />
+          <TabList selectChange={this.selectChange} />
         </Modal>
       </div>
     );

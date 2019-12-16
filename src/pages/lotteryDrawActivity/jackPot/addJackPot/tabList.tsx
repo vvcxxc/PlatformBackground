@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Table } from 'antd';
-export default class TabList extends Component {
+interface Props {
+  selectChange?: any;
+}
+export default class TabList extends Component<Props> {
   state = {};
   render() {
     const columns = [
@@ -70,7 +73,7 @@ export default class TabList extends Component {
     ];
     const rowSelection = {
       onChange: (selectedRowKeys: any, selectedRows: any) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        this.props.selectChange && this.props.selectChange(selectedRows);
       },
       getCheckboxProps: (record: any) => ({
         disabled: record.name === 'Disabled User',
