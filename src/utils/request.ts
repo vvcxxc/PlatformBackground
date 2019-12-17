@@ -60,9 +60,9 @@ const request = extend({
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
   console.log(configs[process.env.API_ENV].API)
-  let API = configs[process.env.API_ENV].API || 'http://test.admin.api.tdianyi.com'
+  let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com'
   let token = localStorage.getItem('token');
-  let Url = 'http://192.168.2.112:9600' + url;
+  let Url = API + url;
   if (token) {
     const headers = {
       'Content-Type': 'application/json',

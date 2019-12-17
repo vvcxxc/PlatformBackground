@@ -182,6 +182,16 @@ export default {
                   name: 'addJackPot',
                   component: './lotteryDrawActivity/jackPot/addJackPot',
                 },
+                {
+                  path: '/lotteryDrawActivity/jackPot/editJackPot',
+                  name: 'editJackPot',
+                  component: './lotteryDrawActivity/jackPot/editJackPot',
+                },
+                {
+                  path: '/lotteryDrawActivity/jackPot/viewJackPot',
+                  name: 'viewJackPot',
+                  component: './lotteryDrawActivity/jackPot/viewJackPot',
+                },
               ],
             },
             {
