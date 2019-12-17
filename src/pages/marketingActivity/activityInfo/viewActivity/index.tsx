@@ -37,7 +37,7 @@ function ViewActivity (Props:any) {
 
       <div className={styles.add_layout}>
         <div className={styles.title}>招募活动图</div>
-        <img src={info.cover_image} className={styles.cover_image}/>
+        <img src={'http://oss.tdianyi.com/'+info.cover_image} className={styles.cover_image}/>
       </div>
 
       <div className={styles.add_layout}>
