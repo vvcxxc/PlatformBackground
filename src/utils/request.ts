@@ -37,8 +37,8 @@ const errorHandler = (error: { response: Response }): Response => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-    if(response.status == 401){
-      router.push('/user/login')
+    if (response.status == 401) {
+      router.push('/user/login');
     }
   } else if (!response) {
     notification.error({
@@ -59,7 +59,7 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
-  let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com'
+  let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com';
   let token = localStorage.getItem('token');
   let Url = API + url;
   if (token) {
