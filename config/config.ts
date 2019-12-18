@@ -111,24 +111,24 @@ export default {
               name: 'marketingActivity',
               routes: [
                 {
-                  path: '/marketingActivity/activityinfo/cardlist',
+                  path: '/marketingActivity/activityInfo/cardlist',
                   name: 'cardList',
                   component: './marketingActivity/activityInfo/cardList',
                 },
                 {
-                  path: '/marketingActivity/activityinfo/addActivity',
+                  path: '/marketingActivity/activityInfo/addActivity',
                   name: 'addActivity',
-                  component: './marketingActivity/activityinfo/addActivity',
+                  component: './marketingActivity/activityInfo/addActivity',
                 },
                 {
-                  path: '/marketingActivity/activityinfo/viewActivity',
+                  path: '/marketingActivity/activityInfo/viewActivity',
                   name: 'viewActivity',
-                  component: './marketingActivity/activityinfo/viewActivity',
+                  component: './marketingActivity/activityInfo/viewActivity',
                 },
                 {
-                  path: '/marketingActivity/merchantcard/cardlist',
-                  name: 'cardlist',
-                  component: './marketingActivity/merchantcard/cardlist',
+                  path: '/marketingActivity/merchantcard/cardList',
+                  name: 'cardList',
+                  component: './marketingActivity/merchantcard/cardList',
                 },
                 {
                   path: '/marketingActivity/merchantcard/cardManage',
