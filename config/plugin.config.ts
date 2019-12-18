@@ -1,6 +1,7 @@
 import path from 'path';
 
 import * as IWebpackChainConfig from 'webpack-chain';
+import CaseSensitivePathsPlugin from 'case-sensitive-paths-webpack-plugin';
 function getModulePackageName(module: { context: string }) {
   if (!module.context) return null;
 
@@ -21,6 +22,11 @@ function getModulePackageName(module: { context: string }) {
 }
 
 export const webpackPlugin = (config: IWebpackChainConfig) => {
+  config.plugin('case-sensitive-paths').use(CaseSensitivePathsPlugin, [
+    {
+      debug: true,
+    },
+  ]);
   // optimize chunks
   config.optimization
     // share the same chunks across different modules
