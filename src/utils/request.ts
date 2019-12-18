@@ -59,7 +59,6 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
-  console.log(configs[process.env.API_ENV].API)
   let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com'
   let token = localStorage.getItem('token');
   let Url = API + url;
@@ -92,7 +91,6 @@ request.interceptors.response.use((response, options) => {
   // if (token) {
   //   localStorage.setItem("x-auth-token", token);
   // }
-  console.log(response)
   return response;
 });
 
