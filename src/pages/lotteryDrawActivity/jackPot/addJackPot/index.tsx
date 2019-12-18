@@ -18,7 +18,7 @@ import {
 } from 'antd';
 import { router } from 'umi';
 import request from '@/utils/request';
-import TabList from './TabList';
+import TabList from './tabList';
 const { Title } = Typography;
 export default class AddJackPot extends Component {
   state = {
