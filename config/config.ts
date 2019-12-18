@@ -188,9 +188,9 @@ export default {
                   component: './lotteryDrawActivity/jackPot/editJackPot',
                 },
                 {
-                  path: '/lotteryDrawActivity/jackPot/viewJackPot',
-                  name: 'viewJackPot',
-                  component: './lotteryDrawActivity/jackPot/viewJackPot',
+                  path: '/lotteryDrawActivity/jackPot/viewJackpot',
+                  name: 'viewJackpot',
+                  component: './lotteryDrawActivity/jackPot/viewJackpot',
                 },
               ],
             },
