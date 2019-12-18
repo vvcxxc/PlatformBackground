@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import styles from './index.less'
-import {Spin, Table, Button} from 'antd'
+import { Spin, Table, Button } from 'antd'
 class EditJackPot extends Component {
   state = {
     Loading: false, //loading
@@ -29,8 +29,8 @@ class EditJackPot extends Component {
     ],
   }
 
-  render (){
-    const {Loading} = this.state
+  render() {
+    const { Loading } = this.state
     const columns = [
       {
         title: '编号',
@@ -106,7 +106,7 @@ class EditJackPot extends Component {
               <div>
                 <Table
                   size='small'
-                  style={{width: '550px'}}
+                  style={{ width: '550px' }}
                   dataSource={this.state.dataSource}
                   columns={columns}
                   pagination={false}
@@ -115,9 +115,9 @@ class EditJackPot extends Component {
             </div>
           </div>
           <div style={{ marginTop: 10 }}>
-          <Button type='primary' style={{ marginRight: 30 }}>发布活动</Button>
-          <Button type='danger'>取消</Button>
-        </div>
+            <Button type='primary' style={{ marginRight: 30 }}>发布活动</Button>
+            <Button type='danger'>取消</Button>
+          </div>
         </Spin>
       </div>
     )
