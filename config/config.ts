@@ -113,7 +113,7 @@ export default {
                 {
                   path: '/marketingActivity/activityinfo/cardlist',
                   name: 'cardList',
-                  component: './marketingActivity/activityInfo/CardList',
+                  component: './marketingActivity/activityInfo/cardList',
                 },
                 {
                   path: '/marketingActivity/activityinfo/addActivity',
@@ -133,12 +133,12 @@ export default {
                 {
                   path: '/marketingActivity/merchantcard/cardManage',
                   name: 'cardManage',
-                  component: './marketingActivity/merchantcard/CardManage',
+                  component: './marketingActivity/merchantcard/cardManage',
                 },
                 {
                   path: '/marketingActivity/merchantcard/detail',
                   name: 'detail',
-                  component: './marketingActivity/merchantcard/Detail',
+                  component: './marketingActivity/merchantcard/detail',
                 },
               ],
             },
@@ -149,22 +149,22 @@ export default {
                 {
                   path: '/lotteryDrawActivity/containerTruck/containerTruckList',
                   name: 'containerTruckList',
-                  component: './lotteryDrawActivity/containerTruck/ContainerTruckList',
+                  component: './lotteryDrawActivity/containerTruck/containerTruckList',
                 },
                 {
                   path: '/lotteryDrawActivity/containerTruck/addActivity',
                   name: 'addActivity',
-                  component: './lotteryDrawActivity/containerTruck/AddActivity',
+                  component: './lotteryDrawActivity/containerTruck/addActivity',
                 },
                 {
                   path: '/lotteryDrawActivity/containerTruck/editActivity',
                   name: 'editActivity',
-                  component: './lotteryDrawActivity/containerTruck/EditActivity',
+                  component: './lotteryDrawActivity/containerTruck/editActivity',
                 },
                 {
                   path: '/lotteryDrawActivity/containerTruck/viewActivity',
                   name: 'viewActivity',
-                  component: './lotteryDrawActivity/containerTruck/ViewActivity',
+                  component: './lotteryDrawActivity/containerTruck/viewActivity',
                 },
                 {
                   path: '/lotteryDrawActivity/containerTruck/card',
@@ -173,19 +173,19 @@ export default {
                     {
                       path: '/lotteryDrawActivity/containerTruck/card/cardList',
                       name: 'cardList',
-                      component: './lotteryDrawActivity/containerTruck/card/CardList',
+                      component: './lotteryDrawActivity/containerTruck/card/cardList',
                     },
                   ],
                 },
                 {
                   path: '/lotteryDrawActivity/jackPot/addJackPot',
                   name: 'addJackPot',
-                  component: './lotteryDrawActivity/jackPot/AddJackPot',
+                  component: './lotteryDrawActivity/jackPot/addJackPot',
                 },
                 {
                   path: '/lotteryDrawActivity/jackPot/editJackPot',
                   name: 'editJackPot',
-                  component: './lotteryDrawActivity/jackPot/EditJackPot',
+                  component: './lotteryDrawActivity/jackPot/editJackPot',
                 },
                 {
                   path: '/lotteryDrawActivity/jackPot/viewJackPot',
