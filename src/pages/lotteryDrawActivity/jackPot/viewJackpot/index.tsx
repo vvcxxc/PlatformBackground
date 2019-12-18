@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import { Spin, Table, Button } from 'antd';
-class ViewJackPot extends Component {
+export default class ViewJackPot extends Component {
   state = {
     Loading: false, //loading
     dataSource: [
@@ -124,4 +124,4 @@ class ViewJackPot extends Component {
   }
 }
 
-export default ViewJackPot;
+// export default ViewJackPot;
