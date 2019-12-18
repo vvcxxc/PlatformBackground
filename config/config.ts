@@ -128,7 +128,7 @@ export default {
                 {
                   path: '/marketingActivity/merchantcard/cardlist',
                   name: 'cardlist',
-                  component: './marketingActivity/merchantcard/Cardlist',
+                  component: './marketingActivity/merchantcard/MerchantCard',
                 },
                 {
                   path: '/marketingActivity/merchantcard/cardManage',
@@ -180,12 +180,12 @@ export default {
                 {
                   path: '/lotteryDrawActivity/jackPot/addJackPot',
                   name: 'addJackPot',
-                  component: './lotteryDrawActivity/jackPot/addJackPot',
+                  component: './lotteryDrawActivity/jackPot/AddJackPot',
                 },
                 {
                   path: '/lotteryDrawActivity/jackPot/editJackPot',
                   name: 'editJackPot',
-                  component: './lotteryDrawActivity/jackPot/editJackPot',
+                  component: './lotteryDrawActivity/jackPot/EditJackPot',
                 },
                 {
                   path: '/lotteryDrawActivity/jackPot/viewJackPot',

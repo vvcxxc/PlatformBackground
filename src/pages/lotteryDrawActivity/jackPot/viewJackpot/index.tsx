@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import styles from './index.less'
-import { Spin, Table, Button } from 'antd'
-class EditJackPot extends Component {
+import React, { Component } from 'react';
+import styles from './index.less';
+import { Spin, Table, Button } from 'antd';
+class ViewJackPot extends Component {
   state = {
     Loading: false, //loading
     dataSource: [
@@ -10,27 +10,27 @@ class EditJackPot extends Component {
         number: '1',
         giftId: 'PC9527',
         name: '谢谢参与',
-        percent: '10%'
+        percent: '10%',
       },
       {
         key: '2',
         number: '2',
         giftId: 'PC9528',
         name: '华为P30',
-        percent: '20%'
+        percent: '20%',
       },
       {
         key: '3',
         number: '3',
         giftId: 'PC9529',
         name: '小米充电宝',
-        percent: '30%'
+        percent: '30%',
       },
     ],
-  }
+  };
 
   render() {
-    const { Loading } = this.state
+    const { Loading } = this.state;
     const columns = [
       {
         title: '编号',
@@ -50,15 +50,13 @@ class EditJackPot extends Component {
       {
         title: '中奖率',
         dataIndex: 'percent',
-        key: 'percent'
+        key: 'percent',
       },
     ];
     return (
       <div className={styles.page}>
         <Spin spinning={Loading}>
-          <div className={styles.header}>
-            编辑活动奖池
-          </div>
+          <div className={styles.header}>编辑活动奖池</div>
           <div className={styles.main}>
             <div className={styles.title}>奖池配置</div>
             <div className={styles.item_layout}>
@@ -105,7 +103,7 @@ class EditJackPot extends Component {
               <div className={styles.item_title}>设置奖品中奖率</div>
               <div>
                 <Table
-                  size='small'
+                  size="small"
                   style={{ width: '550px' }}
                   dataSource={this.state.dataSource}
                   columns={columns}
@@ -115,13 +113,15 @@ class EditJackPot extends Component {
             </div>
           </div>
           <div style={{ marginTop: 10 }}>
-            <Button type='primary' style={{ marginRight: 30 }}>发布活动</Button>
-            <Button type='danger'>取消</Button>
+            <Button type="primary" style={{ marginRight: 30 }}>
+              发布活动
+            </Button>
+            <Button type="danger">取消</Button>
           </div>
         </Spin>
       </div>
-    )
+    );
   }
 }
 
-export default EditJackPot
+export default ViewJackPot;
