@@ -118,12 +118,12 @@ export default {
                 {
                   path: '/marketingActivity/activityinfo/addActivity',
                   name: 'addActivity',
-                  component: './marketingActivity/activityinfo/AddActivity',
+                  component: './marketingActivity/activityinfo/addActivity',
                 },
                 {
                   path: '/marketingActivity/activityinfo/viewActivity',
                   name: 'viewActivity',
-                  component: './marketingActivity/activityinfo/ViewActivity',
+                  component: './marketingActivity/activityinfo/viewActivity',
                 },
                 {
                   path: '/marketingActivity/merchantcard/cardlist',
