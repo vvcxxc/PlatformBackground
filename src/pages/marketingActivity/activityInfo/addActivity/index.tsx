@@ -4,7 +4,6 @@ import { Input, Select, DatePicker, Upload, Icon, List, Button, notification, Sp
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 import locale from 'antd/es/date-picker/locale/zh_CN';
-import upload from '@/services/oss';
 import moment from 'moment';
 import { router } from 'umi';
 import request from '@/utils/request';
@@ -23,8 +22,24 @@ export default class AddActivity extends Component {
     end_date: '', // 结束时间
     area_list: [], // 商圈
     Loading: true, // 页面loading
+    oss_data: {}, // oss参数
   };
   componentDidMount() {
+    request.get('http://release.api.supplier.tdianyi.com/api/v2/up').then(res => {
+      let { data } = res;
+      console.log(data);
+      this.setState({
+        oss_data: {
+          policy: data.policy,
+          OSSAccessKeyId: data.accessid,
+          success_action_status: 200, //让服务端返回200,不然，默认会返回204
+          signature: data.signature,
+          callback: data.callback,
+          host: data.host,
+          key: data.dir + this.randomString(32) + '.png',
+        },
+      });
+    });
     request('/api/common/area', { method: 'get' })
       .then(res => {
         this.setState({ area_list: res.data, Loading: false });
@@ -54,6 +69,18 @@ export default class AddActivity extends Component {
     reader.readAsDataURL(img);
   };
 
+  /**随机数 */
+  randomString = (len: any) => {
+    len = len || 32;
+    const chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';
+    const maxPos = chars.length;
+    let pwd = '';
+    for (let i = 0; i < len; i++) {
+      pwd += chars.charAt(Math.floor(Math.random() * maxPos));
+    }
+    return pwd;
+  };
+
   // 上传图片
   imageChange = (info: any) => {
     if (info.file.status === 'uploading') {
@@ -61,20 +88,13 @@ export default class AddActivity extends Component {
       return;
     }
     if (info.file.status === 'done') {
-      console.log(info);
-      this.getBase64(info.file.originFileObj, (imageUrl: string) => {
-        upload(imageUrl)
-          .then(res => {
-            this.setState({
-              imageUrl,
-              loading: false,
-              cover_image: res.data.path,
-            });
-          })
-          .catch(err => {
-            this.setState({ imageUrl: '', loading: false });
-          });
-      });
+      this.getBase64(info.file.originFileObj, imageUrl =>
+        this.setState({
+          imageUrl,
+          cover_image: info.file.response.data.path,
+          loading: false,
+        }),
+      );
     }
   };
 
@@ -146,7 +166,7 @@ export default class AddActivity extends Component {
   };
 
   render() {
-    const { imageUrl, rules, area_list, Loading } = this.state;
+    const { imageUrl, rules, area_list, Loading, oss_data } = this.state;
     const uploadButton = (
       <div className={styles.uploadDefault}>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -215,6 +235,8 @@ export default class AddActivity extends Component {
                 listType="picture-card"
                 showUploadList={false}
                 onChange={this.imageChange}
+                data={...oss_data}
+                action="http://tmwl.oss-cn-shenzhen.aliyuncs.com/"
               >
                 {imageUrl ? (
                   <img src={imageUrl} alt="avatar" style={{ width: '248px', height: '122px' }} />

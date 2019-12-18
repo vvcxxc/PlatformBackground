@@ -61,7 +61,12 @@ const request = extend({
 request.interceptors.request.use((url, options) => {
   let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com';
   let token = localStorage.getItem('token');
-  let Url = API + url;
+  let Url = '';
+  if (url.includes('http')) {
+    Url = url;
+  } else {
+    Url = API + url;
+  }
   if (token) {
     const headers = {
       'Content-Type': 'application/json',
