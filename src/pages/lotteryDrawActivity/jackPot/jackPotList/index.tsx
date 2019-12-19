@@ -27,6 +27,8 @@ interface Props {
   form: any;
   dispatch: (opt: any) => any;
   jackPotList: any;
+  currentPage: Number;
+  currentPageSize: Number;
 }
 
 export default Form.create()(
@@ -39,7 +41,13 @@ export default Form.create()(
       };
 
       componentDidMount() {
-        console.log(this.props);
+        const {
+          activityName,
+          activityStatus,
+          currentPage,
+          currentPageSize,
+        } = this.props.jackPotList;
+        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
       }
 
       handleSearch = async (e: any) => {
@@ -56,8 +64,29 @@ export default Form.create()(
 
         const { currentPage, currentPageSize } = this.props.jackPotList;
 
-        // this.getListData(activityName, activityStatus, status, currentPage, currentPageSize);
+        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
       };
+
+      getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
+        this.setState({
+          loading: true,
+        });
+        request('/api/v1/pools', {
+          method: 'GET',
+          params: {
+            activity_name,
+            status,
+            page: currentPage,
+            count: currentPageSize
+          }
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            total: res.pagination.total,
+          })
+        })
+      }
 
       handleFormReset = async () => {
         const { form, dispatch } = this.props;
@@ -128,10 +157,99 @@ export default Form.create()(
         );
       }
 
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        await this.props.dispatch({
+          type: 'jackPotList/setPaginationCurrent',
+          payload: {
+            currentPage: pagination.current,
+            currentPageSize: pagination.pageSize,
+          },
+        });
+        const { currentPage, currentPageSize } = this.props.jackPotList;
+        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        let activityName = this.props.form.getFieldValue('activityName');
+        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+      };
+
       render() {
+        const { dataList, loading, total } = this.state;
+        const { currentPage, currentPageSize } = this.props.jackPotList;
+        const columns = [
+          {
+            title: '编号',
+            dataIndex: 'id',
+            key: 'id',
+          },
+          {
+            title: '奖池名称',
+            dataIndex: 'name',
+            key: 'name',
+          },
+          {
+            title: '奖池类型',
+            dataIndex: 'type',
+            key: 'type',
+          },
+          {
+            title: '所属商圈',
+            dataIndex: 'area_name',
+            key: 'area_name',
+          },
+          {
+            title: '关联活动',
+            dataIndex: 'activity_name',
+            key: 'activity_name',
+          },
+          {
+            title: '应用的抽奖活动',
+            dataIndex: 'card_name',
+            key: 'card_name',
+          },
+          {
+            title: '抽奖活动状态',
+            dataIndex: 'status',
+            key: 'status',
+          },
+          {
+            title: '操作',
+            key: 'operation',
+            width: 200,
+            render: (text: any, record: any) => (
+              <span>
+                <a >查看</a>
+                <Divider type="vertical" />
+                <a >编辑</a>
+                {
+                  record.status == "" ? (
+                    <span>
+                      <Divider type="vertical" />
+                      <a >删除奖池</a>
+                    </span>
+                  ) : ""
+                }
+              </span>
+            ),
+          },
+        ];
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Table
+              columns={columns}
+              dataSource={dataList}
+              loading={loading}
+              onChange={this.handleChange}
+              pagination={{
+                current: currentPage,
+                defaultPageSize: currentPageSize,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total,
+                showTotal: () => {
+                  return `共${total}条`;
+                },
+              }}
+            />
           </div>
         );
       }
