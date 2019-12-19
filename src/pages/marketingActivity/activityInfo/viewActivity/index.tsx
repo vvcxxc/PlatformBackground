@@ -1,9 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import styles from './index.less';
 import request from '@/utils/request';
-
+interface Info {
+  name: string;
+  area_name: string;
+  enlistTime: string;
+  card_num: number;
+  cover_image: string;
+  rules: Array<any>;
+  introduce: string;
+}
 function ViewActivity(Props: any) {
-  const [info, setInfo] = useState({ rules: [] });
+  const [info, setInfo] = useState<Info>();
   useEffect(() => {
     request('/api/v1/activity/recruit/' + Props.location.query.activity_id, { method: 'get' }).then(
       res => {
