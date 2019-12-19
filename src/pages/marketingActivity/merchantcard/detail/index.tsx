@@ -202,6 +202,8 @@ export default class AddActivity extends Component {
             </Descriptions>
           </div>
         )}
+        {
+          card.publish_wait == 1 ? null : (
         <div className={styles.buttonList}>
           <div className={styles.clickList}>
             <Button type="primary" size="large" onClick={this.recruit.bind(this, 1)}>
@@ -221,6 +223,8 @@ export default class AddActivity extends Component {
             取消
           </Button>
         </div>
+          )
+        }
 
         <Modal
           title="活动图片"

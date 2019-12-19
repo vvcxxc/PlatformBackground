@@ -97,6 +97,7 @@ class AddActivity extends Component {
         card_info.push(card_list[i].id);
       }
     }
+    console.log(card_info)
     if (condition.length > 1) {
       if (condition[0].condition == condition[1].condition) {
         notification.error({
@@ -121,11 +122,15 @@ class AddActivity extends Component {
             area_id,
             condition_money,
             daily_card,
-            card_info,
-            factor: condition,
+            card_info: JSON.stringify(card_info),
+            factor: JSON.stringify(condition),
           },
         })
-        .then(res => {});
+        .then(res => {
+          notification.success({
+            message: res.message
+          })
+        });
     } else {
       notification.error({
         message: '请填写完整',
@@ -277,9 +282,10 @@ class AddActivity extends Component {
             <div className={styles.title}>配置活动卡片信息</div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>设置卡数量</div>
-              <Select defaultValue="请选择卡片数量" style={{ width: 200 }} size="small">
+              {/* <Select defaultValue="请选择卡片数量" style={{ width: 200 }} size="small">
                 <Option value="1">1</Option>
-              </Select>
+              </Select> */}
+              <div>{card_list.length}</div>
             </div>
             <div style={{ marginTop: '10px', marginBottom: '10px' }}>
               <Table
