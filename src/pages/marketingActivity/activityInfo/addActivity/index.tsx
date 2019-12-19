@@ -208,7 +208,15 @@ export default class AddActivity extends Component {
 
   // 输入
   inputChange = (type: string) => ({ target: { value } }) => {
-    this.setState({ [type]: value });
+    if(type == 'num'){
+      if(value< 0){
+        this.setState({ [type]: 0 });
+      }else{
+        this.setState({ [type]: value });
+      }
+    }else{
+      this.setState({ [type]: value });
+    }
   };
 
   // 发布活动
@@ -297,7 +305,7 @@ export default class AddActivity extends Component {
         width: '10px',
       },
     ];
-    const { imageUrl, rules, area_list, Loading, oss_data, value } = this.state;
+    const { imageUrl, rules, area_list, Loading, oss_data, value, num } = this.state;
     const uploadButton = (
       <div className={styles.uploadDefault}>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -348,6 +356,7 @@ export default class AddActivity extends Component {
               onChange={this.inputChange('num')}
               style={{ width: '100px', margin: '0 5px' }}
               type="number"
+              value={num}
             />
             张
           </div>
