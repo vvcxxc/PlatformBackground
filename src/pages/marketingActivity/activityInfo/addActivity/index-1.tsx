@@ -24,66 +24,6 @@ import moment from 'moment';
 import { router } from 'umi';
 import request from '@/utils/request';
 
-class BodyRow extends React.Component {
-  render() {
-    const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props;
-    const style = { ...restProps.style, cursor: 'move' };
-
-    let { className } = restProps;
-    if (isOver) {
-      if (restProps.index > dragingIndex) {
-        className += ' drop-over-downward';
-      }
-      if (restProps.index < dragingIndex) {
-        className += ' drop-over-upward';
-      }
-    }
-
-    return connectDragSource(
-      connectDropTarget(<tr {...restProps} className={className} style={style} />),
-    );
-  }
-}
-
-const rowSource = {
-  beginDrag(props) {
-    dragingIndex = props.index;
-    return {
-      index: props.index,
-    };
-  },
-};
-
-const rowTarget = {
-  drop(props, monitor) {
-    const dragIndex = monitor.getItem().index;
-    const hoverIndex = props.index;
-
-    // Don't replace items with themselves
-    if (dragIndex === hoverIndex) {
-      return;
-    }
-
-    // Time to actually perform the action
-    props.moveRow(dragIndex, hoverIndex);
-
-    // Note: we're mutating the monitor item here!
-    // Generally it's better to avoid mutations,
-    // but it's good here for the sake of performance
-    // to avoid expensive index searches.
-    monitor.getItem().index = hoverIndex;
-  },
-};
-
-const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-}))(
-  DragSource('row', rowSource, connect => ({
-    connectDragSource: connect.dragSource(),
-  }))(BodyRow),
-);
-
 export default class AddActivity extends Component {
   state = {
     imageUrl: '',
@@ -99,19 +39,11 @@ export default class AddActivity extends Component {
     area_list: [], // 商圈
     Loading: true, // 页面loading
     oss_data: {}, // oss参数
-    value: '', // 输入的规则
   };
-
-  components = {
-    body: {
-      row: DragableBodyRow,
-    },
-  };
-
   componentDidMount() {
     request.get('http://release.api.supplier.tdianyi.com/api/v2/up').then(res => {
       let { data } = res;
-      console.log('data', data);
+      console.log(data);
       this.setState({
         oss_data: {
           policy: data.policy,
@@ -184,9 +116,8 @@ export default class AddActivity extends Component {
 
   // 使用须知删除操作
   deleteItem = (index: number) => {
-    console.log(index);
     let { rules } = this.state;
-    let list: Array<any> = [];
+    let list: Array<string> = [];
     rules.forEach((item, idx) => {
       if (idx != index) {
         list.push(rules[idx]);
@@ -197,13 +128,11 @@ export default class AddActivity extends Component {
 
   // 添加使用规则
   addRules = () => {
-    const { value, rules } = this.state;
-    let a = {
-      name: value,
-      index: 1,
-    };
-    rules.push(a);
-    this.setState({ rules, value: '' });
+    let rule = document.getElementById('rule');
+    let value = rule.value;
+    let { rules } = this.state;
+    rules.push(value);
+    this.setState({ rules });
   };
 
   // 输入
@@ -258,42 +187,8 @@ export default class AddActivity extends Component {
     }
   };
 
-  // 拖拽测试
-  moveRow = (dragIndex: number, hoverIndex: number) => {
-    const { rules } = this.state;
-    const dragRow = rules[dragIndex];
-
-    this.setState(
-      update(this.state, {
-        rules: {
-          $splice: [
-            [dragIndex, 1],
-            [hoverIndex, 0, dragRow],
-          ],
-        },
-      }),
-    );
-  };
-
   render() {
-    const columns = [
-      {
-        title: '规则',
-        dataIndex: 'name',
-        key: 'name',
-        width: '300px',
-      },
-      {
-        title: '操作',
-        dataIndex: 'index',
-        key: 'index',
-        render: (text: any, record: any, index: number) => {
-          return <Icon type="delete" onClick={this.deleteItem.bind(this, index)} />;
-        },
-        width: '10px',
-      },
-    ];
-    const { imageUrl, rules, area_list, Loading, oss_data, value } = this.state;
+    const { imageUrl, rules, area_list, Loading, oss_data } = this.state;
     const uploadButton = (
       <div className={styles.uploadDefault}>
         <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -319,6 +214,12 @@ export default class AddActivity extends Component {
               size="small"
               onChange={this.selectArea}
             >
+              {/* <Option value="jack">Jack</Option>
+            <Option value="lucy">Lucy</Option>
+            <Option value="disabled" disabled>
+              Disabled
+            </Option>
+            <Option value="Yiminghe">yiminghe</Option> */}
               {area_list.length
                 ? area_list.map(item => {
                     return (
@@ -356,7 +257,7 @@ export default class AddActivity extends Component {
                 listType="picture-card"
                 showUploadList={false}
                 onChange={this.imageChange}
-                data={oss_data}
+                data={...oss_data}
                 action="http://tmwl.oss-cn-shenzhen.aliyuncs.com/"
               >
                 {imageUrl ? (
@@ -371,26 +272,22 @@ export default class AddActivity extends Component {
           <div className={styles.add_layout}>
             <div className={styles.title}>设置招募规则</div>
             <div className={styles.ruleList}>
-              <DndProvider backend={HTML5Backend}>
-                <Table
-                  columns={columns}
-                  dataSource={rules}
-                  components={this.components}
-                  pagination={false}
-                  size="small"
-                  showHeader={false}
-                  onRow={(record, index) => ({
-                    index,
-                    moveRow: this.moveRow,
-                  })}
-                />
-              </DndProvider>
+              <List
+                bordered
+                locale={{ emptyText: '暂无招募规则' }}
+                dataSource={rules}
+                size="small"
+                renderItem={(item, index) => (
+                  <List.Item>
+                    <div className={styles.item_flex}>
+                      <div>{item}</div>
+                      <Icon type="delete" onClick={this.deleteItem.bind(this, index)} />
+                    </div>
+                  </List.Item>
+                )}
+              ></List>
               <div className={styles.addRule}>
-                <Input
-                  style={{ width: '90%' }}
-                  value={value}
-                  onChange={this.inputChange('value')}
-                />
+                <Input style={{ width: '90%' }} id="rule" />
                 <Button size="default" onClick={this.addRules}>
                   添加
                 </Button>
