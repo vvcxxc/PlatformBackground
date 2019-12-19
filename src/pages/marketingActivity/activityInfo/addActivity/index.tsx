@@ -221,6 +221,10 @@ export default class AddActivity extends Component {
       return;
     }
     if (name && num && brief && cover_image && start_date && end_date && rules && area_id) {
+      let a = [];
+      for (let i in rules) {
+        a.push(rules[i].name);
+      }
       this.setState({ Loading: true });
       request('/api/v1/activity/recruit', {
         method: 'post',
@@ -231,7 +235,7 @@ export default class AddActivity extends Component {
           end_date,
           card_num: num,
           cover_image,
-          rules,
+          rules: a,
           introduce: brief,
         },
       })

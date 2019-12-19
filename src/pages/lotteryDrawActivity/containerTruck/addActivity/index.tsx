@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import { Input, DatePicker, Select, Spin, Table, Icon, Button } from 'antd';
+import { Input, DatePicker, Select, Spin, Table, Icon, Button, notification } from 'antd';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 import request from '@/utils/request';
@@ -17,29 +17,34 @@ class AddActivity extends Component {
     name: '', // 活动名字
     condition_money: '', // 条件时间
     daily_card: '', // 每天派卡限制
-    card_info: [], //卡片信息
-    factor: [], // 抽奖条件
+    luck_draw: [], // 抽奖条件
+    have_access: [], // 奖池
   };
   componentDidMount() {
     request.get('/api/common/area').then(res => {
       this.setState({ area_list: res.data });
     });
+    this.getCard();
   }
 
-  // 获取信息和抽奖条件
-  getCondition = (area_id?: any) => {
+  // 获取奖池和抽奖条件
+  getCondition = (area_id: any) => {
     request
-      .get('/api/v1/activity/cardcollecting/addCard', {
+      .get('/api/v1/activity/cardcollecting/luckyDrawCondition', {
         params: {
-          area_id: area_id || undefined,
+          area_id,
         },
       })
       .then(res => {
-        if (res.data.area) {
-          this.setState({ area_list: res.data.area, card_list: res.data.card_type });
-        } else {
-        }
+        this.setState({ luck_draw: res.data.luck_draw, have_access: res.data.have_access });
       });
+  };
+
+  // 获取卡片
+  getCard = () => {
+    request.get('/api/v1/activity/cardcollecting/activityCard').then(res => {
+      this.setState({ card_list: res.data });
+    });
   };
 
   addCondition = () => {
@@ -51,7 +56,9 @@ class AddActivity extends Component {
 
   // 抽奖条件的选择
   selectItem = (type: string, index: number) => (value: any) => {
-    console.log(type, value, index);
+    const { condition } = this.state;
+    condition[index][type] = value;
+    this.setState({ condition });
   };
 
   // input输出
@@ -75,27 +82,77 @@ class AddActivity extends Component {
   submit = () => {
     const {
       name,
-      card_info,
+      card_list,
       condition_money,
       start_date,
       end_date,
       area_id,
       daily_card,
-      factor,
+      condition,
     } = this.state;
-    console.log(this.state);
+
+    let card_info = [];
+    if (card_list.length) {
+      for (let i in card_list) {
+        card_info.push(card_list[i].id);
+      }
+    }
+    if (condition.length > 1) {
+      if (condition[0].condition == condition[1].condition) {
+        notification.error({
+          message: '抽奖条件不能相同',
+        });
+        return;
+      }
+      if (condition[0].jackpot == condition[1].jackpot) {
+        notification.error({
+          message: '奖池不能相同',
+        });
+        return;
+      }
+    }
+    if (name && condition_money && start_date && end_date && area_id && daily_card && condition) {
+      request
+        .post('/api/v1/activity/cardcollecting', {
+          data: {
+            name,
+            start_date,
+            end_date,
+            area_id,
+            condition_money,
+            daily_card,
+            card_info,
+            factor: condition,
+          },
+        })
+        .then(res => {});
+    } else {
+      notification.error({
+        message: '请填写完整',
+      });
+    }
   };
 
   render() {
-    const { Loading, area_list, condition, card_list } = this.state;
+    const {
+      Loading,
+      area_list,
+      condition,
+      card_list,
+      have_access,
+      luck_draw,
+      area_id,
+    } = this.state;
     const columns = [
       {
         title: '编号',
         dataIndex: 'id',
+        key: 'id',
       },
       {
         title: '选择卡片',
         dataIndex: 'name',
+        key: 'name',
         // render: (text, record: any) => (
         //   <span>
         //     <Select defaultValue='请选择卡片' style={{ width: 150 }}>
@@ -112,6 +169,7 @@ class AddActivity extends Component {
       {
         title: '卡片编号',
         dataIndex: 'number',
+        key: 'number',
       },
     ];
 
@@ -127,10 +185,15 @@ class AddActivity extends Component {
                 defaultValue="每次获得卡片"
                 style={{ width: 200 }}
                 size="small"
-                onChange={this.selectItem('rule', index)}
+                onChange={this.selectItem('condition', index)}
               >
-                <Option value="1">122</Option>
-                <Option value="2">133</Option>
+                {luck_draw.map(item => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
               </Select>
             </div>
             <div className={styles.item_layout}>
@@ -139,10 +202,15 @@ class AddActivity extends Component {
                 defaultValue="请选择奖池"
                 style={{ width: 200 }}
                 size="small"
-                onChange={this.selectItem('pool_id', index)}
+                onChange={this.selectItem('jackpot', index)}
               >
-                <Option value="3">144</Option>
-                <Option value="4">155</Option>
+                {have_access.map(item => {
+                  return (
+                    <Option value={item.id} key={item.id}>
+                      {item.name}
+                    </Option>
+                  );
+                })}
               </Select>
             </div>
           </div>
@@ -224,11 +292,19 @@ class AddActivity extends Component {
             </div>
 
             {/* 抽奖条件 */}
-            {conditionList}
-            <div className={styles.addCondition} onClick={this.addCondition}>
-              <Icon type="plus-circle" theme="filled" style={{ paddingRight: 5, fontSize: 18 }} />
-              添加抽奖条件
-            </div>
+            {area_id ? (
+              <div>
+                {conditionList}
+                <div className={styles.addCondition} onClick={this.addCondition}>
+                  <Icon
+                    type="plus-circle"
+                    theme="filled"
+                    style={{ paddingRight: 5, fontSize: 18 }}
+                  />
+                  添加抽奖条件
+                </div>
+              </div>
+            ) : null}
           </div>
 
           <div style={{ marginTop: 10 }}>
