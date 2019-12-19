@@ -21,7 +21,9 @@ class AddActivity extends Component {
     factor: [], // 抽奖条件
   };
   componentDidMount() {
-    this.getCondition();
+    request.get('/api/common/area').then(res => {
+      this.setState({ area_list: res.data });
+    });
   }
 
   // 获取信息和抽奖条件
