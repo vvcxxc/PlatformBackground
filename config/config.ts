@@ -163,9 +163,19 @@ export default {
                   ],
                 },
                 {
+                  path: '/lotteryDrawActivity/jackPot/jackPotList',
+                  name: 'jackPotList',
+                  component: './lotteryDrawActivity/jackPot/jackPotList',
+                },
+                {
                   path: '/lotteryDrawActivity/jackPot/addJackPot',
                   name: 'addJackPot',
                   component: './lotteryDrawActivity/jackPot/addJackPot',
+                },
+                {
+                  path: '/lotteryDrawActivity/prizes/prizesList',
+                  name: 'prizesList',
+                  component: './lotteryDrawActivity/prizes/prizesList',
                 },
               ],
             },
