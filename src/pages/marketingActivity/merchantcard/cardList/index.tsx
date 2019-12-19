@@ -11,6 +11,7 @@ import {
   Select,
   Modal,
   ConfigProvider,
+  message,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -585,11 +586,11 @@ export default Form.create()(
       };
 
       handleOk = (e: any) => {
-        this.setState({
-          visible: false,
-          rejectReason: '',
-        });
         const { rejectReason, record } = this.state;
+        if (!rejectReason) {
+          message.error('请输入拒绝原因');
+          return;
+        }
         request(`/api/v1/activity/recruit/card/${record.id}`, {
           method: 'PUT',
           params: {
@@ -605,6 +606,15 @@ export default Form.create()(
             currentPageSize,
           } = this.props.merchantCard;
           this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+          this.setState(
+            {
+              visible: false,
+              rejectReason: '',
+            },
+            () => {
+              console.log(this.state);
+            },
+          );
         });
       };
 
@@ -621,7 +631,7 @@ export default Form.create()(
       };
 
       render() {
-        let { sortedInfo, filteredInfo, dataList, loading, total } = this.state;
+        let { sortedInfo, filteredInfo, dataList, loading, total, rejectReason } = this.state;
         const { currentPage, currentPageSize } = this.props.merchantCard;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
@@ -784,7 +794,11 @@ export default Form.create()(
                 okText="确定"
                 cancelText="取消"
               >
-                <TextArea rows={4} onChange={this.handleChangeRejectReason.bind(this)} />
+                <TextArea
+                  rows={4}
+                  onChange={this.handleChangeRejectReason.bind(this)}
+                  value={rejectReason}
+                />
               </Modal>
             </div>
           </ConfigProvider>

@@ -94,7 +94,7 @@ export default Form.create()(
               }}
             >
               <Col md={8} sm={24}>
-                <FormItem label="商家名称">
+                <FormItem label="商圈名称">
                   {getFieldDecorator('storeName', { initialValue: storeName })(
                     <Select
                       placeholder="请选择"

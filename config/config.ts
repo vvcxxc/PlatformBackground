@@ -111,24 +111,24 @@ export default {
               name: 'marketingActivity',
               routes: [
                 {
-                  path: '/marketingActivity/activityinfo/cardlist',
+                  path: '/marketingActivity/activityInfo/cardlist',
                   name: 'cardList',
                   component: './marketingActivity/activityInfo/cardList',
                 },
                 {
-                  path: '/marketingActivity/activityinfo/addActivity',
+                  path: '/marketingActivity/activityInfo/addActivity',
                   name: 'addActivity',
-                  component: './marketingActivity/activityinfo/addActivity',
+                  component: './marketingActivity/activityInfo/addActivity',
                 },
                 {
-                  path: '/marketingActivity/activityinfo/viewActivity',
+                  path: '/marketingActivity/activityInfo/viewActivity',
                   name: 'viewActivity',
-                  component: './marketingActivity/activityinfo/viewActivity',
+                  component: './marketingActivity/activityInfo/viewActivity',
                 },
                 {
-                  path: '/marketingActivity/merchantcard/cardlist',
-                  name: 'cardlist',
-                  component: './marketingActivity/merchantcard/cardlist',
+                  path: '/marketingActivity/merchantcard/cardList',
+                  name: 'cardList',
+                  component: './marketingActivity/merchantcard/cardList',
                 },
                 {
                   path: '/marketingActivity/merchantcard/cardManage',
@@ -152,6 +152,21 @@ export default {
                   component: './lotteryDrawActivity/containerTruck/containerTruckList',
                 },
                 {
+                  path: '/lotteryDrawActivity/containerTruck/addActivity',
+                  name: 'addActivity',
+                  component: './lotteryDrawActivity/containerTruck/addActivity',
+                },
+                {
+                  path: '/lotteryDrawActivity/containerTruck/editActivity',
+                  name: 'editActivity',
+                  component: './lotteryDrawActivity/containerTruck/editActivity',
+                },
+                {
+                  path: '/lotteryDrawActivity/containerTruck/viewActivity',
+                  name: 'viewActivity',
+                  component: './lotteryDrawActivity/containerTruck/viewActivity',
+                },
+                {
                   path: '/lotteryDrawActivity/containerTruck/card',
                   name: 'containerTruckList',
                   routes: [
@@ -171,6 +186,16 @@ export default {
                   path: '/lotteryDrawActivity/jackPot/addJackPot',
                   name: 'addJackPot',
                   component: './lotteryDrawActivity/jackPot/addJackPot',
+                },
+                {
+                  path: '/lotteryDrawActivity/jackPot/editJackPot',
+                  name: 'editJackPot',
+                  component: './lotteryDrawActivity/jackPot/editJackPot',
+                },
+                {
+                  path: '/lotteryDrawActivity/jackPot/viewJackpot',
+                  name: 'viewJackpot',
+                  component: './lotteryDrawActivity/jackPot/viewJackpot',
                 },
                 {
                   path: '/lotteryDrawActivity/prizes/prizesList',

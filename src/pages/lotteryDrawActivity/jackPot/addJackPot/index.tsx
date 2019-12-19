@@ -1,24 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.less';
-import {
-  Typography,
-  Select,
-  DatePicker,
-  Input,
-  Menu,
-  Dropdown,
-  Descriptions,
-  Button,
-  Icon,
-  message,
-  Table,
-  Divider,
-  Tag,
-  Modal,
-} from 'antd';
-import { router } from 'umi';
-import request from '@/utils/request';
-import TabList from './TabList';
+import { Typography, Input, Menu, Dropdown, Descriptions, Button, Table, Modal } from 'antd';
+import TabList from './tabList';
 const { Title } = Typography;
 export default class AddJackPot extends Component {
   state = {

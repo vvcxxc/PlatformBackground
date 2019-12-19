@@ -6,6 +6,7 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "umi build",
+    "build:test": "cross-env API_ENV=test umi build",
     "deploy": "npm run site && npm run gh-pages",
     "fetch:blocks": "pro fetch-blocks && npm run prettier",
     "format-imports": "cross-env import-sort --write '**/*.{js,jsx,ts,tsx}'",
@@ -27,11 +28,6 @@
     "test:component": "umi test ./src/components",
     "ui": "umi ui"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint-staged"
-    }
-  },
   "lint-staged": {
     "**/*.less": "stylelint --syntax less",
     "**/*.{js,jsx,tsx,ts,less,md,json}": [
@@ -50,7 +46,6 @@
     "@ant-design/pro-layout": "^4.8.7",
     "@antv/data-set": "^0.10.2",
     "antd": "^3.23.6",
-    "axios": "^0.19.0",
     "classnames": "^2.2.6",
     "dva": "^2.4.1",
     "lodash": "^4.17.11",
@@ -81,6 +76,7 @@
     "@types/react-dom": "^16.8.4",
     "@types/react-helmet": "^5.0.13",
     "@umijs/fabric": "^2.0.0-beta.3",
+    "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "chalk": "^3.0.0",
     "check-prettier": "^1.0.3",
     "cross-env": "^6.0.0",

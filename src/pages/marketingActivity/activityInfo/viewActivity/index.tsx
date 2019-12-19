@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from 'react'
-import styles from './index.less'
-import request from '@/utils/request'
+import React, { useState, useEffect } from 'react';
+import styles from './index.less';
+import request from '@/utils/request';
 
-function ViewActivity (Props:any) {
-  const [info, setInfo] = useState({rules: []})
-  useEffect(()=>{
-    request('/api/v1/activity/recruit/'+ Props.location.query.activity_id, {method: 'get'}).then(res => {
-      setInfo(res.data)
-    })
-  },[])
+function ViewActivity(Props: any) {
+  const [info, setInfo] = useState({ rules: [] });
+  useEffect(() => {
+    request('/api/v1/activity/recruit/' + Props.location.query.activity_id, { method: 'get' }).then(
+      res => {
+        setInfo(res.data);
+      },
+    );
+  }, []);
 
   return (
     <div className={styles.viewPage}>
-      <div className={styles.header}>
-        活动招募信息
-      </div>
+      <div className={styles.header}>活动招募信息</div>
       <div className={styles.add_layout}>
         <div className={styles.title}>活动名称</div>
         <div>{info.name}</div>
@@ -37,16 +37,16 @@ function ViewActivity (Props:any) {
 
       <div className={styles.add_layout}>
         <div className={styles.title}>招募活动图</div>
-        <img src={info.cover_image} className={styles.cover_image}/>
+        <img src={'http://oss.tdianyi.com/' + info.cover_image} className={styles.cover_image} />
       </div>
 
       <div className={styles.add_layout}>
         <div className={styles.title}>招募规则</div>
         <div className={styles.ruleList}>
           {/* <div>123</div> */}
-          {
-            info.rules.map((item:string,index:number) => <div key={index}>{item}</div>)
-          }
+          {info.rules.map((item: string, index: number) => (
+            <div key={index}>{item}</div>
+          ))}
         </div>
       </div>
 
@@ -55,6 +55,6 @@ function ViewActivity (Props:any) {
         <div>{info.introduce}</div>
       </div>
     </div>
-  )
+  );
 }
-export default ViewActivity
+export default ViewActivity;

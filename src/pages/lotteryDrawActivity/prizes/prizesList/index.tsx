@@ -12,6 +12,7 @@ import {
   Divider,
   notification,
   Modal,
+  Upload,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -37,9 +38,16 @@ export default Form.create()(
         loading: false,
         total: 0,
         visible: false,
+        imageUrl: '',
+        ImgLoading: false,
+        oss_data: {}, // oss参数
+        prizeName: '',
+        prizeNum: '',
+        prizePrice: '',
       };
 
       componentDidMount() {
+        this.getOSSData();
         console.log(this.props);
       }
 
@@ -135,27 +143,184 @@ export default Form.create()(
         });
       };
 
-      handleOk = () => {};
+      // 输入
+      handleChangeInp = (type: string) => ({ target: { value } }) => {
+        this.setState({ [type]: value });
+      };
+
+      getOSSData = () => {
+        request.get('http://release.api.supplier.tdianyi.com/api/v2/up').then(res => {
+          let { data } = res;
+          console.log('data', data);
+          this.setState({
+            oss_data: {
+              expire: data.expire,
+              policy: data.policy,
+              OSSAccessKeyId: data.accessid,
+              success_action_status: 200, //让服务端返回200,不然，默认会返回204
+              signature: data.signature,
+              callback: data.callback,
+              host: data.host,
+              key: data.dir,
+            },
+          });
+        });
+      };
+
+      transformFile = (file: any) => {
+        const { oss_data } = this.state;
+        const suffix = file.name.slice(file.name.lastIndexOf('.'));
+        const filename = Date.now() + suffix;
+        file.url = oss_data.key + filename;
+
+        return file;
+      };
+
+      getExtraData = (file: any) => {
+        const { oss_data } = this.state;
+        return {
+          key: file.url,
+          policy: oss_data.policy,
+          OSSAccessKeyId: oss_data.OSSAccessKeyId,
+          success_action_status: 200, //让服务端返回200,不然，默认会返回204
+          signature: oss_data.signature,
+          callback: oss_data.callback,
+          host: oss_data.host,
+        };
+      };
+
+      beforeUpload = async () => {
+        const { oss_data } = this.state;
+        const expire = oss_data.expire * 1000;
+
+        if (expire < Date.now()) {
+          await this.getOSSData();
+        }
+        return true;
+      };
+
+      // 将图片转为base64
+      getBase64 = (img: any, callback: any) => {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+      };
+
+      // 上传图片
+      imageChange = (info: any) => {
+        if (info.file.status === 'uploading') {
+          this.setState({ loading: true });
+          return;
+        }
+        if (info.file.status === 'done') {
+          this.getBase64(info.file.originFileObj, (imageUrl: any) =>
+            this.setState(
+              {
+                imageUrl,
+                cover_image: info.file.response.data.path,
+                loading: false,
+              },
+              () => {
+                console.log(this.state);
+              },
+            ),
+          );
+        }
+      };
+
+      handleOk = () => {
+        console.log(this.state);
+      };
 
       handleCancel = () => {
         this.setState({
           visible: false,
+          imageUrl: '',
+          prizeName: '',
+          prizeNum: '',
+          prizePrice: '',
         });
       };
 
       render() {
-        const { visible } = this.state;
+        const {
+          visible,
+          imageUrl,
+          ImgLoading,
+          oss_data,
+          prizeName,
+          prizeNum,
+          prizePrice,
+        } = this.state;
+        const uploadButton = (
+          <div className={styles.uploadDefault}>
+            <Icon type={ImgLoading ? 'loading' : 'plus'} />
+            <div className={styles.upload_text}>上传奖品图片，尺寸：364*192</div>
+          </div>
+        );
+        const uploadProps = {
+          name: 'file',
+          action: oss_data.host,
+          onChange: this.imageChange,
+          transformFile: this.transformFile,
+          data: this.getExtraData,
+          beforeUpload: this.beforeUpload,
+        };
         return (
-          <div>
+          <div className={styles.prizesList}>
             <Modal
-              title="Basic Modal"
+              title="添加奖品"
               visible={visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
             >
-              <p>Some contents...</p>
-              <p>Some contents...</p>
-              <p>Some contents...</p>
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品名称</div>
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={prizeName}
+                  onChange={this.handleChangeInp('prizeName')}
+                />
+              </div>
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品库存</div>
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={prizeNum}
+                  onChange={this.handleChangeInp('prizeNum')}
+                />
+              </div>
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品价值</div>
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={prizePrice}
+                  onChange={this.handleChangeInp('prizePrice')}
+                />
+              </div>
+              <div className={styles.add_layout}>
+                <div style={{ width: '364px', height: '192px' }}>
+                  <Upload
+                    style={{ width: '100%' }}
+                    listType="picture-card"
+                    showUploadList={false}
+                    {...uploadProps}
+                  >
+                    {imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt="avatar"
+                        style={{ width: '364px', height: '192px' }}
+                      />
+                    ) : (
+                      uploadButton
+                    )}
+                  </Upload>
+                </div>
+              </div>
             </Modal>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Button

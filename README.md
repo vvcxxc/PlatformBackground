@@ -1,6 +1,6 @@
-# Ant Design Pro
+# 新版平台管理后台
 
-This project is initialized with [Ant Design Pro](https://pro.ant.design). Follow is the quick guide for how to use.
+目前只有招募和抽奖功能。。
 
 ## Environment Prepare
 
