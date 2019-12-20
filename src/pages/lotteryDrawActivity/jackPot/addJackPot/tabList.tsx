@@ -25,7 +25,7 @@ export default class TabList extends Component<Props> {
     let url = "/api/v1/pools/ActivityPrizes";
     request(url, {
       method: 'get',
-      data: { page, count },
+      params: { page, count },
     })
       .then(res => {
         if (res.status_code == 200) {    
