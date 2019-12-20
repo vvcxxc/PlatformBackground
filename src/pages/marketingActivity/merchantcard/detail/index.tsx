@@ -62,7 +62,9 @@ export default class AddActivity extends Component {
   };
   //拒绝原因
   handleReason = (e: any) => {
-    this.setState({ refuseReason: e.target.value });
+    if(e.target.value.length <= 60){
+      this.setState({ refuseReason: e.target.value });
+    }
   };
 
   componentDidMount() {
@@ -159,12 +161,7 @@ export default class AddActivity extends Component {
               <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
               <Descriptions.Item label="商品原价"> {card.price}元</Descriptions.Item>
               <Descriptions.Item label="卡券有效期">
-                {' '}
-                {new Date(card.begin_time).getFullYear()}年
-                {Number(new Date(card.begin_time).getMonth()) + 1}月
-                {new Date(card.begin_time).getDate()}日至{new Date(card.end_time).getFullYear()}年
-                {Number(new Date(card.end_time).getMonth()) + 1}月
-                {new Date(card.end_time).getDate()}日
+              {card.expire_day}天
               </Descriptions.Item>
               <Descriptions.Item label="使用须知">
                 <ul>

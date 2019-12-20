@@ -208,6 +208,7 @@ export default class AddActivity extends Component {
 
   // 输入
   inputChange = (type: string) => ({ target: { value } }) => {
+
     if(type == 'num'){
       if(value< 0){
         this.setState({ [type]: 0 });

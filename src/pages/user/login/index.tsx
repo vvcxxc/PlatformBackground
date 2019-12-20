@@ -40,7 +40,7 @@ class Login extends Component<LoginProps> {
     return (
       <div className={styles.main}>
         <div className={styles.box}>
-          <div className={styles.title}>平台管理后台</div>
+          <div className={styles.title}>营销管理中心</div>
           <div className={styles.inputBox}>
             <Input
               value={username}

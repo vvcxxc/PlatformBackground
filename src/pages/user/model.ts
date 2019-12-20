@@ -27,7 +27,7 @@ const model: Model = {
       let res = yield call(fakeAccountLogin, payload)
       if(res.status_code == 200){
         localStorage.setItem('token',res.data.token_type + ' ' + res.data.token)
-        router.push('/welcome')
+        router.push('/marketingActivity/activityinfo/cardlist')
       }else{
         notification.error({
           message: res.message,
