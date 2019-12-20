@@ -1,3 +1,4 @@
+#/bin/bash
 a=`stat -c %Y package.json`
 b=$(cat update_time.text)
 echo $a
