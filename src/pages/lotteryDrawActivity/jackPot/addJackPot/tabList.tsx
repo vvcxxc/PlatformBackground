@@ -1,76 +1,74 @@
 import React, { Component } from 'react';
-import { Table } from 'antd';
+import { Table, notification } from 'antd';
+import request from '@/utils/request';
+import { router } from 'umi';
 interface Props {
   selectChange?: any;
 }
 export default class TabList extends Component<Props> {
-  state = {};
+  state = {
+    page: 1,
+    giftList: [],
+    pagination: {
+      count: 0,
+      current_page: 1,
+      total: 0,
+      total_pages: 0
+    },
+    total: ''
+  };
+  componentDidMount() {
+    this.getData(1, 10);
+  }
+  getData = (page: Number, count: Number) => {
+    console.log(page,count)
+    let url = "/api/v1/pools/ActivityPrizes";
+    request(url, {
+      method: 'get',
+      data: { page, count },
+    })
+      .then(res => {
+        if (res.status_code == 200) {    
+          this.setState({ giftList: res.data, pagination: res.pagination })
+        } else {
+          notification.open({ message: res.message });
+        }
+      })
+      .catch(err => { });
+  }
+  changePage = (selectedRowKeys: any, selectedRows: any) => {
+    this.getData(selectedRowKeys.current, selectedRowKeys.pageSize);
+  }
   render() {
     const columns = [
-      {
-        title: '编号',
-        dataIndex: 'code',
-      },
+      // {
+      //   title: '编号',
+      //   dataIndex: 'id',
+      //   align: 'center'
+      // },
       {
         title: '礼品id',
         dataIndex: 'id',
+        align: 'center'
       },
       {
         title: '礼品名称',
         dataIndex: 'name',
+        align: 'center'
       },
       {
         title: '礼品库存',
-        dataIndex: 'number',
+        dataIndex: 'stock',
+        align: 'center'
       },
       {
         title: '商品价值',
-        dataIndex: 'price',
-        render: (text: Number | String) => <a>{text}</a>,
+        dataIndex: 'market_price',
+        align: 'center',
+        render: (text: Number | String) => <div>{text}元</div>,
       },
     ];
-    const data = [
-      {
-        key: '1',
-        code: '1',
-        id: 'PC9527',
-        name: '华为P30',
-        number: 2,
-        price: 676,
-      },
-      {
-        key: '2',
-        code: '2',
-        id: 'PC9527',
-        name: '华为P31',
-        number: 2,
-        price: 676,
-      },
-      {
-        key: '3',
-        code: '3',
-        id: 'PC9527',
-        name: '华为P32',
-        number: 2,
-        price: 676,
-      },
-      {
-        key: '4',
-        code: '004',
-        id: 'PC9527',
-        name: '华为P33',
-        number: 2,
-        price: 676,
-      },
-      {
-        key: '5',
-        code: '555',
-        id: 'PC9527',
-        name: '华为P34',
-        number: 2,
-        price: 676,
-      },
-    ];
+
     const rowSelection = {
       onChange: (selectedRowKeys: any, selectedRows: any) => {
         this.props.selectChange && this.props.selectChange(selectedRows);
@@ -84,15 +82,16 @@ export default class TabList extends Component<Props> {
       <Table
         rowSelection={rowSelection}
         columns={columns}
-        dataSource={data}
+        dataSource={this.state.giftList}
+        onChange={this.changePage}
         pagination={{
           current: 1,
           defaultCurrent: 1,
           showSizeChanger: true,
           showQuickJumper: true,
-          total: 5, //总条数
+          total: this.state.pagination.total, //总条数
           showTotal: () => {
-            return `共${5}条`; //总条数
+            return `共${this.state.pagination.total}条`; //总条数
           },
         }}
       />

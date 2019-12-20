@@ -6,8 +6,7 @@ import request from '@/utils/request';
 const { Title } = Typography;
 export default class AddJackPot extends Component {
   state = {
-    menuCheck: undefined,
-    activityCheck: undefined,
+
     dataSource: [
       {
         key: '1',
@@ -29,9 +28,19 @@ export default class AddJackPot extends Component {
       },
     ],
     closeVisible: false,
+    name: '',//活动名称
+    menuCheck: undefined,//活动类型
+    activityCheck: undefined,//奖品类型
+    thanksParticipationPercent: '',//奖谢谢参与中奖率
+    dailyInventory: '',//每日库存
+    getLocation: '',//领取地点
+    getAddress: '',//领取地址
+    getValidity: '',//有效期
+    giftIdGroup: [],
+    giftIdPrecent: [],
   };
 
-  componentDidMount (){
+  componentDidMount() {
     request.get('/api/v1/pools/ActivityOptions').then(res => {
       console.log(res)
     })
@@ -54,9 +63,16 @@ export default class AddJackPot extends Component {
     console.log(query);
   };
 
-  // 所有输入框里onChange
-  inputChange = (type: string) => ({target: {value}}) => {
-    console.log(type,value)
+  // 礼物概率以外的所有输入框里onChange
+  inputChange = (type: string) => ({ target: { value } }) => {
+    console.log(type, value);
+    this.setState({ [type]: value });
+  }
+  // 礼物概率输入框里onChange
+  giftChange = (index: Number | String, e: any) => {
+    let tempPercent = this.state.giftIdPrecent;
+    tempPercent[index] = e.target.value;
+    this.setState({ giftIdPrecent: tempPercent })
   }
 
 
@@ -104,9 +120,9 @@ export default class AddJackPot extends Component {
       {
         title: '中奖率',
         dataIndex: 'percent',
-        render: () => (
+        render: (a, item, index) => (
           <div>
-            <Input className={styles.inputBox} placeholder="设置中奖率" />%
+            <Input className={styles.inputBox} placeholder="设置中奖率" onChange={this.giftChange.bind(this, index)} />%
           </div>
         ),
       },
@@ -124,15 +140,15 @@ export default class AddJackPot extends Component {
             bordered={true}
           >
             <Descriptions.Item label="设置奖池名称">
-              <Input placeholder="请设置奖池名称" onChange={this.inputChange('name')}/>
+              <Input placeholder="请设置奖池名称" onChange={this.inputChange('name')} />
             </Descriptions.Item>
             <Descriptions.Item label="选择奖品类型">
               <Dropdown.Button overlay={menu}>
                 {!this.state.menuCheck
                   ? '选择奖品类型'
                   : this.state.menuCheck == 1
-                  ? '线上卡券'
-                  : '实物奖品'}
+                    ? '线上卡券'
+                    : '实物奖品'}
               </Dropdown.Button>
             </Descriptions.Item>
             {this.state.menuCheck == 1 ? (
@@ -158,10 +174,10 @@ export default class AddJackPot extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="设置奖池名称">已设置XX张 </Descriptions.Item>
               <Descriptions.Item label="谢谢参与中奖率">
-                <Input className={styles.inputBox} placeholder="请设置谢谢参与中奖率" />
+                <Input className={styles.inputBox} placeholder="请设置谢谢参与中奖率" onChange={this.inputChange('thanksParticipationPercent')} />
               </Descriptions.Item>
               <Descriptions.Item label="每日卡券库存">
-                <Input className={styles.inputBox} placeholder="请设置每日卡券库存" />张
+                <Input className={styles.inputBox} placeholder="请设置每日卡券库存" onChange={this.inputChange('dailyInventory')} />张
               </Descriptions.Item>
             </Descriptions>
           </div>
@@ -176,14 +192,14 @@ export default class AddJackPot extends Component {
               bordered={true}
             >
               <Descriptions.Item label="领取地点">
-                <Input className={styles.inputBox} placeholder="请设置领取地点" />
+                <Input className={styles.inputBox} placeholder="请设置领取地点" onChange={this.inputChange('getLocation')} />
               </Descriptions.Item>
               <Descriptions.Item label="领取地址">
-                <Input placeholder="请设置领取地址" />
+                <Input placeholder="请设置领取地址" onChange={this.inputChange('getAddress')} />
               </Descriptions.Item>
               <Descriptions.Item label="领取有效期">
                 领券后
-                <Input className={styles.inputBox} placeholder="领取有效期" />
+                <Input className={styles.inputBox} placeholder="领取有效期" onChange={this.inputChange('getValidity')} />
                 天有效
               </Descriptions.Item>
               <Descriptions.Item label="奖品数量">已选择X份</Descriptions.Item>
@@ -195,7 +211,7 @@ export default class AddJackPot extends Component {
                     this.setState({ closeVisible: true });
                   }}
                 >
-                  点击选择卡券
+                  点击选择奖品
                 </Button>
               </Descriptions.Item>
               <Descriptions.Item label="设定奖品中奖率">
