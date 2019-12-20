@@ -15,20 +15,19 @@ export default class TabList extends Component<Props> {
       total: 0,
       total_pages: 0
     },
-    total: ''
   };
   componentDidMount() {
     this.getData(1, 10);
   }
   getData = (page: Number, count: Number) => {
-    console.log(page,count)
+    console.log(page, count)
     let url = "/api/v1/pools/ActivityPrizes";
     request(url, {
       method: 'get',
       params: { page, count },
     })
       .then(res => {
-        if (res.status_code == 200) {    
+        if (res.status_code == 200) {
           this.setState({ giftList: res.data, pagination: res.pagination })
         } else {
           notification.open({ message: res.message });
@@ -39,6 +38,11 @@ export default class TabList extends Component<Props> {
   changePage = (selectedRowKeys: any, selectedRows: any) => {
     this.getData(selectedRowKeys.current, selectedRowKeys.pageSize);
   }
+  onSelectChange = (selectedRowKeys) => {
+    console.log('selectedRowKeys changed: ', selectedRowKeys);
+    this.setState({ selectedRowKeys });
+  }
+
   render() {
     const columns = [
       // {
@@ -71,13 +75,16 @@ export default class TabList extends Component<Props> {
 
     const rowSelection = {
       onChange: (selectedRowKeys: any, selectedRows: any) => {
-        this.props.selectChange && this.props.selectChange(selectedRows);
+        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        // this.props.selectChange && this.props.selectChange(selectedRows);
       },
       getCheckboxProps: (record: any) => ({
         disabled: record.name === 'Disabled User',
         name: record.name,
       }),
     };
+  
+
     return (
       <Table
         rowSelection={rowSelection}
@@ -85,10 +92,6 @@ export default class TabList extends Component<Props> {
         dataSource={this.state.giftList}
         onChange={this.changePage}
         pagination={{
-          current: 1,
-          defaultCurrent: 1,
-          showSizeChanger: true,
-          showQuickJumper: true,
           total: this.state.pagination.total, //总条数
           showTotal: () => {
             return `共${this.state.pagination.total}条`; //总条数
