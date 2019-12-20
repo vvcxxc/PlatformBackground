@@ -12,6 +12,7 @@ import {
   Divider,
   notification,
   Modal,
+  message
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -40,7 +41,16 @@ export default Form.create()(
       };
 
       componentDidMount() {
-        console.log(this.props);
+        // console.log(this.props);
+
+        const {
+          activityName,
+          storeName,
+          status,
+          currentPage,
+          currentPageSize,
+        } = this.props.containerTruckList;
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
 
         this.getAreaList();
       }
@@ -71,7 +81,44 @@ export default Form.create()(
 
         const { currentPage, currentPageSize } = this.props.containerTruckList;
 
-        // this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+      };
+
+      getListData = (activity_name: string, storeName: string, status: string, currentPage: any, currentPageSize: any) => {
+        this.setState({
+          loading: true,
+        });
+        request('/api/v1/activity/cardcollecting', {
+          method: 'GET',
+          params: {
+            name: activity_name,
+            status,
+            area_id: storeName,
+            page: currentPage,
+            count: currentPageSize
+          }
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            total: res.pagination.total,
+          })
+        })
+      }
+
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        await this.props.dispatch({
+          type: 'containerTruckList/setPaginationCurrent',
+          payload: {
+            currentPage: pagination.current,
+            currentPageSize: pagination.pageSize,
+          },
+        });
+        const { currentPage, currentPageSize } = this.props.containerTruckList;
+        let status = this.props.form.getFieldValue('status');
+        let activityName = this.props.form.getFieldValue('activityName');
+        let storeName = this.props.form.getFieldValue('storeName');
+        this.getListData(activityName, storeName, status, currentPage, currentPageSize);
       };
 
       handleFormReset = async () => {
@@ -249,10 +296,131 @@ export default Form.create()(
         );
       }
 
+      handleDeleteActivity = (record: any) => {
+        // console.log(record);
+        let _this = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request('/api/v1/activity/cardcollecting', {
+              method: 'DELETE',
+              params: {
+                id: record.id
+              }
+            }).then(res => {
+              message.success(res.message);
+              const {
+                activityName,
+                storeName,
+                status,
+                currentPage,
+                currentPageSize,
+              } = _this.props.containerTruckList;
+              _this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
       render() {
+        const { dataList, loading, total } = this.state;
+        const { currentPage, currentPageSize } = this.props.containerTruckList;
+        const columns = [
+          {
+            title: '编号',
+            dataIndex: 'id',
+            key: 'id',
+          },
+          {
+            title: '活动名称',
+            dataIndex: 'name',
+            key: 'name',
+          },
+          {
+            title: '活动区域',
+            dataIndex: 'areaname',
+            key: 'areaname',
+          },
+          {
+            title: '活动时间',
+            dataIndex: 'activity_time',
+            key: 'activity_time',
+          },
+          {
+            title: '卡片数量',
+            dataIndex: 'card_number',
+            key: 'card_number',
+          },
+          {
+            title: '抽奖条件',
+            dataIndex: 'lucky_draw_number',
+            key: 'lucky_draw_number',
+          },
+          {
+            title: '活动状态',
+            dataIndex: 'status',
+            key: 'status',
+            render: (text: any, record: any) => (
+              <span>
+                {
+                  record.status == 0 ? (
+                    <span>未生效</span>
+                  ) : record.status == 1 ? (
+                    <span>已开始</span>
+                  ) : record.status == 2 ? (
+                    <span>已结束</span>
+                  ) : ""
+                }
+              </span>
+            )
+          },
+          {
+            title: '操作',
+            key: 'operation',
+            width: 200,
+            render: (text: any, record: any) => (
+              <span>
+                <a >查看</a>
+                <Divider type="vertical" />
+                <a >编辑</a>
+                {
+                  record.status == 0 ? (
+                    <span>
+                      <Divider type="vertical" />
+                      <a onClick={this.handleDeleteActivity.bind(this, record)}>删除活动</a>
+                    </span>
+                  ) : ""
+                }
+              </span>
+            ),
+          },
+        ]
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Table
+              columns={columns}
+              dataSource={dataList}
+              loading={loading}
+              onChange={this.handleChange}
+              pagination={{
+                current: currentPage,
+                defaultPageSize: currentPageSize,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total,
+                showTotal: () => {
+                  return `共${total}条`;
+                },
+              }}
+            />
           </div>
         );
       }

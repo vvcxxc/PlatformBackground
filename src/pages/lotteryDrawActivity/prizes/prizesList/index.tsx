@@ -273,6 +273,7 @@ export default Form.create()(
               visible={visible}
               onOk={this.handleOk}
               onCancel={this.handleCancel}
+              width="430px"
             >
               <div className={styles.add_layout}>
                 <div className={styles.title}>奖品名称</div>
