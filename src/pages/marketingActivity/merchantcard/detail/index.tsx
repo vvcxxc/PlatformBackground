@@ -160,6 +160,7 @@ export default class AddActivity extends Component {
               </Descriptions.Item>
               <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
               <Descriptions.Item label="商品原价"> {card.price}元</Descriptions.Item>
+              <Descriptions.Item label="卡券数量"> {card.total_num}张</Descriptions.Item>
               <Descriptions.Item label="卡券有效期">
               {card.expire_day}天
               </Descriptions.Item>
