@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.less';
 import { Typography, Input, Menu, Dropdown, Descriptions, Button, Table, Modal } from 'antd';
 import TabList from './tabList';
+import request from '@/utils/request';
 const { Title } = Typography;
 export default class AddJackPot extends Component {
   state = {
@@ -29,6 +30,13 @@ export default class AddJackPot extends Component {
     ],
     closeVisible: false,
   };
+
+  componentDidMount (){
+    request.get('/api/v1/pools/ActivityOptions').then(res => {
+      console.log(res)
+    })
+  }
+
   handleMenuClick = (type: Number, e: any) => {
     this.setState({ menuCheck: type });
   };
@@ -45,6 +53,13 @@ export default class AddJackPot extends Component {
     //弹出层选择
     console.log(query);
   };
+
+  // 所有输入框里onChange
+  inputChange = (type: string) => ({target: {value}}) => {
+    console.log(type,value)
+  }
+
+
   render() {
     const menu = (
       <Menu>
@@ -109,7 +124,7 @@ export default class AddJackPot extends Component {
             bordered={true}
           >
             <Descriptions.Item label="设置奖池名称">
-              <Input placeholder="请设置奖池名称" />
+              <Input placeholder="请设置奖池名称" onChange={this.inputChange('name')}/>
             </Descriptions.Item>
             <Descriptions.Item label="选择奖品类型">
               <Dropdown.Button overlay={menu}>

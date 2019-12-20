@@ -13,6 +13,11 @@ const configs = {
   local: {
     API: 'http://test.platform_admin_api.tdianyi.com',
   },
+
+  // 线上环境
+  master: {
+    API: 'http://platform_admin_api.tdianyi.com',
+  },
 };
 
 export default configs;
