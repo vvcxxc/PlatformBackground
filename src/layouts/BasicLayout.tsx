@@ -150,7 +150,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         menuHeaderRender={(logo, title) => (
           <Link to="/">
             {logo}
-            <h1>平台管理后台</h1>
+            <h1>营销管理中心</h1>
           </Link>
           // <div>
 
