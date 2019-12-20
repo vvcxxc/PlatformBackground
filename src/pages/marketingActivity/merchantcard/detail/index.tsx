@@ -62,7 +62,9 @@ export default class AddActivity extends Component {
   };
   //拒绝原因
   handleReason = (e: any) => {
-    this.setState({ refuseReason: e.target.value });
+    if(e.target.value.length <= 60){
+      this.setState({ refuseReason: e.target.value });
+    }
   };
 
   componentDidMount() {
