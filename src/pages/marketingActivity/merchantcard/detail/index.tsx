@@ -40,6 +40,8 @@ export default class AddActivity extends Component {
       description: [],
       image: '',
       create_time: '',
+      total_fee:'',
+      expire_day:'',
     },
   };
   //拒绝审批
@@ -187,7 +189,7 @@ export default class AddActivity extends Component {
               <Descriptions.Item label="卡券名称">{card.name}</Descriptions.Item>
               <Descriptions.Item label="发布时间">{card.create_time}</Descriptions.Item>
               <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
-              <Descriptions.Item label="使用门槛"> {card.price}元</Descriptions.Item>
+              <Descriptions.Item label="使用门槛"> {card.total_fee}元</Descriptions.Item>
               <Descriptions.Item label="卡券有效期">
                {card.expire_day}天
               </Descriptions.Item>

@@ -15,12 +15,13 @@ export default class TabList extends Component<Props> {
       total: 0,
       total_pages: 0
     },
+    haveReadPageItem: [],
+    returnItemList: []
   };
   componentDidMount() {
     this.getData(1, 10);
   }
   getData = (page: Number, count: Number) => {
-    console.log(page, count)
     let url = "/api/v1/pools/ActivityPrizes";
     request(url, {
       method: 'get',
@@ -28,7 +29,7 @@ export default class TabList extends Component<Props> {
     })
       .then(res => {
         if (res.status_code == 200) {
-          this.setState({ giftList: res.data, pagination: res.pagination })
+          this.setState({ giftList: res.data, pagination: res.pagination, page: page })
         } else {
           notification.open({ message: res.message });
         }
@@ -38,10 +39,7 @@ export default class TabList extends Component<Props> {
   changePage = (selectedRowKeys: any, selectedRows: any) => {
     this.getData(selectedRowKeys.current, selectedRowKeys.pageSize);
   }
-  onSelectChange = (selectedRowKeys) => {
-    console.log('selectedRowKeys changed: ', selectedRowKeys);
-    this.setState({ selectedRowKeys });
-  }
+
 
   render() {
     const columns = [
@@ -53,21 +51,25 @@ export default class TabList extends Component<Props> {
       {
         title: '礼品id',
         dataIndex: 'id',
+        key: 'id',
         align: 'center'
       },
       {
         title: '礼品名称',
         dataIndex: 'name',
+        key: 'name',
         align: 'center'
       },
       {
         title: '礼品库存',
         dataIndex: 'stock',
+        key: 'stock',
         align: 'center'
       },
       {
         title: '商品价值',
         dataIndex: 'market_price',
+        key: 'market_price',
         align: 'center',
         render: (text: Number | String) => <div>{text}元</div>,
       },
@@ -75,19 +77,38 @@ export default class TabList extends Component<Props> {
 
     const rowSelection = {
       onChange: (selectedRowKeys: any, selectedRows: any) => {
-        console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        // this.props.selectChange && this.props.selectChange(selectedRows);
+        // console.log(`selectedRowKeys:`, selectedRowKeys, 'selectedRows: ', selectedRows);
+        let haveReadPageItem: any = this.state.haveReadPageItem;
+        haveReadPageItem[this.state.page] = selectedRows;
+        // console.log('已选数据', haveReadPageItem)
+
+
+
+        let returnItemList: any = [];
+
+        for (let i = 1; i < haveReadPageItem.length; i++) {
+          for (let j = 0; j < haveReadPageItem[i].length; j++) {
+            returnItemList.push(haveReadPageItem[i][j])
+          }
+        }
+
+        console.log('数据:', returnItemList)
+
+        this.setState({ haveReadPageItem: haveReadPageItem, returnItemList: returnItemList })
+
+
       },
       getCheckboxProps: (record: any) => ({
         disabled: record.name === 'Disabled User',
         name: record.name,
       }),
     };
-  
+
 
     return (
       <Table
         rowSelection={rowSelection}
+        rowKey="id"
         columns={columns}
         dataSource={this.state.giftList}
         onChange={this.changePage}
