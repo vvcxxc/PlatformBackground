@@ -406,6 +406,7 @@ export default Form.create()(
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Table
+              rowKey="id"
               columns={columns}
               dataSource={dataList}
               loading={loading}
