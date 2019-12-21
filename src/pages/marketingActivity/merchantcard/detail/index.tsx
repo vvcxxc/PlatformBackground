@@ -53,7 +53,7 @@ export default class AddActivity extends Component {
     this.recruit(2);
   };
   handleCancel = () => {
-    this.setState({ closeVisible: false });
+    this.setState({ closeVisible: false ,confirmLoading:false});
   };
   //放大图片
   showModal = () => {
