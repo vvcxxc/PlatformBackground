@@ -40,8 +40,8 @@ export default class AddActivity extends Component {
       description: [],
       image: '',
       create_time: '',
-      total_fee:'',
-      expire_day:'',
+      total_fee: '',
+      expire_day: '',
     },
   };
   //拒绝审批
@@ -64,7 +64,7 @@ export default class AddActivity extends Component {
   };
   //拒绝原因
   handleReason = (e: any) => {
-    if(e.target.value.length <= 60){
+    if (e.target.value.length <= 60) {
       this.setState({ refuseReason: e.target.value });
     }
   };
@@ -91,6 +91,10 @@ export default class AddActivity extends Component {
       });
   }
   recruit = (type: Number) => {
+    if (type == 2 && this.state.refuseReason) {
+      notification.open({ message: '拒绝原因不能为空' });
+      return;
+    }
     this.setState({ showLoading: true });
     let url = '/api/v1/activity/recruit/card/' + this.props.location.query.id;
     // let url = '/api/v1/activity/recruit/card/1';
@@ -164,60 +168,60 @@ export default class AddActivity extends Component {
               <Descriptions.Item label="商品原价"> {card.price}元</Descriptions.Item>
               <Descriptions.Item label="卡券数量"> {card.total_num}张</Descriptions.Item>
               <Descriptions.Item label="卡券有效期">
-              {card.expire_day}天
+                {card.expire_day}天
               </Descriptions.Item>
               <Descriptions.Item label="使用须知">
                 <ul>
                   {card.description && card.description.length > 0
                     ? card.description.map((item, index) => {
-                        return <li key={index}>{item}</li>;
-                      })
+                      return <li key={index}>{item}</li>;
+                    })
                     : null}
                 </ul>
               </Descriptions.Item>
             </Descriptions>
           </div>
         ) : (
-          <div className={styles.detailPage}>
-            <Descriptions
-              title="卡券基本信息"
-              layout="horizontal"
-              column={1}
-              size={'small'}
-              bordered={true}
-            >
-              <Descriptions.Item label="卡券名称">{card.name}</Descriptions.Item>
-              <Descriptions.Item label="发布时间">{card.create_time}</Descriptions.Item>
-              <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
-              <Descriptions.Item label="使用门槛"> {card.total_fee}元</Descriptions.Item>
-              <Descriptions.Item label="卡券有效期">
-               {card.expire_day}天
+            <div className={styles.detailPage}>
+              <Descriptions
+                title="卡券基本信息"
+                layout="horizontal"
+                column={1}
+                size={'small'}
+                bordered={true}
+              >
+                <Descriptions.Item label="卡券名称">{card.name}</Descriptions.Item>
+                <Descriptions.Item label="发布时间">{card.create_time}</Descriptions.Item>
+                <Descriptions.Item label="卡券类型">{card.youhui_type_name}</Descriptions.Item>
+                <Descriptions.Item label="使用门槛"> {card.total_fee}元</Descriptions.Item>
+                <Descriptions.Item label="卡券有效期">
+                  {card.expire_day}天
               </Descriptions.Item>
-              <Descriptions.Item label="卡券数量"> {card.total_num}张</Descriptions.Item>
-            </Descriptions>
-          </div>
-        )}
+                <Descriptions.Item label="卡券数量"> {card.total_num}张</Descriptions.Item>
+              </Descriptions>
+            </div>
+          )}
         {
           card.publish_wait == 1 ? null : (
-        <div className={styles.buttonList}>
-          <div className={styles.clickList}>
-            <Button type="primary" size="large" onClick={this.recruit.bind(this, 1)}>
-              审核通过
+            <div className={styles.buttonList}>
+              <div className={styles.clickList}>
+                <Button type="primary" size="large" onClick={this.recruit.bind(this, 1)}>
+                  审核通过
             </Button>
-            <Button type="danger" size="large" onClick={this.showCloseModal}>
-              拒绝通过
+                <Button type="danger" size="large" onClick={this.showCloseModal}>
+                  拒绝通过
             </Button>
-          </div>
-          <Button
-            size="large"
-            onClick={() => {
-              router.goBack();
-            }}
-          >
-            {' '}
-            取消
+              </div>
+              <Button
+                size="large"
+                onClick={() => {
+                  router.goBack();
+                }}
+              >
+                {' '}
+                取消
           </Button>
-        </div>
+            </div>
           )
         }
 
