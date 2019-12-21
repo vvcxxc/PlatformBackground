@@ -91,7 +91,7 @@ export default class AddActivity extends Component {
       });
   }
   recruit = (type: Number) => {
-    if (type == 2 && this.state.refuseReason) {
+    if (type == 2 && !this.state.refuseReason) {
       notification.open({ message: '拒绝原因不能为空' });
       return;
     }

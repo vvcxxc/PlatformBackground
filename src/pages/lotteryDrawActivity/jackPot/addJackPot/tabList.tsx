@@ -91,12 +91,9 @@ export default class TabList extends Component<Props> {
             returnItemList.push(haveReadPageItem[i][j])
           }
         }
-
-        console.log('数据:', returnItemList)
-
         this.setState({ haveReadPageItem: haveReadPageItem, returnItemList: returnItemList })
-
-
+        console.log('数据:', returnItemList)
+        this.props.selectChange && this.props.selectChange(returnItemList)
       },
       getCheckboxProps: (record: any) => ({
         disabled: record.name === 'Disabled User',
