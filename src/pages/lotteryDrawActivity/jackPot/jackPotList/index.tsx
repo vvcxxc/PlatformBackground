@@ -171,6 +171,10 @@ export default Form.create()(
         this.getListData(activityName, activityStatus, currentPage, currentPageSize);
       };
 
+      addJackPot() {
+        router.push('/lotteryDrawActivity/jackPot/addJackPot');
+      }
+
       render() {
         const { dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props.jackPotList;
@@ -234,6 +238,14 @@ export default Form.create()(
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Button
+              type="primary"
+              icon="plus"
+              className={styles.addJackPot}
+              onClick={this.addJackPot.bind(this)}
+            >
+              新增奖池
+              </Button>
             <Table
               rowKey="id"
               columns={columns}

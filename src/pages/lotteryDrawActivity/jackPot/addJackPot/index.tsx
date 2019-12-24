@@ -23,7 +23,9 @@ export default class AddJackPot extends Component {
     getValidity: '',//有效期
     giftIdGroup: [],
     giftIdPrecent: [],
-    activityList: []
+    activityList: [],
+    isFlag: false,
+    originData: [],
   };
 
   componentDidMount() {
@@ -53,13 +55,23 @@ export default class AddJackPot extends Component {
     }).catch(err => { console.log(err) })
   };
   handleOk = () => {
-    this.setState({ closeVisible: false });
+    this.setState({
+      closeVisible: false, 
+      isFlag: true,
+      originData: this.state.dataSource
+    });
   };
   handleCancel = () => {
-    this.setState({ closeVisible: false });
+    this.setState({ 
+      closeVisible: false
+    });
   };
   selectChange = (query: any) => {
-    this.setState({ giftIdGroup: query.selectedRowKeys, dataSource: query.returnItemList })
+    this.setState({ 
+      giftIdGroup: query.selectedRowKeys, 
+      dataSource: query.returnItemList, 
+      isFlag: false,
+    })
   };
 
   // 礼物概率以外的所有输入框里onChange
@@ -249,8 +261,9 @@ export default class AddJackPot extends Component {
                 </Descriptions.Item>
                 <Descriptions.Item label="设定奖品中奖率">
                   {
-                    this.state.dataSource.length > 0 ? <Table rowKey="id" dataSource={this.state.dataSource} columns={columns} pagination={false} />
-                      : null
+                    this.state.dataSource.length > 0 && this.state.isFlag ? <Table rowKey="id" dataSource={this.state.dataSource} columns={columns} pagination={false} />
+                      : this.state.originData.length > 0 && !this.state.isFlag ? <Table rowKey="id" dataSource={this.state.originData} columns={columns} pagination={false} />
+                       : null
                   }
                 </Descriptions.Item>
               </Descriptions>
