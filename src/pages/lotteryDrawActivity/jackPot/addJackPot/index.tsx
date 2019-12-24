@@ -90,7 +90,9 @@ export default class AddJackPot extends Component {
     getValidity: '',//有效期
     giftIdGroup: [],
     giftIdPrecent: [],
-    activityList: []
+    activityList: [],
+    isFlag: false,
+    originData: [],
   };
   components = {
     body: {
@@ -125,13 +127,23 @@ export default class AddJackPot extends Component {
     }).catch(err => { console.log(err) })
   };
   handleOk = () => {
-    this.setState({ closeVisible: false });
+    this.setState({
+      closeVisible: false,
+      isFlag: true,
+      originData: this.state.dataSource
+    });
   };
   handleCancel = () => {
-    this.setState({ closeVisible: false });
+    this.setState({
+      closeVisible: false
+    });
   };
   selectChange = (query: any) => {
-    this.setState({ giftIdGroup: query.selectedRowKeys, dataSource: query.returnItemList })
+    this.setState({
+      giftIdGroup: query.selectedRowKeys,
+      dataSource: query.returnItemList,
+      isFlag: false,
+    })
   };
 
   // 礼物概率以外的所有输入框里onChange
@@ -362,11 +374,23 @@ export default class AddJackPot extends Component {
                 </Descriptions.Item>
                 <Descriptions.Item label="设定奖品中奖率">
                   {
-                    this.state.dataSource.length > 0 ?
-                      <DndProvider backend={HTML5Backend}>
+                    this.state.dataSource.length > 0 && this.state.isFlag ? <DndProvider backend={HTML5Backend}>
+                      <Table
+                        rowKey="id"
+                        dataSource={this.state.dataSource}
+                        components={this.components}
+                        columns={columns}
+                        pagination={false}
+                        onRow={(record, index) => ({
+                          index,
+                          moveRow: this.moveRow,
+                        })}
+                      />
+                    </DndProvider>
+                      : this.state.originData.length > 0 && !this.state.isFlag ? <DndProvider backend={HTML5Backend}>
                         <Table
                           rowKey="id"
-                          dataSource={this.state.dataSource}
+                          dataSource={this.state.originData}
                           components={this.components}
                           columns={columns}
                           pagination={false}
@@ -376,7 +400,7 @@ export default class AddJackPot extends Component {
                           })}
                         />
                       </DndProvider>
-                      : null
+                        : null
                   }
                 </Descriptions.Item>
               </Descriptions>
