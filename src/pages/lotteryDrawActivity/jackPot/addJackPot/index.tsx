@@ -34,13 +34,6 @@ export default class AddJackPot extends Component {
         notification.open({ message: res.message });
       }
     }).catch(err => { console.log(err) })
-    request.get('/api/v1/pools/couponNum').then(res => {
-      if (res.status_code == 200) {
-        this.setState({ activityNum: res.num })
-      } else {
-        notification.open({ message: res.message });
-      }
-    }).catch(err => { console.log(err) })
   }
 
   handleMenuClick = (type: Number, e: any) => {
@@ -48,6 +41,16 @@ export default class AddJackPot extends Component {
   };
   handleActiviutyClick = (id: String | Number, Name: String, area_name: String, e: any) => {
     this.setState({ activityCheckid: id, activityCheckName: Name, activityCheckArea_name: area_name });
+    request.get('/api/v1/pools/couponNum', {
+      method: 'GET',
+      params: { id: id },
+    }).then(res => {
+      if (res.status_code == 200) {
+        this.setState({ activityNum: res.num })
+      } else {
+        notification.open({ message: res.message });
+      }
+    }).catch(err => { console.log(err) })
   };
   handleOk = () => {
     this.setState({ closeVisible: false });
@@ -79,7 +82,7 @@ export default class AddJackPot extends Component {
       }
     } else {
       data = {
-        name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, prize_id: giftIdGroup, probability: giftIdPrecent
+        name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent
       }
     }
     request('/api/v1/pools', {

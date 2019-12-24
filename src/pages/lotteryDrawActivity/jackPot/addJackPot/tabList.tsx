@@ -7,6 +7,7 @@ interface Props {
 }
 export default class TabList extends Component<Props> {
   state = {
+    loading: false,
     page: 1,
     giftList: [],
     pagination: {
@@ -22,19 +23,21 @@ export default class TabList extends Component<Props> {
     this.getData(1, 10);
   }
   getData = (page: Number, count: Number) => {
+    this.setState({ loading: true });
     let url = "/api/v1/pools/ActivityPrizes";
     request(url, {
       method: 'get',
       params: { page, count },
     })
       .then(res => {
+        this.setState({ loading: false });
         if (res.status_code == 200) {
           this.setState({ giftList: res.data, pagination: res.pagination, page: page })
         } else {
           notification.open({ message: res.message });
         }
       })
-      .catch(err => { });
+      .catch(err => { this.setState({ loading: false }); });
   }
   changePage = (selectedRowKeys: any, selectedRows: any) => {
     this.getData(selectedRowKeys.current, selectedRowKeys.pageSize);
@@ -87,7 +90,7 @@ export default class TabList extends Component<Props> {
           }
         }
         this.setState({ haveReadPageItem: haveReadPageItem, returnItemList: returnItemList })
-        let query={selectedRowKeys,returnItemList}
+        let query = { selectedRowKeys, returnItemList }
         this.props.selectChange && this.props.selectChange(query)
       },
       getCheckboxProps: (record: any) => ({
@@ -102,6 +105,7 @@ export default class TabList extends Component<Props> {
         rowSelection={rowSelection}
         rowKey="id"
         columns={columns}
+        loading={this.state.loading}
         dataSource={this.state.giftList}
         onChange={this.changePage}
         pagination={{
