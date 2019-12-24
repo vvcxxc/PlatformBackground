@@ -329,6 +329,15 @@ export default Form.create()(
         });
       }
 
+      Goto = (type: string,id: any) => {
+        console.log(type,id)
+        if(type == 'view'){
+          router.push('/lotteryDrawActivity/containerTruck/viewActivity?id='+id)
+        }else if(type == 'edit'){
+          router.push('/lotteryDrawActivity/containerTruck/editActivity?id='+id)
+        }
+      }
+
       render() {
         const { dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props.containerTruckList;
@@ -387,9 +396,9 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <a >查看</a>
+                <a onClick={this.Goto.bind(this,'view',text.id)}>查看</a>
                 <Divider type="vertical" />
-                <a >编辑</a>
+                <a onClick={this.Goto.bind(this,'edit',text.id)}>编辑</a>
                 {
                   record.status == 0 ? (
                     <span>

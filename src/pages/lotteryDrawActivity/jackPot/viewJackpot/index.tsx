@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import styles from './index.less';
 import { Spin, Table, Button } from 'antd';
+import request from '@/utils/request';
 export default class ViewJackPot extends Component {
   state = {
     Loading: false, //loading
@@ -28,6 +29,12 @@ export default class ViewJackPot extends Component {
       },
     ],
   };
+
+  componentDidMount() {
+    request.get('/api/v1/pools/'+ 26).then(res => {
+      console.log(res)
+    })
+  }
 
   render() {
     const { Loading } = this.state;

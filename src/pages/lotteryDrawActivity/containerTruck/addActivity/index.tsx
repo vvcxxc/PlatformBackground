@@ -5,6 +5,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 import request from '@/utils/request';
 import moment from 'moment';
+import { router } from 'umi';
 class AddActivity extends Component {
   state = {
     Loading: false, // 页面loading
@@ -130,6 +131,7 @@ class AddActivity extends Component {
           notification.success({
             message: res.message
           })
+          router.goBack()
         });
     } else {
       notification.error({
