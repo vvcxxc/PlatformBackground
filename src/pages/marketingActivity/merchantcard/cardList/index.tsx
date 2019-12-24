@@ -640,9 +640,11 @@ export default Form.create()(
       };
 
       handleChangeRejectReason = (e: any) => {
-        this.setState({
-          rejectReason: e.target.value,
-        });
+        if(e.target.value.length <= 60){
+          this.setState({
+            rejectReason: e.target.value,
+          });
+        }
       };
 
       render() {

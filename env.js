@@ -16,7 +16,7 @@ const configs = {
 
   // 线上环境
   master: {
-    API: 'http://platform_admin_api.tdianyi.com',
+    API: 'http://platform-admin.api.tdianyi.com',
   },
 };
 

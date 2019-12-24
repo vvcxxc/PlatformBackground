@@ -81,44 +81,45 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         },
       ],
     },
-    {
-      path: '/lotteryDrawActivity',
-      name: '抽奖活动管理',
-      children: [
-        {
-          path: '/lotteryDrawActivity/containerTruck/',
-          name: '集卡抽奖管理',
-          children: [
-            {
-              path: '/lotteryDrawActivity/containerTruck/containerTruckList',
-              name: '集卡抽奖管理',
-              component: './lotteryDrawActivity/containerTruck/containerTruckList',
-            },
-            {
-              path: '/lotteryDrawActivity/containerTruck/card',
-              name: '卡片管理',
-              children: [
-                {
-                  path: '/lotteryDrawActivity/containerTruck/card/cardList',
-                  name: '卡片管理',
-                  component: './lotteryDrawActivity/containerTruck/card/cardList',
-                },
-              ],
-            },
-          ],
-        },
-        {
-          path: '/lotteryDrawActivity/jackPot/jackPotList',
-          name: '奖池管理',
-          component: './lotteryDrawActivity/jackPot/jackPotList',
-        },
-        {
-          path: '/lotteryDrawActivity/prizes/prizesList',
-          name: '奖品管理',
-          component: './lotteryDrawActivity/prizes/prizesList',
-        },
-      ],
-    },
+    // 暂时隐藏未完成功能
+    // {
+    //   path: '/lotteryDrawActivity',
+    //   name: '抽奖活动管理',
+    //   children: [
+    //     {
+    //       path: '/lotteryDrawActivity/containerTruck/',
+    //       name: '集卡抽奖管理',
+    //       children: [
+    //         {
+    //           path: '/lotteryDrawActivity/containerTruck/containerTruckList',
+    //           name: '集卡抽奖管理',
+    //           component: './lotteryDrawActivity/containerTruck/containerTruckList',
+    //         },
+    //         {
+    //           path: '/lotteryDrawActivity/containerTruck/card',
+    //           name: '卡片管理',
+    //           children: [
+    //             {
+    //               path: '/lotteryDrawActivity/containerTruck/card/cardList',
+    //               name: '卡片管理',
+    //               component: './lotteryDrawActivity/containerTruck/card/cardList',
+    //             },
+    //           ],
+    //         },
+    //       ],
+    //     },
+    //     {
+    //       path: '/lotteryDrawActivity/jackPot/jackPotList',
+    //       name: '奖池管理',
+    //       component: './lotteryDrawActivity/jackPot/jackPotList',
+    //     },
+    //     {
+    //       path: '/lotteryDrawActivity/prizes/prizesList',
+    //       name: '奖品管理',
+    //       component: './lotteryDrawActivity/prizes/prizesList',
+    //     },
+    //   ],
+    // },
   ];
   useEffect(() => {
     // if (dispatch) {
@@ -150,7 +151,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         menuHeaderRender={(logo, title) => (
           <Link to="/">
             {logo}
-            <h1>平台管理后台</h1>
+            <h1>营销管理中心</h1>
           </Link>
           // <div>
 
