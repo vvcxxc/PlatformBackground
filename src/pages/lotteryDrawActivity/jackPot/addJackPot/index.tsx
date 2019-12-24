@@ -6,6 +6,73 @@ import request from '@/utils/request';
 const { Title } = Typography;
 import { router } from 'umi';
 
+import { DndProvider, DragSource, DropTarget } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import update from 'immutability-helper';
+let dragingIndex = -1;
+
+class BodyRow extends React.Component {
+  render() {
+    const { isOver, connectDragSource, connectDropTarget, moveRow, ...restProps } = this.props;
+    const style = { ...restProps.style, cursor: 'move' };
+
+    let { className } = restProps;
+    if (isOver) {
+      if (restProps.index > dragingIndex) {
+        className += ' drop-over-downward';
+      }
+      if (restProps.index < dragingIndex) {
+        className += ' drop-over-upward';
+      }
+    }
+
+    return connectDragSource(
+      connectDropTarget(<tr {...restProps} className={className} style={style} />),
+    );
+  }
+}
+
+const rowSource = {
+  beginDrag(props) {
+    dragingIndex = props.index;
+    return {
+      index: props.index,
+    };
+  },
+};
+
+const rowTarget = {
+  drop(props, monitor) {
+    const dragIndex = monitor.getItem().index;
+    const hoverIndex = props.index;
+
+    // Don't replace items with themselves
+    if (dragIndex === hoverIndex) {
+      return;
+    }
+
+    // Time to actually perform the action
+    props.moveRow(dragIndex, hoverIndex);
+
+    // Note: we're mutating the monitor item here!
+    // Generally it's better to avoid mutations,
+    // but it's good here for the sake of performance
+    // to avoid expensive index searches.
+    monitor.getItem().index = hoverIndex;
+  },
+};
+
+const DragableBodyRow = DropTarget('row', rowTarget, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+}))(
+  DragSource('row', rowSource, connect => ({
+    connectDragSource: connect.dragSource(),
+  }))(BodyRow),
+);
+
+
+
 export default class AddJackPot extends Component {
   state = {
     dataSource: [],
@@ -24,6 +91,11 @@ export default class AddJackPot extends Component {
     giftIdGroup: [],
     giftIdPrecent: [],
     activityList: []
+  };
+  components = {
+    body: {
+      row: DragableBodyRow,
+    },
   };
 
   componentDidMount() {
@@ -78,18 +150,22 @@ export default class AddJackPot extends Component {
     if (this.state.menuCheck == 1) {
       // '线上卡券'
       data = {
-        name, type: menuCheck, recruit_activity_id: activityCheckid, not_win_probability: thanksParticipationPercent, daily_number: dailyInventory
+        name, type: menuCheck, recruit_activity_id: activityCheckid, not_win_probability: thanksParticipationPercent, daily_number: dailyInventory,
       }
     } else {
+      let sort = [];
+      for (let i = 0; i < giftIdGroup.length; i++) {
+        sort[i] = i;
+      }
       data = {
-        name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent
+        name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent, sort
       }
     }
     request('/api/v1/pools', {
       method: 'POST',
       data: data,
     }).then(res => {
-      if (res.status_code == 200) {
+      if (res.status_code == 201) {
         notification.success({ message: res.message });
         setTimeout(() => {
           router.goBack();
@@ -99,6 +175,43 @@ export default class AddJackPot extends Component {
       }
     }).catch(err => { console.log(err) })
   }
+  moveRow = (dragIndex: number, hoverIndex: number) => {
+    const { dataSource, giftIdPrecent } = this.state;
+    let arr: any = [];
+    for (let i in dataSource) {
+      if (giftIdPrecent[i]) {
+        let obj = {
+          id: dataSource[i].id,
+          precent: giftIdPrecent[i]
+        }
+        arr.push(obj)
+      }
+    }
+    const dragRow = dataSource[dragIndex];
+    let arr1: any = [];
+    let arr2: any = [];
+    this.setState(
+      update(this.state, {
+        dataSource: {
+          $splice: [
+            [dragIndex, 1],
+            [hoverIndex, 0, dragRow],
+          ],
+        },
+      }), () => {
+        console.log(this.state.dataSource)
+        for (let i in this.state.dataSource) {
+          for (let j in arr) {
+            if (arr[j].id == this.state.dataSource[i].id) {
+              arr1[i] = arr[j].precent
+              arr2[i] = arr[j].id
+            }
+          }
+        }
+        this.setState({ giftIdPrecent: arr1, giftIdGroup: arr2 })
+      }
+    );
+  };
   render() {
     const menu = (
       <Menu>
@@ -249,7 +362,20 @@ export default class AddJackPot extends Component {
                 </Descriptions.Item>
                 <Descriptions.Item label="设定奖品中奖率">
                   {
-                    this.state.dataSource.length > 0 ? <Table rowKey="id" dataSource={this.state.dataSource} columns={columns} pagination={false} />
+                    this.state.dataSource.length > 0 ?
+                      <DndProvider backend={HTML5Backend}>
+                        <Table
+                          rowKey="id"
+                          dataSource={this.state.dataSource}
+                          components={this.components}
+                          columns={columns}
+                          pagination={false}
+                          onRow={(record, index) => ({
+                            index,
+                            moveRow: this.moveRow,
+                          })}
+                        />
+                      </DndProvider>
                       : null
                   }
                 </Descriptions.Item>
