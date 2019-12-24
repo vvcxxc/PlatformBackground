@@ -171,11 +171,15 @@ export default Form.create()(
         this.getListData(activityName, activityStatus, currentPage, currentPageSize);
       };
 
+      addJackPot() {
+        router.push('/lotteryDrawActivity/jackPot/addJackPot');
+      }
+      
       goTo = (type: string, id: number) => {
-        if(type == 'view'){
-          router.push('/lotteryDrawActivity/jackPot/viewJackPot?id='+id)
-        }else{
-          router.push('/lotteryDrawActivity/jackPot/editJackPot?id='+id)
+        if (type == 'view') {
+          router.push('/lotteryDrawActivity/jackPot/viewJackPot?id=' + id)
+        } else {
+          router.push('/lotteryDrawActivity/jackPot/editJackPot?id=' + id)
         }
       }
 
@@ -224,9 +228,9 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <a onClick={this.goTo.bind(this,'view',text.id)}>查看</a>
+                <a onClick={this.goTo.bind(this, 'view', text.id)}>查看</a>
                 <Divider type="vertical" />
-                <a onClick={this.goTo.bind(this,'edit',text.id)}>编辑</a>
+                <a onClick={this.goTo.bind(this, 'edit', text.id)}>编辑</a>
                 {
                   record.status == "" ? (
                     <span>
@@ -242,6 +246,14 @@ export default Form.create()(
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Button
+              type="primary"
+              icon="plus"
+              className={styles.addJackPot}
+              onClick={this.addJackPot.bind(this)}
+            >
+              新增奖池
+              </Button>
             <Table
               rowKey="id"
               columns={columns}
