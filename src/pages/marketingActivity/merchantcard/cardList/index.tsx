@@ -22,6 +22,7 @@ import request from '@/utils/request';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { TextArea } = Input;
+const { confirm } = Modal;
 
 // const data = [
 //   {
@@ -280,21 +281,35 @@ export default Form.create()(
       };
 
       handlePass = (record: any) => {
-        request(`/api/v1/activity/recruit/card/${record.id}`, {
-          method: 'PUT',
-          params: {
-            status: 1,
+        let _this = this;
+        confirm({
+          title: '确认操作',
+          content: '确定要通过该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/activity/recruit/card/${record.id}`, {
+              method: 'PUT',
+              params: {
+                status: 1,
+              },
+            }).then(res => {
+              const {
+                activityName,
+                storeName,
+                cardStatus,
+                currentPage,
+                currentPageSize,
+              } = _this.props.merchantCard;
+              _this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+            });
           },
-        }).then(res => {
-          const {
-            activityName,
-            storeName,
-            cardStatus,
-            currentPage,
-            currentPageSize,
-          } = this.props.merchantCard;
-          this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+          onCancel() {
+            console.log('Cancel');
+          },
         });
+
       };
 
       getListData = (
@@ -756,8 +771,8 @@ export default Form.create()(
                     <a onClick={this.handlePass.bind(this, record)}>通过</a>
                   </span>
                 ) : (
-                  ''
-                )}
+                        ''
+                      )}
               </span>
             ),
           },
