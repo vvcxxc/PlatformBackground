@@ -13,8 +13,9 @@ export default class AddJackPot extends Component {
     activityNum: '0',
     name: '',//活动名称
     menuCheck: undefined,//活动类型
-    activityCheckid: undefined,//奖品类型
-    activityCheckName: undefined,//奖品类型
+    activityCheckid: undefined,
+    activityCheckName: undefined,
+    activityCheckArea_name: undefined,
     thanksParticipationPercent: '',//奖谢谢参与中奖率
     dailyInventory: '',//每日库存
     getLocation: '',//领取地点
@@ -45,8 +46,8 @@ export default class AddJackPot extends Component {
   handleMenuClick = (type: Number, e: any) => {
     this.setState({ menuCheck: type });
   };
-  handleActiviutyClick = (id: String | Number, Name: String, e: any) => {
-    this.setState({ activityCheckid: id, activityCheckName: Name });
+  handleActiviutyClick = (id: String | Number, Name: String, area_name: String, e: any) => {
+    this.setState({ activityCheckid: id, activityCheckName: Name, activityCheckArea_name: area_name });
   };
   handleOk = () => {
     this.setState({ closeVisible: false });
@@ -112,7 +113,7 @@ export default class AddJackPot extends Component {
           this.state.activityList.map((item: any, index: any) => {
             return (
 
-              <Menu.Item key={index} onClick={this.handleActiviutyClick.bind(this, item.id, item.name)}>
+              <Menu.Item key={index} onClick={this.handleActiviutyClick.bind(this, item.id, item.name, item.area_name)}>
                 {item.name}
               </Menu.Item>
             )
@@ -181,7 +182,7 @@ export default class AddJackPot extends Component {
             }
             {
               this.state.menuCheck == 1 ? (
-                <Descriptions.Item label="所属商圈">444</Descriptions.Item>
+                <Descriptions.Item label="所属商圈">{!this.state.activityCheckArea_name ? '未选择活动' : this.state.activityCheckArea_name}</Descriptions.Item>
               ) : null
             }
           </Descriptions>
