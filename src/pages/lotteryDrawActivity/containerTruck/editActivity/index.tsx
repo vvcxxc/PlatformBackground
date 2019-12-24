@@ -7,7 +7,7 @@ import request from '@/utils/request';
 function EditActivity(props: any) {
   const [a, setA] = useState(1);
   const [info, setInfo] = useState([]);
-  const [startDate, setStart] = useState(null);
+  const [startDate, setStart] = useState();
   const [endDate, setEnd] = useState();
   const [Loading, setLoading] = useState(false);
   useEffect(() => {
