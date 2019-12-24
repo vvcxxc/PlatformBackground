@@ -77,13 +77,8 @@ export default class TabList extends Component<Props> {
 
     const rowSelection = {
       onChange: (selectedRowKeys: any, selectedRows: any) => {
-        // console.log(`selectedRowKeys:`, selectedRowKeys, 'selectedRows: ', selectedRows);
         let haveReadPageItem: any = this.state.haveReadPageItem;
         haveReadPageItem[this.state.page] = selectedRows;
-        // console.log('已选数据', haveReadPageItem)
-
-
-
         let returnItemList: any = [];
 
         for (let i = 1; i < haveReadPageItem.length; i++) {
@@ -92,8 +87,8 @@ export default class TabList extends Component<Props> {
           }
         }
         this.setState({ haveReadPageItem: haveReadPageItem, returnItemList: returnItemList })
-        console.log('数据:', returnItemList)
-        this.props.selectChange && this.props.selectChange(returnItemList)
+        let query={selectedRowKeys,returnItemList}
+        this.props.selectChange && this.props.selectChange(query)
       },
       getCheckboxProps: (record: any) => ({
         disabled: record.name === 'Disabled User',
