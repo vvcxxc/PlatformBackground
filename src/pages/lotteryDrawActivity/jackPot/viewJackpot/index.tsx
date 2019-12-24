@@ -5,6 +5,8 @@ import request from '@/utils/request';
 export default class ViewJackPot extends Component {
   state = {
     Loading: false, //loading
+    info: {
+    },
     dataSource: [
       {
         key: '1',
@@ -31,8 +33,16 @@ export default class ViewJackPot extends Component {
   };
 
   componentDidMount() {
-    request.get('/api/v1/pools/'+ 26).then(res => {
-      console.log(res)
+    let id = this.props.location.query.id
+    request.get('/api/v1/pools/'+ id).then(res => {
+      if(res.status_code == 200){
+        if(res.data.type == 2){
+          for (let i in res.data.objectPools.prize){
+            res.data.objectPools.prize[i].key = i
+          }
+        }
+        this.setState({info:res.data})
+      }
     })
   }
 
@@ -43,11 +53,14 @@ export default class ViewJackPot extends Component {
         title: '编号',
         dataIndex: 'number',
         key: 'number',
+        render: (a: any,b: any,idx: number) =>{
+          return idx+1
+        }
       },
       {
         title: '礼品ID',
-        dataIndex: 'giftId',
-        key: 'giftId',
+        dataIndex: 'id',
+        key: 'id',
       },
       {
         title: '礼品名称',
@@ -56,10 +69,14 @@ export default class ViewJackPot extends Component {
       },
       {
         title: '中奖率',
-        dataIndex: 'percent',
-        key: 'percent',
+        dataIndex: 'probability',
+        key: 'probability',
+        render: (text: any) =>{
+          return text + '%'
+        }
       },
     ];
+    const {info} = this.state
     return (
       <div className={styles.page}>
         <Spin spinning={Loading}>
@@ -68,67 +85,69 @@ export default class ViewJackPot extends Component {
             <div className={styles.title}>奖池配置</div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>奖池名称</div>
-              <div>鹰潭线上奖池</div>
+              <div>{info.name}</div>
             </div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>奖品类型</div>
-              <div>线上卡券</div>
+              <div>{info.type == 1 ? '线上卡券' : '实物奖品'}</div>
             </div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>关联的营销活动</div>
-              <div>双十一鹰潭区域免费推广</div>
+              <div>{info.activity_name}</div>
             </div>
           </div>
 
-          <div className={styles.main}>
-            <div className={styles.title}>线上卡券奖池</div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>关联活动</div>
-              <div>双十一鹰潭区域免费推广</div>
-            </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>礼品数量</div>
-              <div>已设置xx张</div>
-            </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>谢谢参与中奖率</div>
-              <div>100%</div>
-            </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>每日卡券库存</div>
-              <div>100张</div>
-            </div>
-          </div>
-
-          <div className={styles.main}>
-            <div className={styles.title}>实物奖品奖池</div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>实物数量</div>
-              <div>已选择xx份</div>
-            </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>设置奖品中奖率</div>
-              <div>
-                <Table
-                  size="small"
-                  style={{ width: '550px' }}
-                  dataSource={this.state.dataSource}
-                  columns={columns}
-                  pagination={false}
-                />
+          {
+            info.type == 1 ? (
+              <div className={styles.main}>
+              <div className={styles.title}>线上卡券奖池</div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>关联活动</div>
+                <div>{info.activity_name}</div>
+              </div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>礼品数量</div>
+            <div>已设置{info.cardPools.number}张</div>
+              </div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>谢谢参与中奖率</div>
+                <div>{info.cardPools.not_win_probability}%</div>
+              </div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>每日卡券库存</div>
+                <div>{info.cardPools.daily_number}</div>
               </div>
             </div>
-          </div>
+            ) : info.type == 2 ? (
+              <div className={styles.main}>
+              <div className={styles.title}>实物奖品奖池</div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>实物数量</div>
+                <div>已选择{info.objectPools.number}份</div>
+              </div>
+              <div className={styles.item_layout}>
+                <div className={styles.item_title}>设置奖品中奖率</div>
+                <div>
+                  <Table
+                    size="small"
+                    style={{ width: '550px' }}
+                    dataSource={info.objectPools.prize}
+                    columns={columns}
+                    pagination={false}
+                  />
+                </div>
+              </div>
+            </div>
+            ) : null
+          }
+
+
+
           <div style={{ marginTop: 10 }}>
-            <Button type="primary" style={{ marginRight: 30 }}>
-              发布活动
-            </Button>
-            <Button type="danger">取消</Button>
+            <Button type="danger">关闭</Button>
           </div>
         </Spin>
       </div>
     );
   }
 }
-
-// export default ViewJackPot;

@@ -174,6 +174,14 @@ export default Form.create()(
       addJackPot() {
         router.push('/lotteryDrawActivity/jackPot/addJackPot');
       }
+      
+      goTo = (type: string, id: number) => {
+        if (type == 'view') {
+          router.push('/lotteryDrawActivity/jackPot/viewJackPot?id=' + id)
+        } else {
+          router.push('/lotteryDrawActivity/jackPot/editJackPot?id=' + id)
+        }
+      }
 
       render() {
         const { dataList, loading, total } = this.state;
@@ -220,9 +228,9 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <a >查看</a>
+                <a onClick={this.goTo.bind(this, 'view', text.id)}>查看</a>
                 <Divider type="vertical" />
-                <a >编辑</a>
+                <a onClick={this.goTo.bind(this, 'edit', text.id)}>编辑</a>
                 {
                   record.status == "" ? (
                     <span>
