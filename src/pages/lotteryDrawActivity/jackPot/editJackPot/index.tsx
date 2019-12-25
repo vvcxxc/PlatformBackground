@@ -6,26 +6,6 @@ import { router } from 'umi';
 class EditJackPot extends Component {
   state = {
     Loading: false, //loading
-    dataSource: [
-      {
-        key: '1',
-        number: '1',
-        giftId: 'PC9527',
-        name: '谢谢参与',
-      },
-      {
-        key: '2',
-        number: '2',
-        giftId: 'PC9528',
-        name: '华为P30',
-      },
-      {
-        key: '3',
-        number: '3',
-        giftId: 'PC9529',
-        name: '小米充电宝',
-      },
-    ],
     info: {},
     not_win_probability: '',
     daily_number: '',
@@ -59,20 +39,20 @@ class EditJackPot extends Component {
 
   // 输入
   handleInput = (type: string) => ({ target: { value } }) => {
-    if(type == 'not_win_probability'){
-      if(value.includes('.')){
+    if (type == 'not_win_probability') {
+      if (value.includes('.')) {
         let arr = value.split('.')
-        if(arr[1].length > 1){
+        if (arr[1].length > 1) {
           return
-        }else{
-          if(arr[0] && arr[0] != '.'){
+        } else {
+          if (arr[0] && arr[0] != '.') {
             this.setState({ [type]: value })
           }
         }
-      }else{
+      } else {
         this.setState({ [type]: value })
       }
-    }else{
+    } else {
       this.setState({ [type]: value })
     }
   }
@@ -80,17 +60,17 @@ class EditJackPot extends Component {
   // 中奖率输入
   percentChange = (index: number) => ({ target: { value } }) => {
     let { probability } = this.state
-    if(value.includes('.')){
+    if (value.includes('.')) {
       let arr = value.split('.')
-      if(arr[1].length > 1){
+      if (arr[1].length > 1) {
         return
-      }else{
-        if(arr[0] && arr[0] != '.'){
+      } else {
+        if (arr[0] && arr[0] != '.') {
           probability[index] = value
           this.setState({ probability })
         }
       }
-    }else{
+    } else {
       probability[index] = value
       this.setState({ probability })
     }
@@ -110,8 +90,9 @@ class EditJackPot extends Component {
         activity_prize_id.push(prize[i].activity_prize_id)
       }
       for (let i in probability) {
-        sum = sum + probability[i]
+        sum = sum + Number(probability[i])
       }
+      console.log(sum)
       if (sum > 100) {
         notification.error({
           message: '总中奖率不能超过100%'
