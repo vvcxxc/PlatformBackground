@@ -120,11 +120,11 @@ export default class ViewJackPot extends Component {
             <div className={styles.title}>抽奖活动信息</div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>应用的抽奖活动</div>
-              <div></div>
+              <div>{info.activity_card_name}</div>
             </div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>活动状态</div>
-              <div>{info.status}</div>
+              <div>{info.activity_status}</div>
             </div>
           </div>
 
