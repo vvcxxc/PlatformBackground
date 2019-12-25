@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styles from './index.less';
 import { Spin, Table, Button } from 'antd';
 import request from '@/utils/request';
+import { router } from 'umi';
 export default class ViewJackPot extends Component {
   state = {
     Loading: false, //loading
@@ -47,7 +48,7 @@ export default class ViewJackPot extends Component {
   }
 
   render() {
-    const { Loading } = this.state;
+    const { Loading, info } = this.state;
     const columns = [
       {
         title: '编号',
@@ -76,11 +77,10 @@ export default class ViewJackPot extends Component {
         }
       },
     ];
-    const {info} = this.state
     return (
       <div className={styles.page}>
         <Spin spinning={Loading}>
-          <div className={styles.header}>编辑活动奖池</div>
+          <div className={styles.header}>查看活动奖池</div>
           <div className={styles.main}>
             <div className={styles.title}>奖池配置</div>
             <div className={styles.item_layout}>
@@ -141,10 +141,8 @@ export default class ViewJackPot extends Component {
             ) : null
           }
 
-
-
           <div style={{ marginTop: 10 }}>
-            <Button type="danger">关闭</Button>
+            <Button type="danger" onClick={()=> router.goBack()}>关闭</Button>
           </div>
         </Spin>
       </div>
