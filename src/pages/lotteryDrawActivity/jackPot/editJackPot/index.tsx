@@ -33,24 +33,24 @@ class EditJackPot extends Component {
     probability: [], //概率
   };
 
-  componentDidMount (){
+  componentDidMount() {
     let id = this.props.location.query.id
-    this.setState({Loading: true})
-    request.get('/api/v1/pools/'+ id).then(res => {
-      this.setState({Loading: false})
-      if(res.status_code == 200){
-        if(res.data.type == 2){
+    this.setState({ Loading: true })
+    request.get('/api/v1/pools/' + id).then(res => {
+      this.setState({ Loading: false })
+      if (res.status_code == 200) {
+        if (res.data.type == 2) {
           let probability = []
-          for (let i in res.data.objectPools.prize){
+          for (let i in res.data.objectPools.prize) {
             res.data.objectPools.prize[i].key = i
             probability.push(res.data.objectPools.prize[i].probability)
           }
-          this.setState({info:res.data,probability })
-        }else{
+          this.setState({ info: res.data, probability })
+        } else {
           this.setState({
             not_win_probability: res.data.cardPools.not_win_probability,
             daily_number: res.data.cardPools.daily_number,
-            info:res.data
+            info: res.data
           })
         }
       }
@@ -58,35 +58,61 @@ class EditJackPot extends Component {
   }
 
   // 输入
-  handleInput = (type: string) => ({target: {value}}) => {
-    this.setState({[type]: value},()=>{
-    })
+  handleInput = (type: string) => ({ target: { value } }) => {
+    if(type == 'not_win_probability'){
+      if(value.includes('.')){
+        let arr = value.split('.')
+        if(arr[1].length > 1){
+          return
+        }else{
+          if(arr[0] && arr[0] != '.'){
+            this.setState({ [type]: value })
+          }
+        }
+      }else{
+        this.setState({ [type]: value })
+      }
+    }else{
+      this.setState({ [type]: value })
+    }
   }
 
   // 中奖率输入
-  percentChange = (index: number) => ({target: {value}}) => {
-    let {probability} = this.state
-    probability[index] = Number(value)
-    this.setState({probability})
+  percentChange = (index: number) => ({ target: { value } }) => {
+    let { probability } = this.state
+    if(value.includes('.')){
+      let arr = value.split('.')
+      if(arr[1].length > 1){
+        return
+      }else{
+        if(arr[0] && arr[0] != '.'){
+          probability[index] = value
+          this.setState({ probability })
+        }
+      }
+    }else{
+      probability[index] = value
+      this.setState({ probability })
+    }
   }
 
   // 提交
   submit = () => {
     const { not_win_probability, daily_number, probability, info } = this.state
     let data = {}
-    if(info.type == 2){
+    if (info.type == 2) {
       let prize = info.objectPools.prize
       let object_prize_pool_id = []
       let activity_prize_id = []
       let sum = 0
-      for (let i in prize){
+      for (let i in prize) {
         object_prize_pool_id.push(prize[i].object_prize_pool_id)
         activity_prize_id.push(prize[i].activity_prize_id)
       }
-      for (let i in probability){
+      for (let i in probability) {
         sum = sum + probability[i]
       }
-      if(sum > 100){
+      if (sum > 100) {
         notification.error({
           message: '总中奖率不能超过100%'
         })
@@ -98,7 +124,7 @@ class EditJackPot extends Component {
         probability,
         activity_prize_id
       }
-    }else {
+    } else {
       data = {
         type: info.type,
         not_win_probability,
@@ -106,15 +132,13 @@ class EditJackPot extends Component {
         card_id: info.cardPools.id,
       }
     }
-
-    request.put('/api/v1/pools',{data}).then(res => {
-      console.log(res)
-      if(res.status_code == 200){
+    request.put('/api/v1/pools', { data }).then(res => {
+      if (res.status_code == 200) {
         notification.success({
           message: res.message
         })
         router.goBack()
-      }else{
+      } else {
         notification.error({
           message: res.message
         })
@@ -124,7 +148,7 @@ class EditJackPot extends Component {
   }
 
   render() {
-    const { Loading, info, probability} = this.state;
+    const { Loading, info, probability } = this.state;
     const columns = [
       {
         title: '编号',
@@ -174,56 +198,56 @@ class EditJackPot extends Component {
           {
             info.type == 1 ? (
               <div className={styles.main}>
-            <div className={styles.title}>线上卡券奖池</div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>关联活动</div>
-              <div>{info.activity_name}</div>
+                <div className={styles.title}>线上卡券奖池</div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>关联活动</div>
+                  <div>{info.activity_name}</div>
+                </div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>礼品数量</div>
+                  <div>已设置{info.cardPools.number}张</div>
+                </div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>谢谢参与中奖率</div>
+                  <Input
+                    type="number"
+                    onChange={this.handleInput('not_win_probability')}
+                    value={this.state.not_win_probability}
+                    size="small"
+                    style={{ width: '170px', marginRight: 5 }}
+                  />%
             </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>礼品数量</div>
-              <div>已设置{info.cardPools.number}张</div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>每日卡券库存</div>
+                  <Input
+                    type="number"
+                    onChange={this.handleInput('daily_number')}
+                    value={this.state.daily_number}
+                    size="small"
+                    style={{ width: '170px', marginRight: 5 }}
+                  />张
             </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>谢谢参与中奖率</div>
-              <Input
-                type="number"
-                onChange={this.handleInput('not_win_probability')}
-                value={this.state.not_win_probability}
-                size="small"
-                style={{ width: '170px', marginRight: 5 }}
-              />%
-            </div>
-            <div className={styles.item_layout}>
-              <div className={styles.item_title}>每日卡券库存</div>
-              <Input
-                type="number"
-                onChange={this.handleInput('daily_number')}
-                value={this.state.daily_number}
-                size="small"
-                style={{ width: '170px', marginRight: 5 }}
-              />张
-            </div>
-          </div>
+              </div>
             ) : info.type == 2 ? (
               <div className={styles.main}>
-              <div className={styles.title}>实物奖品奖池</div>
-              <div className={styles.item_layout}>
-                <div className={styles.item_title}>实物数量</div>
-                <div>已选择xx份</div>
-              </div>
-              <div className={styles.item_layout}>
-                <div className={styles.item_title}>设置奖品中奖率</div>
-                <div>
-                  <Table
-                    size="small"
-                    style={{ width: '550px' }}
-                    dataSource={info.objectPools.prize}
-                    columns={columns}
-                    pagination={false}
-                  />
+                <div className={styles.title}>实物奖品奖池</div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>实物数量</div>
+                  <div>已选择xx份</div>
+                </div>
+                <div className={styles.item_layout}>
+                  <div className={styles.item_title}>设置奖品中奖率</div>
+                  <div>
+                    <Table
+                      size="small"
+                      style={{ width: '550px' }}
+                      dataSource={info.objectPools.prize}
+                      columns={columns}
+                      pagination={false}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
             ) : null
           }
 
@@ -234,7 +258,7 @@ class EditJackPot extends Component {
             <Button type="primary" style={{ marginRight: 30 }} onClick={this.submit}>
               发布活动
             </Button>
-            <Button type="danger" onClick={()=>router.goBack()}>取消</Button>
+            <Button type="danger" onClick={() => router.goBack()}>取消</Button>
           </div>
         </Spin>
       </div>
