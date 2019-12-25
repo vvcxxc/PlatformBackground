@@ -11,6 +11,7 @@ class EditJackPot extends Component {
     daily_number: '',
 
     probability: [], //概率
+    sort: [], // 排序
   };
 
   componentDidMount() {
@@ -21,11 +22,13 @@ class EditJackPot extends Component {
       if (res.status_code == 200) {
         if (res.data.type == 2) {
           let probability = []
+          let sort = []
           for (let i in res.data.objectPools.prize) {
             res.data.objectPools.prize[i].key = i
             probability.push(res.data.objectPools.prize[i].probability)
+            sort.push(res.data.objectPools.prize[i].sort)
           }
-          this.setState({ info: res.data, probability })
+          this.setState({ info: res.data, probability,sort })
         } else {
           this.setState({
             not_win_probability: res.data.cardPools.not_win_probability,
@@ -76,9 +79,16 @@ class EditJackPot extends Component {
     }
   }
 
+  // 排序输入
+  sortChange = (index: number) => ({ target: { value } }) => {
+    let {sort} = this.state
+    sort[index] = Number(value)
+    this.setState({sort})
+  }
+
   // 提交
   submit = () => {
-    const { not_win_probability, daily_number, probability, info } = this.state
+    const { not_win_probability, daily_number, probability, info, sort } = this.state
     let data = {}
     if (info.type == 2) {
       let prize = info.objectPools.prize
@@ -102,7 +112,8 @@ class EditJackPot extends Component {
         type: info.type,
         object_prize_pool_id,
         probability,
-        activity_prize_id
+        activity_prize_id,
+        sort
       }
     } else {
       data = {
@@ -128,7 +139,7 @@ class EditJackPot extends Component {
   }
 
   render() {
-    const { Loading, info, probability } = this.state;
+    const { Loading, info, probability, sort } = this.state;
     const columns = [
       {
         title: '编号',
@@ -156,6 +167,15 @@ class EditJackPot extends Component {
           </div>
         ),
       },
+      {
+        title: '排序',
+        dataIndex: 'sort',
+        render: (text: any, record: object, index: number) => (
+          <div>
+            <Input className={styles.inputBox} style={{width: 50}} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
+          </div>
+        ),
+      }
     ];
     return (
       <div className={styles.page}>
