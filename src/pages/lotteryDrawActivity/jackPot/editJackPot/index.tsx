@@ -172,7 +172,7 @@ class EditJackPot extends Component {
         dataIndex: 'sort',
         render: (text: any, record: object, index: number) => (
           <div>
-            <Input className={styles.inputBox} style={{width: 50}} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
+            <Input className={styles.inputBox} style={{width: 70}} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
           </div>
         ),
       }
