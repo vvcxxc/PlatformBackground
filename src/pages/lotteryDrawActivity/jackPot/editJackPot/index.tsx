@@ -132,8 +132,10 @@ class EditJackPot extends Component {
     const columns = [
       {
         title: '编号',
-        dataIndex: 'object_prize_pool_id',
-        key: 'object_prize_pool_id',
+        render: (a: any,b: any,index: number)=>{
+          return index + 1
+        }
+
       },
       {
         title: '礼品ID',
