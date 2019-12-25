@@ -2,7 +2,6 @@ const Model = {
   namespace: 'prizesList',
   state: {
     prizeName: undefined, // 活动名称
-    activityStatus: undefined, // 活动状态
     currentPage: 1, // 当前页
     currentPageSize: 10, // 每页数量
   },
@@ -11,7 +10,6 @@ const Model = {
       return {
         ...state,
         prizeName: action.payload.prizeName,
-        activityStatus: action.payload.activityStatus,
         currentPage: 1,
       };
     },
@@ -19,7 +17,13 @@ const Model = {
       return {
         ...state,
         prizeName: undefined,
-        activityStatus: undefined,
+      };
+    },
+    setPaginationCurrent(state: any, action: any) {
+      return {
+        ...state,
+        currentPage: action.payload.currentPage,
+        currentPageSize: action.payload.currentPageSize,
       };
     },
   },
