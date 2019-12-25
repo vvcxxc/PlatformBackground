@@ -640,12 +640,48 @@ export default Form.create()(
       };
 
       handleChangeRejectReason = (e: any) => {
-        if(e.target.value.length <= 60){
+        if (e.target.value.length <= 60) {
           this.setState({
             rejectReason: e.target.value,
           });
         }
       };
+
+      handleDelete = (record: any) => {
+        let _this = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该卡券吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request('/api/v1/activity/recruit/card', {
+              method: 'DELETE',
+              params: {
+                youhui_id: record.youhui_id
+              }
+            }).then(res => {
+              if (res.status_code == 200) {
+                message.success(res.message);
+              } else {
+                message.error(res.message);
+              }
+              const {
+                activityName,
+                storeName,
+                cardStatus,
+                currentPage,
+                currentPageSize,
+              } = _this.props.merchantCard;
+              _this.getListData(activityName, storeName, cardStatus, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
 
       render() {
         let { sortedInfo, filteredInfo, dataList, loading, total, rejectReason } = this.state;
@@ -747,11 +783,6 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                {/* <a onClick={this.handleDetails.bind(this, record)}>查看</a>
-                <Divider type="vertical" />
-                <a>通过</a>
-                <Divider type="vertical" />
-                <a onClick={this.handleReject.bind(this)}>拒绝</a> */}
                 {record.youhui_publish_wait == '未审核' ? (
                   <span>
                     <a onClick={this.handleDetails.bind(this, record)}>查看</a>
@@ -773,6 +804,12 @@ export default Form.create()(
                 ) : (
                         ''
                       )}
+                {record.recruit_status == 1 ? (
+                  <span>
+                    <Divider type="vertical" />
+                    <a onClick={this.handleDelete.bind(this, record)}>删除</a>
+                  </span>
+                ) : ''}
               </span>
             ),
           },

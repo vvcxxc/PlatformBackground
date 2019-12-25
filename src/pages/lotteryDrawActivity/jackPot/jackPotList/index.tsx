@@ -43,31 +43,54 @@ export default Form.create()(
       componentDidMount() {
         const {
           activityName,
-          activityStatus,
+          // activityStatus,
           currentPage,
           currentPageSize,
         } = this.props.jackPotList;
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       }
 
       handleSearch = async (e: any) => {
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
         e.preventDefault();
         await this.props.dispatch({
           type: 'jackPotList/setFussyForm',
           payload: {
-            activityStatus,
+            // activityStatus,
             activityName,
           },
         });
 
         const { currentPage, currentPageSize } = this.props.jackPotList;
 
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       };
 
-      getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
+      // getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
+      //   this.setState({
+      //     loading: true,
+      //   });
+      //   request('/api/v1/pools', {
+      //     method: 'GET',
+      //     params: {
+      //       activity_name,
+      //       status,
+      //       page: currentPage,
+      //       count: currentPageSize
+      //     }
+      //   }).then(res => {
+      //     this.setState({
+      //       dataList: res.data,
+      //       loading: false,
+      //       total: res.pagination.total,
+      //     })
+      //   })
+      // }
+      
+      getListData = (activity_name: string, currentPage: any, currentPageSize: any) => {
         this.setState({
           loading: true,
         });
@@ -75,7 +98,6 @@ export default Form.create()(
           method: 'GET',
           params: {
             activity_name,
-            status,
             page: currentPage,
             count: currentPageSize
           }
@@ -104,7 +126,8 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { activityName, activityStatus } = this.props.jackPotList;
+        // const { activityName, activityStatus } = this.props.jackPotList;
+        const { activityName } = this.props.jackPotList;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -121,7 +144,7 @@ export default Form.create()(
                   )}
                 </FormItem>
               </Col>
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="活动状态">
                   {getFieldDecorator('activityStatus', { initialValue: activityStatus })(
                     <Select
@@ -136,7 +159,7 @@ export default Form.create()(
                     </Select>,
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button type="primary" htmlType="submit">
@@ -166,15 +189,16 @@ export default Form.create()(
           },
         });
         const { currentPage, currentPageSize } = this.props.jackPotList;
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       };
 
       addJackPot() {
         router.push('/lotteryDrawActivity/jackPot/addJackPot');
       }
-      
+
       goTo = (type: string, id: number) => {
         if (type == 'view') {
           router.push('/lotteryDrawActivity/jackPot/viewJackPot?id=' + id)
@@ -212,16 +236,16 @@ export default Form.create()(
             dataIndex: 'activity_name',
             key: 'activity_name',
           },
-          {
-            title: '应用的抽奖活动',
-            dataIndex: 'card_name',
-            key: 'card_name',
-          },
-          {
-            title: '抽奖活动状态',
-            dataIndex: 'status',
-            key: 'status',
-          },
+          // {
+          //   title: '应用的抽奖活动',
+          //   dataIndex: 'card_name',
+          //   key: 'card_name',
+          // },
+          // {
+          //   title: '抽奖活动状态',
+          //   dataIndex: 'status',
+          //   key: 'status',
+          // },
           {
             title: '操作',
             key: 'operation',
