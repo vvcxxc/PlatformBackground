@@ -12,6 +12,7 @@ function EditActivity(props: any) {
   const [Loading, setLoading] = useState(false);
   useEffect(() => {
     // componentDidMount生命周期
+
     let id = props.location.query.id
     request.get('/api/v1/activity/cardcollecting/edit',{params: {id}}).then(res => {
       console.log(res)
