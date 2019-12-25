@@ -92,7 +92,6 @@ class EditJackPot extends Component {
       for (let i in probability) {
         sum = sum + Number(probability[i])
       }
-      console.log(sum)
       if (sum > 100) {
         notification.error({
           message: '总中奖率不能超过100%'
