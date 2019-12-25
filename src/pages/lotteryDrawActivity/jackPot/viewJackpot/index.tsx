@@ -48,7 +48,7 @@ export default class ViewJackPot extends Component {
   }
 
   render() {
-    const { Loading } = this.state;
+    const { Loading, info } = this.state;
     const columns = [
       {
         title: '编号',
@@ -77,11 +77,10 @@ export default class ViewJackPot extends Component {
         }
       },
     ];
-    const {info} = this.state
     return (
       <div className={styles.page}>
         <Spin spinning={Loading}>
-          <div className={styles.header}>编辑活动奖池</div>
+          <div className={styles.header}>查看活动奖池</div>
           <div className={styles.main}>
             <div className={styles.title}>奖池配置</div>
             <div className={styles.item_layout}>
