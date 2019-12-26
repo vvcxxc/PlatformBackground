@@ -98,8 +98,19 @@ class AddActivity extends Component {
         card_info.push(card_list[i].id);
       }
     }
-    console.log(card_info)
+    if (Object.keys(condition[0]).length <= 1){
+      notification.error({
+        message: '请选择抽奖条件',
+      });
+      return;
+    }
     if (condition.length > 1) {
+      if(Object.keys(condition[0]).length <= 1 || Object.keys(condition[0]).length <= 1){
+        notification.error({
+          message: '请选择抽奖条件',
+        });
+        return;
+      }
       if (condition[0].condition == condition[1].condition) {
         notification.error({
           message: '抽奖条件不能相同',
@@ -189,7 +200,7 @@ class AddActivity extends Component {
             <div className={styles.item_layout}>
               <div className={styles.item_title}>抽奖条件</div>
               <Select
-                defaultValue="每次获得卡片"
+                defaultValue="请选择抽奖条件"
                 style={{ width: 200 }}
                 size="small"
                 onChange={this.selectItem('condition', index)}
