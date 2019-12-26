@@ -139,7 +139,7 @@ class AddActivity extends Component {
           },
         })
         .then(res => {
-          if(res.status_code == 200){
+          if(res.status_code == 201){
             notification.success({
               message: res.message
             })
