@@ -242,7 +242,7 @@ class EditJackPot extends Component {
                   <div>
                     <Table
                       size="small"
-                      style={{ width: '550px' }}
+                      style={{ width: '750px' }}
                       dataSource={info.objectPools.prize}
                       columns={columns}
                       pagination={false}
