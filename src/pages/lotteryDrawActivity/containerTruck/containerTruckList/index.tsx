@@ -306,11 +306,8 @@ export default Form.create()(
           okType: 'danger',
           cancelText: '取消',
           onOk() {
-            request('/api/v1/activity/cardcollecting', {
+            request(`/api/v1/activity/cardcollecting/${record.id}`, {
               method: 'DELETE',
-              params: {
-                id: record.id
-              }
             }).then(res => {
               message.success(res.message);
               const {
@@ -329,12 +326,16 @@ export default Form.create()(
         });
       }
 
-      Goto = (type: string,id: any) => {
-        console.log(type,id)
-        if(type == 'view'){
-          router.push('/lotteryDrawActivity/containerTruck/viewActivity?id='+id)
-        }else if(type == 'edit'){
-          router.push('/lotteryDrawActivity/containerTruck/editActivity?id='+id)
+      addActivity = () => {
+        router.push('/lotteryDrawActivity/containerTruck/addActivity');
+      }
+
+      Goto = (type: string, id: any) => {
+        console.log(type, id)
+        if (type == 'view') {
+          router.push('/lotteryDrawActivity/containerTruck/viewActivity?id=' + id)
+        } else if (type == 'edit') {
+          router.push('/lotteryDrawActivity/containerTruck/editActivity?id=' + id)
         }
       }
 
@@ -396,9 +397,9 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <a onClick={this.Goto.bind(this,'view',text.id)}>查看</a>
+                <a onClick={this.Goto.bind(this, 'view', text.id)}>查看</a>
                 <Divider type="vertical" />
-                <a onClick={this.Goto.bind(this,'edit',text.id)}>编辑</a>
+                <a onClick={this.Goto.bind(this, 'edit', text.id)}>编辑</a>
                 {
                   record.status == 0 ? (
                     <span>
@@ -414,6 +415,14 @@ export default Form.create()(
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Button
+              type="primary"
+              icon="plus"
+              className={styles.addActivity}
+              onClick={this.addActivity}
+            >
+              新增活动
+            </Button>
             <Table
               rowKey="id"
               columns={columns}

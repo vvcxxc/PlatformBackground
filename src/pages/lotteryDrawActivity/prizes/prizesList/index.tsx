@@ -50,7 +50,10 @@ export default Form.create()(
         editPrizeName: '',
         editPrizePrice: '',
         editPrizeNum: '',
-        record: {}
+        record: {},
+        showPoolsModal: false,
+        poolsPrizeName: '',
+        relatedPools: []
       };
 
       componentDidMount() {
@@ -338,13 +341,13 @@ export default Form.create()(
       }
 
       handleEditOk = () => {
-        const { record, editPrizeNum } = this.state;
+        const { record, editPrizeNum, editPrizeName, editPrizePrice } = this.state;
         request(`/api/v1/prize/${record.id}`, {
           method: 'PUT',
           params: {
-            name: record.name,
+            name: editPrizeName,
             image: record.image,
-            market_price: record.market_price,
+            market_price: editPrizePrice,
             stock: editPrizeNum
           }
         }).then(res => {
@@ -373,10 +376,29 @@ export default Form.create()(
         })
       }
 
-      handleEditInp = (e: any) => {
-        // console.log(e.target.value);
-        this.setState({
-          editPrizeNum: e.target.value
+      // handleEditInp = (e: any) => {
+      //   // console.log(e.target.value);
+      //   this.setState({
+      //     editPrizeNum: e.target.value
+      //   })
+      // }
+
+      handleEditInp = (type: string) => ({ target: { value } }) => {
+        this.setState({ [type]: value });
+      };
+
+      handlePoolsCount = (record: any) => {
+        // console.log(record)
+        request(`/api/v1/prize/pools/${record.id}`, {
+          method: 'GET'
+        }).then(res => {
+          if (res.status_code == 200) {
+            this.setState({
+              showPoolsModal: true,
+              poolsPrizeName: record.name,
+              relatedPools: res.data
+            })
+          }
         })
       }
 
@@ -395,7 +417,10 @@ export default Form.create()(
           editModal,
           editPrizeName,
           editPrizePrice,
-          editPrizeNum
+          editPrizeNum,
+          showPoolsModal,
+          poolsPrizeName,
+          relatedPools
         } = this.state;
         const { currentPage, currentPageSize } = this.props.prizesList;
         const uploadButton = (
@@ -444,6 +469,11 @@ export default Form.create()(
             title: '关联奖池',
             dataIndex: 'poolsCount',
             key: 'poolsCount',
+            render: (text: any, record: any) => (
+              <span>
+                <a onClick={this.handlePoolsCount.bind(this, record)}>{record.poolsCount}</a>
+              </span>
+            ),
           },
           {
             title: '操作',
@@ -525,11 +555,23 @@ export default Form.create()(
             >
               <div className={styles.add_layout}>
                 <div className={styles.title}>奖品名称</div>
-                <div>{editPrizeName}</div>
+                {/* <div>{editPrizeName}</div> */}
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={editPrizeName}
+                  onChange={this.handleEditInp('editPrizeName')}
+                />
               </div>
               <div className={styles.add_layout}>
                 <div className={styles.title}>奖品价格</div>
-                <div>{editPrizePrice}</div>
+                {/* <div>{editPrizePrice}</div> */}
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={editPrizePrice}
+                  onChange={this.handleEditInp('editPrizePrice')}
+                />
               </div>
               <div className={styles.add_layout}>
                 <div className={styles.title}>奖品库存</div>
@@ -537,8 +579,47 @@ export default Form.create()(
                   size="small"
                   style={{ width: '264px', height: '30px' }}
                   value={editPrizeNum}
-                  onChange={this.handleEditInp.bind(this)}
+                  onChange={this.handleEditInp('editPrizeNum')}
                 />
+              </div>
+            </Modal>
+
+            <Modal
+              title="关联奖池"
+              visible={showPoolsModal}
+              closable={false}
+              footer={(
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.setState({
+                      showPoolsModal: false
+                    })
+                  }}
+                >
+                  关闭
+                </Button>
+              )}
+              width="430px"
+            >
+              <div>
+                <div className={styles.add_layout}>
+                  <div className={styles.title}>奖品名称</div>
+                  <div>{poolsPrizeName}</div>
+                </div>
+                <div className={styles.add_layout_pools}>
+                  <div className={styles.title}>关联奖池</div>
+                  <div className={styles.related_pools}>
+                    {
+                      relatedPools.map((item: any, index: any) => (
+                        <div>
+                          {/* <span>{index + 1}. </span> */}
+                          <span>{item.name}</span>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
               </div>
             </Modal>
 
