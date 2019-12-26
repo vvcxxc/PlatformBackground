@@ -139,10 +139,16 @@ class AddActivity extends Component {
           },
         })
         .then(res => {
-          notification.success({
-            message: res.message
-          })
-          router.goBack()
+          if(res.status_code == 200){
+            notification.success({
+              message: res.message
+            })
+            router.goBack()
+          }else{
+            notification.error({
+              message: res.message
+            })
+          }
         });
     } else {
       notification.error({
