@@ -144,7 +144,8 @@ class EditJackPot extends Component {
       {
         title: '编号',
         render: (a: any,b: any,index: number)=>{
-          return index + 1
+          console.log(index)
+          return index
         }
 
       },
