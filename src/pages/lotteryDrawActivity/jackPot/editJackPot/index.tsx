@@ -6,31 +6,12 @@ import { router } from 'umi';
 class EditJackPot extends Component {
   state = {
     Loading: false, //loading
-    dataSource: [
-      {
-        key: '1',
-        number: '1',
-        giftId: 'PC9527',
-        name: '谢谢参与',
-      },
-      {
-        key: '2',
-        number: '2',
-        giftId: 'PC9528',
-        name: '华为P30',
-      },
-      {
-        key: '3',
-        number: '3',
-        giftId: 'PC9529',
-        name: '小米充电宝',
-      },
-    ],
     info: {},
     not_win_probability: '',
     daily_number: '',
 
     probability: [], //概率
+    sort: [], // 排序
   };
 
   componentDidMount() {
@@ -41,11 +22,13 @@ class EditJackPot extends Component {
       if (res.status_code == 200) {
         if (res.data.type == 2) {
           let probability = []
+          let sort = []
           for (let i in res.data.objectPools.prize) {
             res.data.objectPools.prize[i].key = i
             probability.push(res.data.objectPools.prize[i].probability)
+            sort.push(res.data.objectPools.prize[i].sort)
           }
-          this.setState({ info: res.data, probability })
+          this.setState({ info: res.data, probability,sort })
         } else {
           this.setState({
             not_win_probability: res.data.cardPools.not_win_probability,
@@ -59,20 +42,20 @@ class EditJackPot extends Component {
 
   // 输入
   handleInput = (type: string) => ({ target: { value } }) => {
-    if(type == 'not_win_probability'){
-      if(value.includes('.')){
+    if (type == 'not_win_probability') {
+      if (value.includes('.')) {
         let arr = value.split('.')
-        if(arr[1].length > 1){
+        if (arr[1].length > 1) {
           return
-        }else{
-          if(arr[0] && arr[0] != '.'){
+        } else {
+          if (arr[0] && arr[0] != '.') {
             this.setState({ [type]: value })
           }
         }
-      }else{
+      } else {
         this.setState({ [type]: value })
       }
-    }else{
+    } else {
       this.setState({ [type]: value })
     }
   }
@@ -80,25 +63,32 @@ class EditJackPot extends Component {
   // 中奖率输入
   percentChange = (index: number) => ({ target: { value } }) => {
     let { probability } = this.state
-    if(value.includes('.')){
+    if (value.includes('.')) {
       let arr = value.split('.')
-      if(arr[1].length > 1){
+      if (arr[1].length > 1) {
         return
-      }else{
-        if(arr[0] && arr[0] != '.'){
+      } else {
+        if (arr[0] && arr[0] != '.') {
           probability[index] = value
           this.setState({ probability })
         }
       }
-    }else{
+    } else {
       probability[index] = value
       this.setState({ probability })
     }
   }
 
+  // 排序输入
+  sortChange = (index: number) => ({ target: { value } }) => {
+    let {sort} = this.state
+    sort[index] = Number(value)
+    this.setState({sort})
+  }
+
   // 提交
   submit = () => {
-    const { not_win_probability, daily_number, probability, info } = this.state
+    const { not_win_probability, daily_number, probability, info, sort } = this.state
     let data = {}
     if (info.type == 2) {
       let prize = info.objectPools.prize
@@ -110,7 +100,7 @@ class EditJackPot extends Component {
         activity_prize_id.push(prize[i].activity_prize_id)
       }
       for (let i in probability) {
-        sum = sum + probability[i]
+        sum = sum + Number(probability[i])
       }
       if (sum > 100) {
         notification.error({
@@ -122,7 +112,8 @@ class EditJackPot extends Component {
         type: info.type,
         object_prize_pool_id,
         probability,
-        activity_prize_id
+        activity_prize_id,
+        sort
       }
     } else {
       data = {
@@ -148,12 +139,15 @@ class EditJackPot extends Component {
   }
 
   render() {
-    const { Loading, info, probability } = this.state;
+    const { Loading, info, probability, sort } = this.state;
     const columns = [
       {
         title: '编号',
-        dataIndex: 'object_prize_pool_id',
-        key: 'object_prize_pool_id',
+        render: (a: any,b: any,index: number)=>{
+          console.log(index + 1)
+          return (index + 1)
+        }
+
       },
       {
         title: '礼品ID',
@@ -174,6 +168,15 @@ class EditJackPot extends Component {
           </div>
         ),
       },
+      {
+        title: '排序',
+        dataIndex: 'sort',
+        render: (text: any, record: object, index: number) => (
+          <div>
+            <Input className={styles.inputBox} style={{width: 70}} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
+          </div>
+        ),
+      }
     ];
     return (
       <div className={styles.page}>
@@ -240,7 +243,7 @@ class EditJackPot extends Component {
                   <div>
                     <Table
                       size="small"
-                      style={{ width: '550px' }}
+                      style={{ width: '750px' }}
                       dataSource={info.objectPools.prize}
                       columns={columns}
                       pagination={false}
