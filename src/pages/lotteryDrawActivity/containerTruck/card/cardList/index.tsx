@@ -39,22 +39,31 @@ export default Form.create()(
       };
 
       componentDidMount() {
-        console.log(this.props);
+        // console.log(this.props);
+        const {
+          cardName,
+          cardNumber,
+          currentPage,
+          currentPageSize,
+        } = this.props.cardList;
+        this.getListData(cardName, cardNumber, currentPage, currentPageSize);
       }
 
       handleSearch = async (e: any) => {
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
+        let cardNumber = this.props.form.getFieldValue('cardNumber');
         let cardName = this.props.form.getFieldValue('cardName');
         e.preventDefault();
         await this.props.dispatch({
           type: 'cardList/setFussyForm',
           payload: {
-            activityStatus,
+            cardNumber,
             cardName,
           },
         });
 
         const { currentPage, currentPageSize } = this.props.cardList;
+        this.getListData(cardName, cardNumber, currentPage, currentPageSize);
 
         // this.getListData(activityName, activityStatus, status, currentPage, currentPageSize);
       };
@@ -75,7 +84,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { cardName, activityStatus } = this.props.cardList;
+        const { cardName, cardNumber } = this.props.cardList;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -86,13 +95,13 @@ export default Form.create()(
               }}
             >
               <Col md={8} sm={24}>
-                <FormItem label="卡券名称">
+                <FormItem label="卡片名称">
                   {getFieldDecorator('cardName', { initialValue: cardName })(
                     <Input placeholder="请输入" />,
                   )}
                 </FormItem>
               </Col>
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="活动状态">
                   {getFieldDecorator('activityStatus', { initialValue: activityStatus })(
                     <Select
@@ -105,6 +114,13 @@ export default Form.create()(
                       <Option value="1">招募中</Option>
                       <Option value="2">已结束</Option>
                     </Select>,
+                  )}
+                </FormItem>
+              </Col> */}
+              <Col md={8} sm={24}>
+                <FormItem label="卡片编号">
+                  {getFieldDecorator('cardNumber', { initialValue: cardNumber })(
+                    <Input placeholder="请输入" />,
                   )}
                 </FormItem>
               </Col>
@@ -128,10 +144,94 @@ export default Form.create()(
         );
       }
 
+      getListData = (cardName: string, cardNumber: string, currentPage: any, currentPageSize: any) => {
+        this.setState({
+          loading: true,
+        });
+        request('/api/v1/activity/cardcollecting/activityCard', {
+          method: 'GET',
+          params: {
+            name: cardName,
+            number: cardNumber
+          }
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            // total: res.pagination.total,
+          })
+        })
+      }
+
+      addCard = () => {
+
+      }
+
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        await this.props.dispatch({
+          type: 'cardList/setPaginationCurrent',
+          payload: {
+            currentPage: pagination.current,
+            currentPageSize: pagination.pageSize,
+          },
+        });
+        const { currentPage, currentPageSize } = this.props.cardList;
+        let cardName = this.props.form.getFieldValue('cardName');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
+        let cardNumber = this.props.form.getFieldValue('cardNumber');
+        this.getListData(cardName, cardNumber, currentPage, currentPageSize);
+        // this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+      };
+
       render() {
+        const { dataList, loading, total } = this.state;
+        const { currentPage, currentPageSize } = this.props.cardList;
+        const columns = [
+          {
+            title: '编号',
+            dataIndex: 'id',
+            key: 'id',
+          },
+          {
+            title: '卡片名称',
+            dataIndex: 'name',
+            key: 'name',
+          },
+          {
+            title: '卡片编号',
+            dataIndex: 'number',
+            key: 'number',
+          },
+        ]
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            {/* <Button
+              type="primary"
+              icon="plus"
+              className={styles.addCard}
+              onClick={this.addCard}
+            >
+              添加活动卡片
+            </Button> */}
+            <Table
+              rowKey="id"
+              columns={columns}
+              dataSource={dataList}
+              loading={loading}
+              onChange={this.handleChange}
+              pagination={false}
+            // pagination={{
+            //   current: currentPage,
+            //   defaultPageSize: currentPageSize,
+            //   showSizeChanger: true,
+            //   showQuickJumper: true,
+            //   total,
+            //   showTotal: () => {
+            //     return `共${total}条`;
+            //   },
+            // }}
+            />
           </div>
         );
       }

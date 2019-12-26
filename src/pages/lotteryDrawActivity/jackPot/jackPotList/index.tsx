@@ -12,6 +12,7 @@ import {
   Divider,
   notification,
   Modal,
+  message,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -89,7 +90,7 @@ export default Form.create()(
       //     })
       //   })
       // }
-      
+
       getListData = (activity_name: string, currentPage: any, currentPageSize: any) => {
         this.setState({
           loading: true,
@@ -207,6 +208,37 @@ export default Form.create()(
         }
       }
 
+      handleDeletePools = (record: any) => {
+        let _this = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/pools/${record.id}`, {
+              method: 'DELETE',
+            }).then(res => {
+              if (res.status_code == 200) {
+                message.success(res.message);
+              } else {
+                message.error(res.message);
+              }
+              const {
+                activityName,
+                currentPage,
+                currentPageSize,
+              } = _this.props.jackPotList;
+              _this.getListData(activityName, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
       render() {
         const { dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props.jackPotList;
@@ -255,14 +287,16 @@ export default Form.create()(
                 <a onClick={this.goTo.bind(this, 'view', text.id)}>查看</a>
                 <Divider type="vertical" />
                 <a onClick={this.goTo.bind(this, 'edit', text.id)}>编辑</a>
-                {
+                <Divider type="vertical" />
+                <a onClick={this.handleDeletePools.bind(this, record)}>删除奖池</a>
+                {/* {
                   record.status == "" ? (
                     <span>
                       <Divider type="vertical" />
-                      <a >删除奖池</a>
+                      <a onClick={this.handleDeletePools.bind(this, record)}>删除奖池</a>
                     </span>
                   ) : ""
-                }
+                } */}
               </span>
             ),
           },
