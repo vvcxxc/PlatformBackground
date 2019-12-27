@@ -82,15 +82,15 @@ export default class ViewJackPot extends Component {
                 </div>
                 <div className={styles.item_layout}>
                   <div className={styles.item_title}>礼品数量</div>
-                  <div>已设置{info.cardPools.number}张</div>
+                  <div>已设置{info.cardPools ? info.cardPools.number : null}张</div>
                 </div>
                 <div className={styles.item_layout}>
                   <div className={styles.item_title}>谢谢参与中奖率</div>
-                  <div>{info.cardPools.not_win_probability}%</div>
+                  <div>{info.cardPools ? info.cardPools.not_win_probability : null}%</div>
                 </div>
                 <div className={styles.item_layout}>
                   <div className={styles.item_title}>每日卡券库存</div>
-                  <div>{info.cardPools.daily_number}</div>
+                  <div>{info.cardPools ? info.cardPools.daily_number : null}</div>
                 </div>
               </div>
             ) : info.type == 2 ? (

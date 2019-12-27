@@ -64,7 +64,17 @@ class AddActivity extends Component {
 
   // input输出
   inputChange = (type: string) => ({ target: { value } }) => {
-    this.setState({ [type]: value });
+    let money = /^\d*(\.?\d{0,2})/g;//金额限制
+    switch (type) {
+      case 'condition_money':
+        this.setState({ [type]: value.match(money)[0] });
+        break;
+    
+      default:
+        this.setState({ [type]: value });
+        break;
+    }
+    
   };
 
   // 选择日期
@@ -98,8 +108,32 @@ class AddActivity extends Component {
         card_info.push(card_list[i].id);
       }
     }
-    console.log(card_info)
+    
+    if (condition_money && Number(condition_money) <= 0 || !condition_money) {
+      notification.error({
+        message: '派发条件须大于0元',
+      });
+      return;
+    }
+    if (daily_card && Number(daily_card) <= 0 || !daily_card ) {
+      notification.error({
+        message: '派卡限制须大于0元',
+      });
+      return;
+    }
+    if (Object.keys(condition[0]).length <= 1) {
+      notification.error({
+        message: '请选择抽奖条件',
+      });
+      return;
+    }
     if (condition.length > 1) {
+      if(Object.keys(condition[0]).length <= 1 || Object.keys(condition[0]).length <= 1){
+        notification.error({
+          message: '请选择抽奖条件',
+        });
+        return;
+      }
       if (condition[0].condition == condition[1].condition) {
         notification.error({
           message: '抽奖条件不能相同',
@@ -128,10 +162,16 @@ class AddActivity extends Component {
           },
         })
         .then(res => {
-          notification.success({
-            message: res.message
-          })
-          router.goBack()
+          if(res.status_code == 201){
+            notification.success({
+              message: res.message
+            })
+            router.goBack()
+          }else{
+            notification.error({
+              message: res.message
+            })
+          }
         });
     } else {
       notification.error({
@@ -149,6 +189,7 @@ class AddActivity extends Component {
       have_access,
       luck_draw,
       area_id,
+      condition_money
     } = this.state;
     const columns = [
       {
@@ -189,7 +230,7 @@ class AddActivity extends Component {
             <div className={styles.item_layout}>
               <div className={styles.item_title}>抽奖条件</div>
               <Select
-                defaultValue="每次获得卡片"
+                defaultValue="请选择抽奖条件"
                 style={{ width: 200 }}
                 size="small"
                 onChange={this.selectItem('condition', index)}
@@ -264,6 +305,7 @@ class AddActivity extends Component {
               满
               <Input
                 size="small"
+                value={condition_money}
                 style={{ width: '110px', marginLeft: '5px', marginRight: '5px' }}
                 onChange={this.inputChange('condition_money')}
               />
