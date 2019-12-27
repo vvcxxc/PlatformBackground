@@ -370,7 +370,7 @@ class AddActivity extends Component {
             <Button type="primary" style={{ marginRight: 30 }} onClick={this.submit}>
               发布活动
             </Button>
-            <Button type="danger">取消</Button>
+            <Button type="danger" onClick={()=>{router.goBack()}}>取消</Button>
           </div>
         </Spin>
       </div>
