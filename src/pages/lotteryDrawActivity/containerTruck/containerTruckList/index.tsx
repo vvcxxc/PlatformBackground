@@ -219,7 +219,7 @@ export default Form.create()(
                       }}
                     >
                       <Option value="0">未生效</Option>
-                      <Option value="1">招募中</Option>
+                      <Option value="1">进行中</Option>
                       <Option value="2">已结束</Option>
                     </Select>,
                   )}
