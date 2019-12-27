@@ -53,7 +53,8 @@ export default Form.create()(
         record: {},
         showPoolsModal: false,
         poolsPrizeName: '',
-        relatedPools: []
+        relatedPools: [],
+        showImgModal: false
       };
 
       componentDidMount() {
@@ -143,7 +144,7 @@ export default Form.create()(
               }}
             >
               <Col md={8} sm={24}>
-                <FormItem label="活动名称">
+                <FormItem label="奖品名称">
                   {getFieldDecorator('prizeName', { initialValue: prizeName })(
                     <Input placeholder="请输入" />,
                   )}
@@ -402,6 +403,13 @@ export default Form.create()(
         })
       }
 
+      handleZoomInImg = (record: any) => {
+        this.setState({
+          showImgModal: true,
+          record
+        })
+      }
+
       render() {
         const {
           visible,
@@ -420,7 +428,9 @@ export default Form.create()(
           editPrizeNum,
           showPoolsModal,
           poolsPrizeName,
-          relatedPools
+          relatedPools,
+          showImgModal,
+          record
         } = this.state;
         const { currentPage, currentPageSize } = this.props.prizesList;
         const uploadButton = (
@@ -446,7 +456,7 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                <img src={"http://tmwl.oss-cn-shenzhen.aliyuncs.com/" + record.image} alt="" width="91px" height="48px" />
+                <img src={"http://tmwl.oss-cn-shenzhen.aliyuncs.com/" + record.image} alt="" width="91px" height="48px" style={{ cursor: 'zoom-in' }} onClick={this.handleZoomInImg.bind(this, record)} />
               </span>
             ),
           },
@@ -621,6 +631,20 @@ export default Form.create()(
                   </div>
                 </div>
               </div>
+            </Modal>
+
+            <Modal
+              title="显示图片"
+              visible={showImgModal}
+              onCancel={() => {
+                this.setState({
+                  showImgModal: false
+                })
+              }}
+              footer={false}
+              width="430px"
+            >
+              <img src={`http://tmwl.oss-cn-shenzhen.aliyuncs.com/${record.image}`} width="100%" alt="" />
             </Modal>
 
             <div className={styles.tableListForm}>{this.renderForm()}</div>
