@@ -144,7 +144,7 @@ export default Form.create()(
               }}
             >
               <Col md={8} sm={24}>
-                <FormItem label="活动名称">
+                <FormItem label="奖品名称">
                   {getFieldDecorator('prizeName', { initialValue: prizeName })(
                     <Input placeholder="请输入" />,
                   )}
