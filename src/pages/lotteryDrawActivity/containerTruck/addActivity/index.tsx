@@ -50,6 +50,7 @@ class AddActivity extends Component {
 
   addCondition = () => {
     const { condition } = this.state;
+    console.log(condition,'ddfdf')
     if (condition.length <= 1) {
       this.setState({ condition: [...condition, {}] });
     }
@@ -225,7 +226,15 @@ class AddActivity extends Component {
     const conditionList = condition.map((item, index) => {
       return (
         <div key={index}>
-          <div className={styles.title}>设置抽奖条件{index + 1}</div>
+          <div className={styles.title}>
+            设置抽奖条件{index + 1}
+            {index ? <Icon type="close-circle" onClick={
+              () => {
+              let meta = this.state.condition
+                meta.length = meta.length-1
+                this.setState({ condition: meta})
+            }} /> : null}
+          </div>
           <div className={styles.condition}>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>抽奖条件</div>
