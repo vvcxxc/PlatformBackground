@@ -239,6 +239,37 @@ export default Form.create()(
         });
       }
 
+      handleClearStorage = (id: any) => {
+        let _this = this;
+        confirm({
+          title: '清除缓存',
+          content: '确定要清除缓存吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/pools/clearCache/${id}`, {
+              method: 'PUT',
+            }).then(res => {
+              if (res.status_code == 200) {
+                message.success(res.message);
+              } else {
+                message.error(res.message);
+              }
+              const {
+                activityName,
+                currentPage,
+                currentPageSize,
+              } = _this.props.jackPotList;
+              _this.getListData(activityName, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
       render() {
         const { dataList, loading, total } = this.state;
         const { currentPage, currentPageSize } = this.props.jackPotList;
@@ -281,9 +312,11 @@ export default Form.create()(
           {
             title: '操作',
             key: 'operation',
-            width: 200,
+            width: 300,
             render: (text: any, record: any) => (
               <span>
+                <a onClick={this.handleClearStorage.bind(this, record.id)}>清除缓存</a>
+                <Divider type="vertical" />
                 <a onClick={this.goTo.bind(this, 'view', text.id)}>查看</a>
                 <Divider type="vertical" />
                 <a onClick={this.goTo.bind(this, 'edit', text.id)}>编辑</a>
