@@ -29,7 +29,7 @@ export default class ViewJackPot extends Component {
     const columns = [
       {
         title: '编号',
-        render: (a: any,b: any,index: number)=>{
+        render: (a: any, b: any, index: number) => {
           return index + 1
         }
       },
@@ -124,7 +124,15 @@ export default class ViewJackPot extends Component {
             </div>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>活动状态</div>
-              <div>{info.activity_status}</div>
+              <div>{
+                info.activity_status == 0 ? '未生效' : (
+                  info.activity_status == 1 ? '已开始' : (
+                    info.activity_status == 2 ? '已结束' : (
+                      info.activity_status == 3 ? '未关联' : ''
+                    )
+                  )
+                )
+              }</div>
             </div>
           </div>
 

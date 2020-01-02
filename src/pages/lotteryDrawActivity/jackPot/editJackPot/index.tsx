@@ -253,9 +253,6 @@ class EditJackPot extends Component {
             ) : null
           }
 
-
-
-
           <div style={{ marginTop: 10 }}>
             <Button type="primary" style={{ marginRight: 30 }} onClick={this.submit}>
               发布活动
