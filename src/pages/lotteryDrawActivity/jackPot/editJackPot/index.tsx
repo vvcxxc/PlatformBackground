@@ -28,7 +28,7 @@ class EditJackPot extends Component {
             probability.push(res.data.objectPools.prize[i].probability)
             sort.push(res.data.objectPools.prize[i].sort)
           }
-          this.setState({ info: res.data, probability,sort })
+          this.setState({ info: res.data, probability, sort })
         } else {
           this.setState({
             not_win_probability: res.data.cardPools.not_win_probability,
@@ -81,9 +81,9 @@ class EditJackPot extends Component {
 
   // 排序输入
   sortChange = (index: number) => ({ target: { value } }) => {
-    let {sort} = this.state
+    let { sort } = this.state
     sort[index] = Number(value)
-    this.setState({sort})
+    this.setState({ sort })
   }
 
   // 提交
@@ -143,7 +143,7 @@ class EditJackPot extends Component {
     const columns = [
       {
         title: '编号',
-        render: (a: any,b: any,index: number)=>{
+        render: (a: any, b: any, index: number) => {
           return (index + 1)
         }
 
@@ -172,7 +172,7 @@ class EditJackPot extends Component {
         dataIndex: 'sort',
         render: (text: any, record: object, index: number) => (
           <div>
-            <Input className={styles.inputBox} style={{width: 70}} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
+            <Input className={styles.inputBox} style={{ width: 70 }} onChange={this.sortChange(index)} type='number' value={sort[index]} placeholder="排序" />
           </div>
         ),
       }
@@ -235,7 +235,7 @@ class EditJackPot extends Component {
                 <div className={styles.title}>实物奖品奖池</div>
                 <div className={styles.item_layout}>
                   <div className={styles.item_title}>实物数量</div>
-                  <div>已选择xx份</div>
+                  <div>已选择{info.objectPools.number}份</div>
                 </div>
                 <div className={styles.item_layout}>
                   <div className={styles.item_title}>设置奖品中奖率</div>
@@ -252,9 +252,6 @@ class EditJackPot extends Component {
               </div>
             ) : null
           }
-
-
-
 
           <div style={{ marginTop: 10 }}>
             <Button type="primary" style={{ marginRight: 30 }} onClick={this.submit}>
