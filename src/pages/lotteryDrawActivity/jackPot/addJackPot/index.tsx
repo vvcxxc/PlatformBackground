@@ -328,7 +328,7 @@ export default class AddJackPot extends Component {
                 <Descriptions.Item label="关联活动">
                   {!this.state.activityCheckName ? '未选择活动' : this.state.activityCheckName}
                 </Descriptions.Item>
-                <Descriptions.Item label="设置奖池名称">已设置{this.state.activityNum}张 </Descriptions.Item>
+                <Descriptions.Item label="奖品数量">已设置{this.state.activityNum}张 </Descriptions.Item>
                 <Descriptions.Item label="谢谢参与中奖率">
                   <Input className={styles.inputBox} placeholder="请设置谢谢参与中奖率" onChange={this.inputChange('thanksParticipationPercent')} />
                 </Descriptions.Item>
