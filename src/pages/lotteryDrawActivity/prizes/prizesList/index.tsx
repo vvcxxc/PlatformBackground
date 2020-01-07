@@ -13,6 +13,7 @@ import {
   notification,
   Modal,
   Upload,
+  message
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -39,33 +40,81 @@ export default Form.create()(
         total: 0,
         visible: false,
         imageUrl: '',
+        cover_image: "",
         ImgLoading: false,
         oss_data: {}, // oss参数
         prizeName: '',
         prizeNum: '',
         prizePrice: '',
+        editModal: false,
+        editPrizeName: '',
+        editPrizePrice: '',
+        editPrizeNum: '',
+        record: {},
+        showPoolsModal: false,
+        poolsPrizeName: '',
+        relatedPools: [],
+        showImgModal: false
       };
 
       componentDidMount() {
         this.getOSSData();
-        console.log(this.props);
+        // console.log(this.props);
+
+        const {
+          prizeName,
+          currentPage,
+          currentPageSize,
+        } = this.props.prizesList;
+        this.getListData(prizeName, currentPage, currentPageSize);
+      }
+
+      getListData = (prizeName: string, currentPage: any, currentPageSize: any) => {
+        this.setState({
+          loading: true,
+        });
+        request('/api/v1/prize', {
+          method: 'GET',
+          params: {
+            name: prizeName,
+            page: currentPage,
+            count: currentPageSize
+          }
+        }).then(res => {
+          this.setState({
+            dataList: res.data,
+            loading: false,
+            total: res.pagination.total,
+          })
+        })
       }
 
       handleSearch = async (e: any) => {
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
         let prizeName = this.props.form.getFieldValue('prizeName');
         e.preventDefault();
         await this.props.dispatch({
           type: 'prizesList/setFussyForm',
           payload: {
-            activityStatus,
             prizeName,
           },
         });
 
         const { currentPage, currentPageSize } = this.props.prizesList;
 
-        // this.getListData(activityName, activityStatus, status, currentPage, currentPageSize);
+        this.getListData(prizeName, currentPage, currentPageSize);
+      };
+
+      handleChange = async (pagination: any, filters: any, sorter: any) => {
+        await this.props.dispatch({
+          type: 'prizesList/setPaginationCurrent',
+          payload: {
+            currentPage: pagination.current,
+            currentPageSize: pagination.pageSize,
+          },
+        });
+        const { currentPage, currentPageSize } = this.props.prizesList;
+        let prizeName = this.props.form.getFieldValue('prizeName');
+        this.getListData(prizeName, currentPage, currentPageSize);
       };
 
       handleFormReset = async () => {
@@ -84,7 +133,7 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { prizeName, activityStatus } = this.props.prizesList;
+        const { prizeName } = this.props.prizesList;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -95,25 +144,9 @@ export default Form.create()(
               }}
             >
               <Col md={8} sm={24}>
-                <FormItem label="活动名称">
+                <FormItem label="奖品名称">
                   {getFieldDecorator('prizeName', { initialValue: prizeName })(
                     <Input placeholder="请输入" />,
-                  )}
-                </FormItem>
-              </Col>
-              <Col md={8} sm={24}>
-                <FormItem label="活动状态">
-                  {getFieldDecorator('activityStatus', { initialValue: activityStatus })(
-                    <Select
-                      placeholder="请选择"
-                      style={{
-                        width: '100%',
-                      }}
-                    >
-                      <Option value="0">未生效</Option>
-                      <Option value="1">招募中</Option>
-                      <Option value="2">已结束</Option>
-                    </Select>,
                   )}
                 </FormItem>
               </Col>
@@ -137,7 +170,7 @@ export default Form.create()(
         );
       }
 
-      addActivity = () => {
+      addPrize = () => {
         this.setState({
           visible: true,
         });
@@ -229,7 +262,31 @@ export default Form.create()(
       };
 
       handleOk = () => {
-        console.log(this.state);
+        const { prizeName, prizeNum, prizePrice, cover_image } = this.state;
+        request('/api/v1/prize', {
+          method: 'POST',
+          data: {
+            name: prizeName,
+            stock: prizeNum,
+            market_price: prizePrice,
+            image: cover_image
+          }
+        }).then(res => {
+          message.success(res.message);
+          this.setState({
+            visible: false,
+            imageUrl: '',
+            prizeName: '',
+            prizeNum: '',
+            prizePrice: '',
+          })
+          const {
+            prizeName,
+            currentPage,
+            currentPageSize,
+          } = this.props.prizesList;
+          this.getListData(prizeName, currentPage, currentPageSize);
+        })
       };
 
       handleCancel = () => {
@@ -242,6 +299,117 @@ export default Form.create()(
         });
       };
 
+      handleDeletePrize = (record: any) => {
+        let _this = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该礼品吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/prize/${record.id}`, {
+              method: 'DELETE',
+            }).then(res => {
+              if (res.status_code == 400) {
+                message.error(res.message);
+              } else {
+                message.success(res.message);
+              }
+
+              const {
+                prizeName,
+                currentPage,
+                currentPageSize,
+              } = _this.props.prizesList;
+              _this.getListData(prizeName, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
+      handleEdit = (record: any) => {
+        this.setState({
+          editModal: true,
+          editPrizeName: record.name,
+          editPrizePrice: record.market_price,
+          editPrizeNum: record.stock,
+          record
+        })
+      }
+
+      handleEditOk = () => {
+        const { record, editPrizeNum, editPrizeName, editPrizePrice } = this.state;
+        request(`/api/v1/prize/${record.id}`, {
+          method: 'PUT',
+          params: {
+            name: editPrizeName,
+            image: record.image,
+            market_price: editPrizePrice,
+            stock: editPrizeNum
+          }
+        }).then(res => {
+          if (res.status_code == 400) {
+            message.error(res.message);
+          } else {
+            message.success(res.message);
+          }
+
+          this.setState({
+            editModal: false
+          })
+
+          const {
+            prizeName,
+            currentPage,
+            currentPageSize,
+          } = this.props.prizesList;
+          this.getListData(prizeName, currentPage, currentPageSize);
+        })
+      }
+
+      handleEditCancel = () => {
+        this.setState({
+          editModal: false
+        })
+      }
+
+      // handleEditInp = (e: any) => {
+      //   // console.log(e.target.value);
+      //   this.setState({
+      //     editPrizeNum: e.target.value
+      //   })
+      // }
+
+      handleEditInp = (type: string) => ({ target: { value } }) => {
+        this.setState({ [type]: value });
+      };
+
+      handlePoolsCount = (record: any) => {
+        // console.log(record)
+        request(`/api/v1/prize/pools/${record.id}`, {
+          method: 'GET'
+        }).then(res => {
+          if (res.status_code == 200) {
+            this.setState({
+              showPoolsModal: true,
+              poolsPrizeName: record.name,
+              relatedPools: res.data
+            })
+          }
+        })
+      }
+
+      handleZoomInImg = (record: any) => {
+        this.setState({
+          showImgModal: true,
+          record
+        })
+      }
+
       render() {
         const {
           visible,
@@ -251,7 +419,20 @@ export default Form.create()(
           prizeName,
           prizeNum,
           prizePrice,
+          dataList,
+          loading,
+          total,
+          editModal,
+          editPrizeName,
+          editPrizePrice,
+          editPrizeNum,
+          showPoolsModal,
+          poolsPrizeName,
+          relatedPools,
+          showImgModal,
+          record
         } = this.state;
+        const { currentPage, currentPageSize } = this.props.prizesList;
         const uploadButton = (
           <div className={styles.uploadDefault}>
             <Icon type={ImgLoading ? 'loading' : 'plus'} />
@@ -266,6 +447,57 @@ export default Form.create()(
           data: this.getExtraData,
           beforeUpload: this.beforeUpload,
         };
+
+        const columns = [
+          {
+            title: '奖品图片',
+            dataIndex: 'image',
+            key: 'image',
+            width: 200,
+            render: (text: any, record: any) => (
+              <span>
+                <img src={"http://tmwl.oss-cn-shenzhen.aliyuncs.com/" + record.image} alt="" width="91px" height="48px" style={{ cursor: 'zoom-in' }} onClick={this.handleZoomInImg.bind(this, record)} />
+              </span>
+            ),
+          },
+          {
+            title: '奖品名称',
+            dataIndex: 'name',
+            key: 'name',
+          },
+          {
+            title: '奖品价值',
+            dataIndex: 'market_price',
+            key: 'market_price',
+          },
+          {
+            title: '奖品库存',
+            dataIndex: 'stock',
+            key: 'stock',
+          },
+          {
+            title: '关联奖池',
+            dataIndex: 'poolsCount',
+            key: 'poolsCount',
+            render: (text: any, record: any) => (
+              <span>
+                <a onClick={this.handlePoolsCount.bind(this, record)}>{record.poolsCount}</a>
+              </span>
+            ),
+          },
+          {
+            title: '操作',
+            key: 'operation',
+            width: 200,
+            render: (text: any, record: any) => (
+              <span>
+                <a onClick={this.handleEdit.bind(this, record)}>编辑库存</a>
+                <Divider type="vertical" />
+                <a onClick={this.handleDeletePrize.bind(this, record)}>删除礼品</a>
+              </span>
+            ),
+          },
+        ];
         return (
           <div className={styles.prizesList}>
             <Modal
@@ -317,21 +549,131 @@ export default Form.create()(
                         style={{ width: '364px', height: '192px' }}
                       />
                     ) : (
-                      uploadButton
-                    )}
+                        uploadButton
+                      )}
                   </Upload>
                 </div>
               </div>
             </Modal>
+
+            <Modal
+              title="编辑库存"
+              visible={editModal}
+              onOk={this.handleEditOk}
+              onCancel={this.handleEditCancel}
+              width="430px"
+            >
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品名称</div>
+                {/* <div>{editPrizeName}</div> */}
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={editPrizeName}
+                  onChange={this.handleEditInp('editPrizeName')}
+                />
+              </div>
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品价格</div>
+                {/* <div>{editPrizePrice}</div> */}
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={editPrizePrice}
+                  onChange={this.handleEditInp('editPrizePrice')}
+                />
+              </div>
+              <div className={styles.add_layout}>
+                <div className={styles.title}>奖品库存</div>
+                <Input
+                  size="small"
+                  style={{ width: '264px', height: '30px' }}
+                  value={editPrizeNum}
+                  onChange={this.handleEditInp('editPrizeNum')}
+                />
+              </div>
+            </Modal>
+
+            <Modal
+              title="关联奖池"
+              visible={showPoolsModal}
+              closable={false}
+              footer={(
+                <Button
+                  type="primary"
+                  onClick={() => {
+                    this.setState({
+                      showPoolsModal: false
+                    })
+                  }}
+                >
+                  关闭
+                </Button>
+              )}
+              width="430px"
+            >
+              <div>
+                <div className={styles.add_layout}>
+                  <div className={styles.title}>奖品名称</div>
+                  <div>{poolsPrizeName}</div>
+                </div>
+                <div className={styles.add_layout_pools}>
+                  <div className={styles.title}>关联奖池</div>
+                  <div className={styles.related_pools}>
+                    {
+                      relatedPools.map((item: any, index: any) => (
+                        <div>
+                          {/* <span>{index + 1}. </span> */}
+                          <span>{item.name}</span>
+                        </div>
+                      ))
+                    }
+                  </div>
+                </div>
+              </div>
+            </Modal>
+
+            <Modal
+              title="显示图片"
+              visible={showImgModal}
+              onCancel={() => {
+                this.setState({
+                  showImgModal: false
+                })
+              }}
+              footer={false}
+              width="430px"
+            >
+              <img src={`http://tmwl.oss-cn-shenzhen.aliyuncs.com/${record.image}`} width="100%" alt="" />
+            </Modal>
+
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <Button
               type="primary"
               icon="plus"
-              className={styles.addActivity}
-              onClick={this.addActivity}
+              className={styles.addPrize}
+              onClick={this.addPrize}
             >
               添加奖品
             </Button>
+
+            <Table
+              rowKey="id"
+              columns={columns}
+              dataSource={dataList}
+              loading={loading}
+              onChange={this.handleChange}
+              pagination={{
+                current: currentPage,
+                defaultPageSize: currentPageSize,
+                showSizeChanger: true,
+                showQuickJumper: true,
+                total,
+                showTotal: () => {
+                  return `共${total}条`;
+                },
+              }}
+            />
           </div>
         );
       }

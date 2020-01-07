@@ -2,7 +2,7 @@ const Model = {
   namespace: 'jackPotList',
   state: {
     activityName: undefined, // 活动名称
-    activityStatus: undefined, // 活动状态
+    // activityStatus: undefined, // 活动状态
     currentPage: 1, // 当前页
     currentPageSize: 10, // 每页数量
   },
@@ -11,7 +11,7 @@ const Model = {
       return {
         ...state,
         activityName: action.payload.activityName,
-        activityStatus: action.payload.activityStatus,
+        // activityStatus: action.payload.activityStatus,
         currentPage: 1,
       };
     },
@@ -19,7 +19,7 @@ const Model = {
       return {
         ...state,
         activityName: undefined,
-        activityStatus: undefined,
+        // activityStatus: undefined,
       };
     },
     setPaginationCurrent(state: any, action: any) {

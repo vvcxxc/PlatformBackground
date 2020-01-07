@@ -5,6 +5,7 @@ const { Option } = Select;
 const { RangePicker } = DatePicker;
 import request from '@/utils/request';
 import moment from 'moment';
+import { router } from 'umi';
 class AddActivity extends Component {
   state = {
     Loading: false, // 页面loading
@@ -18,7 +19,7 @@ class AddActivity extends Component {
     condition_money: '', // 条件时间
     daily_card: '', // 每天派卡限制
     luck_draw: [], // 抽奖条件
-    have_access: [], // 奖池
+    have_access: [[],[]], // 奖池
   };
   componentDidMount() {
     request.get('/api/common/area').then(res => {
@@ -36,7 +37,7 @@ class AddActivity extends Component {
         },
       })
       .then(res => {
-        this.setState({ luck_draw: res.data.luck_draw, have_access: res.data.have_access });
+        this.setState({ luck_draw: res.data.luck_draw });
       });
   };
 
@@ -56,14 +57,27 @@ class AddActivity extends Component {
 
   // 抽奖条件的选择
   selectItem = (type: string, index: number) => (value: any) => {
-    const { condition } = this.state;
+    const { condition, area_id } = this.state;
     condition[index][type] = value;
     this.setState({ condition });
+    if(type == 'condition'){
+      this.getJackpot(area_id, value, index)
+    }
   };
 
   // input输出
   inputChange = (type: string) => ({ target: { value } }) => {
-    this.setState({ [type]: value });
+    let money = /^\d*(\.?\d{0,2})/g;//金额限制
+    switch (type) {
+      case 'condition_money':
+        this.setState({ [type]: value.match(money)[0] });
+        break;
+
+      default:
+        this.setState({ [type]: value });
+        break;
+    }
+
   };
 
   // 选择日期
@@ -76,8 +90,30 @@ class AddActivity extends Component {
   // 选择商圈
   selectArea = (value: string) => {
     this.setState({ area_id: value });
-    this.getCondition(value);
+    this.getCondition(value)
   };
+
+  // 获取抽奖条件的奖池
+  getJackpot = (area_id: string,card_type: string, index: number) => {
+    console.log(area_id,card_type,index)
+    let { have_access } = this.state
+    request
+    .get('/api/v1/activity/cardcollecting/luckyDrawCondition', {
+      params: {
+        area_id,
+        card_type
+      },
+    })
+    .then(res => {
+      if(index == 0){
+        have_access[0] = res.data.have_access
+      }else{
+        have_access[1] = res.data.have_access
+      }
+      this.setState({have_access})
+    });
+
+  }
 
   submit = () => {
     const {
@@ -97,8 +133,32 @@ class AddActivity extends Component {
         card_info.push(card_list[i].id);
       }
     }
-    console.log(card_info)
+
+    if (condition_money && Number(condition_money) <= 0 || !condition_money) {
+      notification.error({
+        message: '派发条件须大于0元',
+      });
+      return;
+    }
+    if (daily_card && Number(daily_card) <= 0 || !daily_card ) {
+      notification.error({
+        message: '派卡限制须大于0元',
+      });
+      return;
+    }
+    if (Object.keys(condition[0]).length <= 1) {
+      notification.error({
+        message: '请选择抽奖条件',
+      });
+      return;
+    }
     if (condition.length > 1) {
+      if(Object.keys(condition[0]).length <= 1 || Object.keys(condition[0]).length <= 1){
+        notification.error({
+          message: '请选择抽奖条件',
+        });
+        return;
+      }
       if (condition[0].condition == condition[1].condition) {
         notification.error({
           message: '抽奖条件不能相同',
@@ -127,9 +187,16 @@ class AddActivity extends Component {
           },
         })
         .then(res => {
-          notification.success({
-            message: res.message
-          })
+          if(res.status_code == 201){
+            notification.success({
+              message: res.message
+            })
+            router.goBack()
+          }else{
+            notification.error({
+              message: res.message
+            })
+          }
         });
     } else {
       notification.error({
@@ -147,6 +214,7 @@ class AddActivity extends Component {
       have_access,
       luck_draw,
       area_id,
+      condition_money
     } = this.state;
     const columns = [
       {
@@ -177,17 +245,24 @@ class AddActivity extends Component {
         key: 'number',
       },
     ];
-
     // 抽奖条件
     const conditionList = condition.map((item, index) => {
       return (
         <div key={index}>
-          <div className={styles.title}>设置抽奖条件{index + 1}</div>
+          <div className={styles.title}>
+            设置抽奖条件{index + 1}
+            {index ? <Icon type="close-circle" onClick={
+              () => {
+              let meta = this.state.condition
+                meta.length = meta.length-1
+                this.setState({ condition: meta})
+            }} /> : null}
+          </div>
           <div className={styles.condition}>
             <div className={styles.item_layout}>
               <div className={styles.item_title}>抽奖条件</div>
               <Select
-                defaultValue="每次获得卡片"
+                defaultValue="请选择抽奖条件"
                 style={{ width: 200 }}
                 size="small"
                 onChange={this.selectItem('condition', index)}
@@ -209,13 +284,13 @@ class AddActivity extends Component {
                 size="small"
                 onChange={this.selectItem('jackpot', index)}
               >
-                {have_access.map(item => {
+                {have_access.length ? have_access[index].map(item => {
                   return (
                     <Option value={item.id} key={item.id}>
                       {item.name}
                     </Option>
                   );
-                })}
+                }) : null}
               </Select>
             </div>
           </div>
@@ -262,6 +337,7 @@ class AddActivity extends Component {
               满
               <Input
                 size="small"
+                value={condition_money}
                 style={{ width: '110px', marginLeft: '5px', marginRight: '5px' }}
                 onChange={this.inputChange('condition_money')}
               />
@@ -317,7 +393,7 @@ class AddActivity extends Component {
             <Button type="primary" style={{ marginRight: 30 }} onClick={this.submit}>
               发布活动
             </Button>
-            <Button type="danger">取消</Button>
+            <Button type="danger" onClick={()=>{router.goBack()}}>取消</Button>
           </div>
         </Spin>
       </div>

@@ -12,6 +12,7 @@ import {
   Divider,
   notification,
   Modal,
+  message,
 } from 'antd';
 import zhCN from 'antd/es/locale/zh_CN';
 import { connect } from 'dva';
@@ -43,31 +44,54 @@ export default Form.create()(
       componentDidMount() {
         const {
           activityName,
-          activityStatus,
+          // activityStatus,
           currentPage,
           currentPageSize,
         } = this.props.jackPotList;
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       }
 
       handleSearch = async (e: any) => {
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
         e.preventDefault();
         await this.props.dispatch({
           type: 'jackPotList/setFussyForm',
           payload: {
-            activityStatus,
+            // activityStatus,
             activityName,
           },
         });
 
         const { currentPage, currentPageSize } = this.props.jackPotList;
 
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       };
 
-      getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
+      // getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
+      //   this.setState({
+      //     loading: true,
+      //   });
+      //   request('/api/v1/pools', {
+      //     method: 'GET',
+      //     params: {
+      //       activity_name,
+      //       status,
+      //       page: currentPage,
+      //       count: currentPageSize
+      //     }
+      //   }).then(res => {
+      //     this.setState({
+      //       dataList: res.data,
+      //       loading: false,
+      //       total: res.pagination.total,
+      //     })
+      //   })
+      // }
+
+      getListData = (activity_name: string, currentPage: any, currentPageSize: any) => {
         this.setState({
           loading: true,
         });
@@ -75,7 +99,6 @@ export default Form.create()(
           method: 'GET',
           params: {
             activity_name,
-            status,
             page: currentPage,
             count: currentPageSize
           }
@@ -104,7 +127,8 @@ export default Form.create()(
         const {
           form: { getFieldDecorator },
         } = this.props;
-        const { activityName, activityStatus } = this.props.jackPotList;
+        // const { activityName, activityStatus } = this.props.jackPotList;
+        const { activityName } = this.props.jackPotList;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -121,7 +145,7 @@ export default Form.create()(
                   )}
                 </FormItem>
               </Col>
-              <Col md={8} sm={24}>
+              {/* <Col md={8} sm={24}>
                 <FormItem label="活动状态">
                   {getFieldDecorator('activityStatus', { initialValue: activityStatus })(
                     <Select
@@ -136,7 +160,7 @@ export default Form.create()(
                     </Select>,
                   )}
                 </FormItem>
-              </Col>
+              </Col> */}
               <Col md={8} sm={24}>
                 <span className={styles.submitButtons}>
                   <Button type="primary" htmlType="submit">
@@ -166,10 +190,85 @@ export default Form.create()(
           },
         });
         const { currentPage, currentPageSize } = this.props.jackPotList;
-        let activityStatus = this.props.form.getFieldValue('activityStatus');
+        // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
-        this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
+        this.getListData(activityName, currentPage, currentPageSize);
       };
+
+      addJackPot() {
+        router.push('/lotteryDrawActivity/jackPot/addJackPot');
+      }
+
+      goTo = (type: string, id: number) => {
+        if (type == 'view') {
+          router.push('/lotteryDrawActivity/jackPot/viewJackPot?id=' + id)
+        } else {
+          router.push('/lotteryDrawActivity/jackPot/editJackPot?id=' + id)
+        }
+      }
+
+      handleDeletePools = (record: any) => {
+        let _this = this;
+        confirm({
+          title: '删除操作',
+          content: '确定要删除该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/pools/${record.id}`, {
+              method: 'DELETE',
+            }).then(res => {
+              if (res.status_code == 200) {
+                message.success(res.message);
+              } else {
+                message.error(res.message);
+              }
+              const {
+                activityName,
+                currentPage,
+                currentPageSize,
+              } = _this.props.jackPotList;
+              _this.getListData(activityName, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
+      handleClearStorage = (id: any) => {
+        let _this = this;
+        confirm({
+          title: '清除缓存',
+          content: '确定要清除缓存吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request(`/api/v1/pools/clearCache/${id}`, {
+              method: 'PUT',
+            }).then(res => {
+              if (res.status_code == 200) {
+                message.success(res.message);
+              } else {
+                message.error(res.message);
+              }
+              const {
+                activityName,
+                currentPage,
+                currentPageSize,
+              } = _this.props.jackPotList;
+              _this.getListData(activityName, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
 
       render() {
         const { dataList, loading, total } = this.state;
@@ -200,33 +299,37 @@ export default Form.create()(
             dataIndex: 'activity_name',
             key: 'activity_name',
           },
-          {
-            title: '应用的抽奖活动',
-            dataIndex: 'card_name',
-            key: 'card_name',
-          },
-          {
-            title: '抽奖活动状态',
-            dataIndex: 'status',
-            key: 'status',
-          },
+          // {
+          //   title: '应用的抽奖活动',
+          //   dataIndex: 'card_name',
+          //   key: 'card_name',
+          // },
+          // {
+          //   title: '抽奖活动状态',
+          //   dataIndex: 'status',
+          //   key: 'status',
+          // },
           {
             title: '操作',
             key: 'operation',
-            width: 200,
+            width: 300,
             render: (text: any, record: any) => (
               <span>
-                <a >查看</a>
+                <a onClick={this.handleClearStorage.bind(this, record.id)}>清除缓存</a>
                 <Divider type="vertical" />
-                <a >编辑</a>
-                {
+                <a onClick={this.goTo.bind(this, 'view', text.id)}>查看</a>
+                <Divider type="vertical" />
+                <a onClick={this.goTo.bind(this, 'edit', text.id)}>编辑</a>
+                <Divider type="vertical" />
+                <a onClick={this.handleDeletePools.bind(this, record)}>删除奖池</a>
+                {/* {
                   record.status == "" ? (
                     <span>
                       <Divider type="vertical" />
-                      <a >删除奖池</a>
+                      <a onClick={this.handleDeletePools.bind(this, record)}>删除奖池</a>
                     </span>
                   ) : ""
-                }
+                } */}
               </span>
             ),
           },
@@ -234,6 +337,14 @@ export default Form.create()(
         return (
           <div>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <Button
+              type="primary"
+              icon="plus"
+              className={styles.addJackPot}
+              onClick={this.addJackPot.bind(this)}
+            >
+              新增奖池
+              </Button>
             <Table
               rowKey="id"
               columns={columns}
