@@ -1,11 +1,10 @@
 import { Reducer } from 'redux';
-import { routerRedux } from 'dva/router';
 import { Effect } from 'dva';
-import { stringify } from 'querystring';
-
-import { fakeAccountLogin, getFakeCaptcha } from '@/services/login';
+import { notification } from 'antd';
+import { fakeAccountLogin } from '@/services/login';
 import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
+import { router } from 'umi';
 
 export interface StateType {
   status?: 'ok' | 'error';
@@ -18,7 +17,6 @@ export interface LoginModelType {
   state: StateType;
   effects: {
     login: Effect;
-    getCaptcha: Effect;
     logout: Effect;
   };
   reducers: {
@@ -35,37 +33,27 @@ const Model: LoginModelType = {
 
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.status === 'ok') {
-        const urlParams = new URL(window.location.href);
-        const params = getPageQuery();
-        let { redirect } = params as { redirect: string };
-        if (redirect) {
-          const redirectUrlParams = new URL(redirect);
-          if (redirectUrlParams.origin === urlParams.origin) {
-            redirect = redirect.substr(urlParams.origin.length);
-            if (redirect.match(/^\/.*#/)) {
-              redirect = redirect.substr(redirect.indexOf('#') + 1);
-            }
-          } else {
-            window.location.href = '/';
-            return;
+      let res = yield call(fakeAccountLogin, payload)
+      if(res.status_code == 200){
+        localStorage.setItem('token',res.data.token_type + ' ' + res.data.token)
+        yield put({
+          type: 'user/saveCurrentUser',
+          payload:{
+            name: payload.username,
+            avatar: 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png',
           }
-        }
-        yield put(routerRedux.replace(redirect || '/'));
+        })
+        router.push('/marketingActivity/activityinfo/cardlist')
+      }else{
+        notification.error({
+          message: res.message,
+        });
       }
-    },
-
-    *getCaptcha({ payload }, { call }) {
-      yield call(getFakeCaptcha, payload);
     },
     *logout(_, { put }) {
       const { redirect } = getPageQuery();
+      localStorage.removeItem('token')
+      router.push('/user/login')
       // redirect
 
       // if (window.location.pathname !== '/user/login' && !redirect) {
