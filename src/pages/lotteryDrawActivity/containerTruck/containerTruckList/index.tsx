@@ -326,6 +326,40 @@ export default Form.create()(
         });
       }
 
+      handleEnd = (record: any) => {
+        // console.log(record);
+        let _this = this;
+        confirm({
+          title: '立即结束',
+          content: '确定要立即结束该活动吗?',
+          okText: '确定',
+          okType: 'danger',
+          cancelText: '取消',
+          onOk() {
+            request("/api/v1/activity/cardcollecting/stopIt", {
+              method: 'POST',
+              data: {
+                id: record.id,
+                status: 2
+              }
+            }).then(res => {
+              message.success(res.message);
+              const {
+                activityName,
+                storeName,
+                status,
+                currentPage,
+                currentPageSize,
+              } = _this.props.containerTruckList;
+              _this.getListData(activityName, storeName, status, currentPage, currentPageSize);
+            })
+          },
+          onCancel() {
+            console.log('Cancel');
+          },
+        });
+      }
+
       addActivity = () => {
         router.push('/lotteryDrawActivity/containerTruck/addActivity');
       }
@@ -405,6 +439,11 @@ export default Form.create()(
                     <span>
                       <Divider type="vertical" />
                       <a onClick={this.handleDeleteActivity.bind(this, record)}>删除活动</a>
+                    </span>
+                  ) : record.status == 1 ? (
+                    <span>
+                      <Divider type="vertical" />
+                      <a onClick={this.handleEnd.bind(this, record)}>立即结束</a>
                     </span>
                   ) : ""
                 }
