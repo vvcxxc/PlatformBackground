@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from './index.less';
 import { Spin, Button, Input, DatePicker, notification } from 'antd';
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 import moment from 'moment';
 import request from '@/utils/request';
 import { router } from 'umi';
@@ -33,8 +33,7 @@ function EditActivity(props: any) {
 
   // 选择日期
   const selectDate = (time: any) => {
-    setStart(moment(time[0]).format('YYYY-MM-DD'));
-    setEnd(moment(time[1]).format('YYYY-MM-DD'));
+    setEnd(moment(time).format('YYYY-MM-DD'));
   };
 
   const handleInput = (type: string) => ({ target: { value } }) => {
@@ -71,7 +70,7 @@ function EditActivity(props: any) {
       }
     })
   }
-
+  console.log(endDate)
   return (
     <div className={styles.page}>
       <Spin spinning={Loading}>
@@ -84,7 +83,20 @@ function EditActivity(props: any) {
           </div>
           <div className={styles.item_layout}>
             <div className={styles.item_title}>活动时间</div>
-            <RangePicker size="small" onChange={selectDate} value={[moment(startDate), moment(endDate)]} />
+            {/* <RangePicker size="small" onChange={selectDate} value={[moment(startDate), moment(endDate)]} /> */}
+            {
+              startDate ? (
+                <div>
+                  <DatePicker defaultValue={moment(startDate, 'YYYY-MM-DD')} disabled />
+                  -
+                  {
+                    endDate ? <DatePicker defaultValue={moment(endDate, 'YYYY-MM-DD')} onChange={selectDate}/> : null
+                  }
+
+                </div>
+              ) : null
+            }
+
           </div>
           <div className={styles.item_layout}>
             <div className={styles.item_title}>设置活动区域</div>

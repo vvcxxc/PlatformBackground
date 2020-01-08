@@ -19,7 +19,7 @@ class AddActivity extends Component {
     condition_money: '', // 条件时间
     daily_card: '', // 每天派卡限制
     luck_draw: [], // 抽奖条件
-    have_access: [], // 奖池
+    have_access: [[],[]], // 奖池
   };
   componentDidMount() {
     request.get('/api/common/area').then(res => {
@@ -37,7 +37,7 @@ class AddActivity extends Component {
         },
       })
       .then(res => {
-        this.setState({ luck_draw: res.data.luck_draw, have_access: res.data.have_access });
+        this.setState({ luck_draw: res.data.luck_draw });
       });
   };
 
@@ -50,7 +50,6 @@ class AddActivity extends Component {
 
   addCondition = () => {
     const { condition } = this.state;
-    console.log(condition,'ddfdf')
     if (condition.length <= 1) {
       this.setState({ condition: [...condition, {}] });
     }
@@ -58,9 +57,12 @@ class AddActivity extends Component {
 
   // 抽奖条件的选择
   selectItem = (type: string, index: number) => (value: any) => {
-    const { condition } = this.state;
+    const { condition, area_id } = this.state;
     condition[index][type] = value;
     this.setState({ condition });
+    if(type == 'condition'){
+      this.getJackpot(area_id, value, index)
+    }
   };
 
   // input输出
@@ -70,12 +72,12 @@ class AddActivity extends Component {
       case 'condition_money':
         this.setState({ [type]: value.match(money)[0] });
         break;
-    
+
       default:
         this.setState({ [type]: value });
         break;
     }
-    
+
   };
 
   // 选择日期
@@ -88,8 +90,30 @@ class AddActivity extends Component {
   // 选择商圈
   selectArea = (value: string) => {
     this.setState({ area_id: value });
-    this.getCondition(value);
+    this.getCondition(value)
   };
+
+  // 获取抽奖条件的奖池
+  getJackpot = (area_id: string,card_type: string, index: number) => {
+    console.log(area_id,card_type,index)
+    let { have_access } = this.state
+    request
+    .get('/api/v1/activity/cardcollecting/luckyDrawCondition', {
+      params: {
+        area_id,
+        card_type
+      },
+    })
+    .then(res => {
+      if(index == 0){
+        have_access[0] = res.data.have_access
+      }else{
+        have_access[1] = res.data.have_access
+      }
+      this.setState({have_access})
+    });
+
+  }
 
   submit = () => {
     const {
@@ -109,7 +133,7 @@ class AddActivity extends Component {
         card_info.push(card_list[i].id);
       }
     }
-    
+
     if (condition_money && Number(condition_money) <= 0 || !condition_money) {
       notification.error({
         message: '派发条件须大于0元',
@@ -221,7 +245,6 @@ class AddActivity extends Component {
         key: 'number',
       },
     ];
-
     // 抽奖条件
     const conditionList = condition.map((item, index) => {
       return (
@@ -261,13 +284,13 @@ class AddActivity extends Component {
                 size="small"
                 onChange={this.selectItem('jackpot', index)}
               >
-                {have_access.map(item => {
+                {have_access.length ? have_access[index].map(item => {
                   return (
                     <Option value={item.id} key={item.id}>
                       {item.name}
                     </Option>
                   );
-                })}
+                }) : null}
               </Select>
             </div>
           </div>

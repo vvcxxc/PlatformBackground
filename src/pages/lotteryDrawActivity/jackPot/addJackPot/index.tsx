@@ -157,21 +157,41 @@ export default class AddJackPot extends Component {
     this.setState({ giftIdPrecent: tempPercent })
   }
   sumbit = () => {
-    const { name, menuCheck, activityCheckid, thanksParticipationPercent, dailyInventory, getLocation, getAddress, getValidity, giftIdGroup, giftIdPrecent } = this.state
+    const { name, menuCheck, activityCheckid, thanksParticipationPercent, dailyInventory, getLocation, getAddress, getValidity, giftIdGroup, giftIdPrecent } = this.state;
     let data;
     if (this.state.menuCheck == 1) {
       // '线上卡券'
+      if (!name || !activityCheckid || !thanksParticipationPercent || !dailyInventory) {
+        notification.open({ message: '信息未填写完整或未选择活动' });
+        return;
+      }
       data = {
         name, type: menuCheck, recruit_activity_id: activityCheckid, not_win_probability: thanksParticipationPercent, daily_number: dailyInventory,
       }
-    } else {
+    } else if (this.state.menuCheck == 2) {
+
+
+      if (!name || !getLocation || !getAddress || !getValidity) {
+        notification.open({ message: '信息未填写完整' });
+        return;
+      } else if (giftIdGroup.length == 0) {
+        notification.open({ message: '未选择奖品' });
+        return;
+      }
       let sort = [];
       for (let i = 0; i < giftIdGroup.length; i++) {
+        if (!giftIdPrecent[i]) {
+          notification.open({ message: '中奖率填写有误或未填写完整' });
+          return;
+        }
         sort[i] = i;
       }
       data = {
         name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent, sort
       }
+    } else {
+      notification.open({ message: '信息未填写完整或未选择活动' });
+      return;
     }
     request('/api/v1/pools', {
       method: 'POST',
@@ -328,7 +348,7 @@ export default class AddJackPot extends Component {
                 <Descriptions.Item label="关联活动">
                   {!this.state.activityCheckName ? '未选择活动' : this.state.activityCheckName}
                 </Descriptions.Item>
-                <Descriptions.Item label="设置奖池名称">已设置{this.state.activityNum}张 </Descriptions.Item>
+                <Descriptions.Item label="奖品数量">已设置{this.state.activityNum}张 </Descriptions.Item>
                 <Descriptions.Item label="谢谢参与中奖率">
                   <Input className={styles.inputBox} placeholder="请设置谢谢参与中奖率" onChange={this.inputChange('thanksParticipationPercent')} />
                 </Descriptions.Item>
