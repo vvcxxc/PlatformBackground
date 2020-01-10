@@ -93,6 +93,7 @@ export default class AddJackPot extends Component {
     activityList: [],
     isFlag: false,
     originData: [],
+    area_id: ''
   };
   components = {
     body: {
@@ -113,8 +114,8 @@ export default class AddJackPot extends Component {
   handleMenuClick = (type: Number, e: any) => {
     this.setState({ menuCheck: type });
   };
-  handleActiviutyClick = (id: String | Number, Name: String, area_name: String, e: any) => {
-    this.setState({ activityCheckid: id, activityCheckName: Name, activityCheckArea_name: area_name });
+  handleActiviutyClick = (id: String | Number, Name: String, area_name: String, area_id: string | number,e: any) => {
+    this.setState({ activityCheckid: id, activityCheckName: Name, activityCheckArea_name: area_name, area_id });
     request.get('/api/v1/pools/couponNum', {
       method: 'GET',
       params: { id: id },
@@ -157,8 +158,9 @@ export default class AddJackPot extends Component {
     this.setState({ giftIdPrecent: tempPercent })
   }
   sumbit = () => {
-    const { name, menuCheck, activityCheckid, thanksParticipationPercent, dailyInventory, getLocation, getAddress, getValidity, giftIdGroup, giftIdPrecent } = this.state;
+    const { name, area_id,menuCheck, activityCheckid, thanksParticipationPercent, dailyInventory, getLocation, getAddress, getValidity, giftIdGroup, giftIdPrecent } = this.state;
     let data;
+    console.log(this.state)
     if (this.state.menuCheck == 1) {
       // '线上卡券'
       if (!name || !activityCheckid || !thanksParticipationPercent || !dailyInventory) {
@@ -166,7 +168,7 @@ export default class AddJackPot extends Component {
         return;
       }
       data = {
-        name, type: menuCheck, recruit_activity_id: activityCheckid, not_win_probability: thanksParticipationPercent, daily_number: dailyInventory,
+        name, type: menuCheck, area_id,recruit_activity_id: activityCheckid, not_win_probability: thanksParticipationPercent, daily_number: dailyInventory,
       }
     } else if (this.state.menuCheck == 2) {
 
@@ -187,7 +189,7 @@ export default class AddJackPot extends Component {
         sort[i] = i;
       }
       data = {
-        name, type: menuCheck, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent, sort
+        name, type: menuCheck,area_id,recruit_activity_id: activityCheckid, object_name: getLocation, address: getAddress, expiry_day: getValidity, number: giftIdGroup.length, prize_id: giftIdGroup, probability: giftIdPrecent, sort
       }
     } else {
       notification.open({ message: '信息未填写完整或未选择活动' });
@@ -261,7 +263,7 @@ export default class AddJackPot extends Component {
           this.state.activityList.map((item: any, index: any) => {
             return (
 
-              <Menu.Item key={index} onClick={this.handleActiviutyClick.bind(this, item.id, item.name, item.area_name)}>
+              <Menu.Item key={index} onClick={this.handleActiviutyClick.bind(this, item.id, item.name, item.area_name, item.area_id)}>
                 {item.name}
               </Menu.Item>
             )
@@ -320,7 +322,7 @@ export default class AddJackPot extends Component {
               </Dropdown.Button>
             </Descriptions.Item>
             {
-              this.state.menuCheck == 1 ? (
+              this.state.menuCheck == 1 || 2 ? (
                 <Descriptions.Item label="选择关联营销活动">
                   <Dropdown.Button overlay={activiuty}>
                     {!this.state.activityCheckName ? '未选择活动' : this.state.activityCheckName}
@@ -329,7 +331,7 @@ export default class AddJackPot extends Component {
               ) : null
             }
             {
-              this.state.menuCheck == 1 ? (
+              this.state.menuCheck == 1 || 2  ? (
                 <Descriptions.Item label="所属商圈">{!this.state.activityCheckArea_name ? '未选择活动' : this.state.activityCheckArea_name}</Descriptions.Item>
               ) : null
             }
