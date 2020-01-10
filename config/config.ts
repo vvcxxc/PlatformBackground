@@ -205,6 +205,27 @@ export default {
               ],
             },
             {
+              path: '/merchantManagement',
+              name: 'merchantManagement',
+              routes: [
+                {
+                  path: '/merchantManagement/merchantList',
+                  name: 'merchantList',
+                  component: './merchantManagement/merchantList'
+                },
+                {
+                  path: '/merchantManagement/storeAudit',
+                  name: 'storeAudit',
+                  component: './merchantManagement/storeAudit'
+                },
+                {
+                  path: '/merchantManagement/payAudit',
+                  name: 'payAudit',
+                  component: './merchantManagement/payAudit'
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
