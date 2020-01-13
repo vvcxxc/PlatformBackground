@@ -44,30 +44,33 @@ export default Form.create()(
       componentDidMount() {
         const {
           activityName,
+          jackPotName,
           // activityStatus,
           currentPage,
           currentPageSize,
         } = this.props.jackPotList;
         // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
-        this.getListData(activityName, currentPage, currentPageSize);
+        this.getListData(activityName, jackPotName, currentPage, currentPageSize);
       }
 
       handleSearch = async (e: any) => {
         // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
+        let jackPotName = this.props.form.getFieldValue('jackPotName');
         e.preventDefault();
         await this.props.dispatch({
           type: 'jackPotList/setFussyForm',
           payload: {
             // activityStatus,
             activityName,
+            jackPotName
           },
         });
 
         const { currentPage, currentPageSize } = this.props.jackPotList;
 
         // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
-        this.getListData(activityName, currentPage, currentPageSize);
+        this.getListData(activityName, jackPotName, currentPage, currentPageSize);
       };
 
       // getListData = (activity_name: string, status: string, currentPage: any, currentPageSize: any) => {
@@ -91,7 +94,7 @@ export default Form.create()(
       //   })
       // }
 
-      getListData = (activity_name: string, currentPage: any, currentPageSize: any) => {
+      getListData = (activity_name: string, jackPotName: string, currentPage: any, currentPageSize: any) => {
         this.setState({
           loading: true,
         });
@@ -99,6 +102,7 @@ export default Form.create()(
           method: 'GET',
           params: {
             activity_name,
+            pools_name: jackPotName,
             page: currentPage,
             count: currentPageSize
           }
@@ -128,7 +132,7 @@ export default Form.create()(
           form: { getFieldDecorator },
         } = this.props;
         // const { activityName, activityStatus } = this.props.jackPotList;
-        const { activityName } = this.props.jackPotList;
+        const { activityName, jackPotName } = this.props.jackPotList;
         return (
           <Form onSubmit={this.handleSearch.bind(this)} layout="inline">
             <Row
@@ -138,6 +142,13 @@ export default Form.create()(
                 xl: 48,
               }}
             >
+              <Col md={8} sm={24}>
+                <FormItem label="奖池名称">
+                  {getFieldDecorator('jackPotName', { initialValue: jackPotName })(
+                    <Input placeholder="请输入" />,
+                  )}
+                </FormItem>
+              </Col>
               <Col md={8} sm={24}>
                 <FormItem label="活动名称">
                   {getFieldDecorator('activityName', { initialValue: activityName })(
@@ -192,8 +203,9 @@ export default Form.create()(
         const { currentPage, currentPageSize } = this.props.jackPotList;
         // let activityStatus = this.props.form.getFieldValue('activityStatus');
         let activityName = this.props.form.getFieldValue('activityName');
+        let jackPotName = this.props.form.getFieldValue('jackPotName');
         // this.getListData(activityName, activityStatus, currentPage, currentPageSize);
-        this.getListData(activityName, currentPage, currentPageSize);
+        this.getListData(activityName, jackPotName, currentPage, currentPageSize);
       };
 
       addJackPot() {
@@ -227,10 +239,11 @@ export default Form.create()(
               }
               const {
                 activityName,
+                jackPotName,
                 currentPage,
                 currentPageSize,
               } = _this.props.jackPotList;
-              _this.getListData(activityName, currentPage, currentPageSize);
+              _this.getListData(activityName, jackPotName, currentPage, currentPageSize);
             })
           },
           onCancel() {
@@ -258,10 +271,11 @@ export default Form.create()(
               }
               const {
                 activityName,
+                jackPotName,
                 currentPage,
                 currentPageSize,
               } = _this.props.jackPotList;
-              _this.getListData(activityName, currentPage, currentPageSize);
+              _this.getListData(activityName, jackPotName, currentPage, currentPageSize);
             })
           },
           onCancel() {

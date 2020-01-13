@@ -7,7 +7,7 @@ import { Dispatch } from 'redux';
 interface LoginProps {
   dispatch: Dispatch<any>;
 }
-@connect(({ userLogin }: any) => userLogin)
+@connect(({ login }: any) => login)
 class Login extends Component<LoginProps> {
 
   state= {
@@ -27,7 +27,7 @@ class Login extends Component<LoginProps> {
   login = () => {
     const {username, password} = this.state
     this.props.dispatch({
-      type: 'userLogin/login',
+      type: 'login/login',
       payload: {
         username,
         password
