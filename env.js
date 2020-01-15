@@ -12,6 +12,7 @@ const configs = {
   // 本地
   local: {
     API: 'http://test.platform_admin_api.tdianyi.com',
+    // API: 'http://platform-admin.api.tdianyi.com',
   },
 
   // 线上环境
