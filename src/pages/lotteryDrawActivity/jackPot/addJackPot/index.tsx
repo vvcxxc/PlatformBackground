@@ -163,6 +163,7 @@ export default class AddJackPot extends Component {
   inputChange = (type: string) => ({ target: { value } }) => {
     this.setState({ [type]: value });
   }
+
   // 礼物概率输入框里onChange
   giftChange = (index: Number | String, e: any) => {
     let tempPercent = this.state.giftIdPrecent;
