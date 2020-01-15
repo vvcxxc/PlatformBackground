@@ -49,6 +49,7 @@ export default Form.create()(
       };
 
       componentDidMount = () => {
+        console.log('环境：'+process.env.API_ENV)
         const {
           activityName,
           storeName,
