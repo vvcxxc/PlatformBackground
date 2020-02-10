@@ -59,6 +59,7 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
+  console.log(process.env.API_ENV)
   let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com';
   let token = localStorage.getItem('token');
   let Url = '';
