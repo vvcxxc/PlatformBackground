@@ -211,7 +211,7 @@ export default {
                 {
                   path: '/merchantManagement/merchantList',
                   name: 'merchantList',
-                  component: './merchantManagement/merchantList'
+                  component: './merchantManagement/merchantList',
                 },
                 {
                   path: '/merchantManagement/storeAudit',
@@ -222,6 +222,11 @@ export default {
                   path: '/merchantManagement/payAudit',
                   name: 'payAudit',
                   component: './merchantManagement/payAudit'
+                },
+                {
+                  path: '/merchantManagement/merchantList/setNumber',
+                  name: 'setNumber',
+                  component: './merchantManagement/merchantList/setNumber',
                 }
               ]
             },

@@ -84,7 +84,6 @@ function UploadBox(props: Props) {
   }
 
 
-
   const uploadButton = (
     <div className={styles.uploadDefault}>
       <Icon type={imgLoading ? 'loading' : 'plus'} />
@@ -104,14 +103,13 @@ function UploadBox(props: Props) {
       >
         {props.imgUrl ?  (
           <img
-            src={props.imgUrl}
+            src={'http://tmwl.oss-cn-shenzhen.aliyuncs.com/'+props.imgUrl}
             alt="avatar"
             style={{ width: '84px', height: '84px' }}
           />
         ) : imageUrl ? (
           <img
             src={imageUrl}
-            alt="avatar"
             style={{ width: '84px', height: '84px' }}
 
           />
