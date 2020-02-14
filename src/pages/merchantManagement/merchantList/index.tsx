@@ -205,6 +205,9 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
+                {/* {
+                  text.supplier_status == '通过' && text.
+                } */}
                 <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>查看门店</a>
                 <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>查看支付</a>
                 <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewCode', text)}>查看码</a>
