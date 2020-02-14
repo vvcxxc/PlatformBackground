@@ -110,7 +110,7 @@ export default Form.create()(
             router.push('/merchantManagement/storeAudit?id=' + info.id)
             break
           case 'viewPay':
-            router.push('/merchantManagement/payAudit')
+            router.push('/merchantManagement/payAudit?id=' + info.supplier_id)
             break
           case 'viewCode':
             this.viewCode(info.id)
@@ -205,14 +205,23 @@ export default Form.create()(
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                {/* {
-                  text.supplier_status == '通过' && text.
-                } */}
-                <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>查看门店</a>
-                <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>查看支付</a>
-                <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewCode', text)}>查看码</a>
-                <a className={styles.click_a} onClick={this.Goto.bind(this, 'download', text)}>下载资料</a>
-                <a className={styles.click_a} onClick={this.Goto.bind(this, 'setNum', text)}>商户号设置</a>
+                {
+                  (text.supplier_status != '通过' || text.supplier_status != '通过') ? (
+                    <span>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>查看门店</a>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>查看支付</a>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewCode', text)}>查看码</a>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'download', text)}>下载资料</a>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'setNum', text)}>商户号设置</a>
+                    </span>
+                  ) : (
+                    <span>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>门店审核</a>
+                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>支付审核</a>
+                    </span>
+                  )
+                }
+
               </span>
             ),
           },
