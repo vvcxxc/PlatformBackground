@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './index.less'
-import { Breadcrumb, Radio, Icon, Select, Button } from 'antd'
+import { Breadcrumb, Radio, notification, Select, Button } from 'antd'
 import InputBox from '@/components/myComponents/InputBox'
 import UploadBox from '@/components/myComponents/uploadBox'
 import router from 'umi/router'
@@ -54,6 +54,7 @@ class PayAudit extends Component {
     if(type == 'type'){
       this.setState({type: e.target.value})
     }
+    console.log(e.target.value)
   }
 
   inputChange = (type: string) => (value: any) => {
@@ -62,6 +63,28 @@ class PayAudit extends Component {
 
   imageChange = (type: string) => (path: string) => {
     this.setState({[type]: path})
+  }
+
+  // 提交数据
+  submit = () => {
+    let id = this.props.location.query.id
+    request.post('/api/sq',{
+      data: {
+        supplier_id: id,
+        type: this.state.type
+      }
+    }).then(res => {
+      console.log(res)
+      if(res.status_code == 200){
+        notification.success({
+          message: res.message,
+        });
+      }else {
+        notification.error({
+          message: res.message,
+        });
+      }
+    })
   }
 
   render (){
@@ -84,7 +107,7 @@ class PayAudit extends Component {
         </div>
         <div className={styles.layout}>
           <div>提交双乾审核：已提交</div>
-          <Button type='primary' style={{marginLeft: 30}}>提交数据</Button>
+          <Button type='primary' style={{marginLeft: 30}} onClick={this.submit}>提交数据</Button>
         </div>
         <div className={styles.layout}>
           <div className={styles.status}>认证状态：认证失败</div>
