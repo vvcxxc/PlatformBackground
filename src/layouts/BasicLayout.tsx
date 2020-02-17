@@ -81,7 +81,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         },
       ],
     },
-    // 暂时隐藏未完成功能
     {
       path: '/lotteryDrawActivity',
       name: '抽奖活动管理',
@@ -120,6 +119,28 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         },
       ],
     },
+    {
+      path: '/merchantManagement',
+      name: '商户管理',
+      children: [
+        {
+          path: '/merchantManagement/merchantList',
+          name: '门店审核',
+          component: './merchantManagement/merchantList'
+        }
+      ]
+    },
+    {
+      path: '/personalManagement',
+      name: '个人管理',
+      children: [
+        {
+          path: '/personalManagement/personalList',
+          name: '个人审核',
+          component: './personalManagement/personalList'
+        }
+      ]
+    }
   ];
   useEffect(() => {
     // if (dispatch) {

@@ -205,6 +205,43 @@ export default {
               ],
             },
             {
+              path: '/merchantManagement',
+              name: 'merchantManagement',
+              routes: [
+                {
+                  path: '/merchantManagement/merchantList',
+                  name: 'merchantList',
+                  component: './merchantManagement/merchantList',
+                },
+                {
+                  path: '/merchantManagement/storeAudit',
+                  name: 'storeAudit',
+                  component: './merchantManagement/storeAudit'
+                },
+                {
+                  path: '/merchantManagement/payAudit',
+                  name: 'payAudit',
+                  component: './merchantManagement/payAudit'
+                },
+                {
+                  path: '/merchantManagement/merchantList/setNumber',
+                  name: 'setNumber',
+                  component: './merchantManagement/merchantList/setNumber',
+                }
+              ]
+            },
+            {
+              path: '/personalManagement',
+              name: 'personalManagement',
+              routes: [
+                {
+                  path: '/personalManagement/personalList',
+                  name: 'personalList',
+                  component: './personalManagement/personalList'
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
