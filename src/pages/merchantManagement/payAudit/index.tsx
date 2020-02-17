@@ -28,7 +28,8 @@ class PayAudit extends Component {
     bank_card_back_img: '',
     bank_opening_permit: '',
     typeList: [],
-    type: 0
+    type: 0,
+    remarks: ''
   }
 
   componentDidMount(){
@@ -37,7 +38,7 @@ class PayAudit extends Component {
       params: {supplier_id: id}
     }).then(res => {
       console.log(res)
-      if(res.data.length){
+      if(res.data != []){
         this.setState({...res.data})
       }
     })
@@ -87,8 +88,64 @@ class PayAudit extends Component {
     })
   }
 
+  //确定按钮
+  confirm = () => {
+    let id = this.props.location.query.id
+    const {payment_status, remarks} = this.state
+    request.post('/api/sq/examine',{
+      data: {
+        supplier_id: id,
+        payment_status,
+        remarks
+      }
+    }).then(res => {
+      console.log(res)
+      if(res.status_code == 200){
+        notification.success({
+          message: res.message,
+        });
+      }else{
+        notification.error({
+          message: res.message,
+        });
+      }
+    })
+  }
+
+  //修改数据
+  changeInfo = () => {
+    let id = this.props.location.query.id
+    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img } = this.state
+
+    request.put('/api/sq/update',{
+      data: {
+        supplier_id: id,
+        address,
+        deal_cate_id,
+        contact_name,
+        legal_id_no,
+        legal_id_valid_date,
+        hand_hold_id_img,
+        legal_id_back_img,
+        legal_id_front_img,
+        corn_bus_name,
+        three_certs_in_one_no,
+        three_certs_in_one_valid_date,
+        three_certs_in_one_img,
+        settle_bank_account_no,
+        settle_bank,
+        bank_name,
+        bank_card_front_img,
+        bank_card_back_img,
+        bank_opening_permit
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  }
+
   render (){
-    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList } = this.state
+    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status } = this.state
 
     return (
       <div className={styles.page}>
@@ -181,17 +238,18 @@ class PayAudit extends Component {
         <div className={styles.title}>审核设置</div>
         <div className={styles.layout} style={{alignItems: 'center'}}>
           <div className={styles.label}>审核状态：</div>
-          <Select defaultValue="1" style={{ width: 120 }}>
+          <Select defaultValue="设置状态" style={{ width: 120 }} value={payment_status} onChange={this.inputChange('payment_status')}>
             <Option value="1">待审核</Option>
             <Option value="2">拒绝</Option>
             <Option value="3">通过</Option>
           </Select>
         </div>
-        <InputBox label='备注原因' value={name} onChange={this.inputChange('name')} />
+        <InputBox label='备注原因' value={remarks} onChange={this.inputChange('remarks')} />
 
 
         <div className={styles.buttonBox}>
-          <Button type='primary' className={styles.confirm}>确定</Button>
+          <Button type='primary' className={styles.confirm} onClick={this.changeInfo}>保存修改</Button>
+          <Button type='primary' className={styles.confirm} onClick={this.confirm}>确定</Button>
           <Button>取消</Button>
         </div>
       </div>

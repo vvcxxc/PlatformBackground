@@ -129,6 +129,17 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           component: './merchantManagement/merchantList'
         }
       ]
+    },
+    {
+      path: '/personalManagement',
+      name: '个人管理',
+      children: [
+        {
+          path: '/personalManagement/personalList',
+          name: '个人审核',
+          component: './personalManagement/personalList'
+        }
+      ]
     }
   ];
   useEffect(() => {

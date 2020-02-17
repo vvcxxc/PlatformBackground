@@ -231,6 +231,17 @@ export default {
               ]
             },
             {
+              path: '/personalManagement',
+              name: 'personalManagement',
+              routes: [
+                {
+                  path: '/personalManagement/personalList',
+                  name: 'personalList',
+                  component: './personalManagement/personalList'
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
