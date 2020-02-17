@@ -230,9 +230,9 @@ class PayAudit extends Component {
         <InputBox label='有效期' onChange={this.inputChange('legal_id_valid_date')} value={legal_id_valid_date} />
         <div className={styles.imageLayout}>
           <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='身份证正面' imgUrl={legal_id_front_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='身份证反面' imgUrl={legal_id_back_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='手持身份证' imgUrl={hand_hold_id_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('legal_id_front_img')} title='身份证正面' imgUrl={legal_id_front_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('legal_id_back_img')} title='身份证反面' imgUrl={legal_id_back_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('hand_hold_id_img')} title='手持身份证' imgUrl={hand_hold_id_img}/>
         </div>
 
         {/* 营业执照 */}
@@ -242,7 +242,7 @@ class PayAudit extends Component {
         <InputBox label='有效期' onChange={this.inputChange('three_certs_in_one_valid_date')} value={three_certs_in_one_valid_date} />
         <div className={styles.imageLayout}>
           <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='营业执照图' imgUrl={three_certs_in_one_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('three_certs_in_one_img')} title='营业执照图' imgUrl={three_certs_in_one_img}/>
         </div>
 
         {/* 银行卡信息 */}
@@ -252,10 +252,10 @@ class PayAudit extends Component {
         <InputBox label='支行' onChange={this.inputChange('bank_name')} value={bank_name} />
         <div className={styles.imageLayout}>
           <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='银行卡正面' imgUrl={bank_card_front_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='银行卡反面' imgUrl={bank_card_back_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_card_front_img')} title='银行卡正面' imgUrl={bank_card_front_img}/>
+          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_card_back_img')} title='银行卡反面' imgUrl={bank_card_back_img}/>
           {
-            this.state.type ? null : <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange} title='银行卡户许可' imgUrl={bank_opening_permit}/>
+            this.state.type ? null : <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_opening_permit')} title='银行卡户许可' imgUrl={bank_opening_permit}/>
           }
 
         </div>
