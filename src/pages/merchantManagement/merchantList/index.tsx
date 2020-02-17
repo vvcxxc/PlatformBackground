@@ -216,6 +216,9 @@ export default Form.create()(
                     </span>
                   ) : (
                     <span>
+                      {
+                        text.supplier_status != '通过' ? <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>门店审核</a> : <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>查看门店</a>
+                      }
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>门店审核</a>
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>支付审核</a>
                     </span>
