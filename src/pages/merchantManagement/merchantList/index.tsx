@@ -211,7 +211,7 @@ export default Form.create()(
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewStore', text)}>查看门店</a>
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewPay', text)}>查看支付</a>
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'viewCode', text)}>查看码</a>
-                      <a className={styles.click_a} onClick={this.Goto.bind(this, 'download', text)}>下载资料</a>
+                      {/*<a className={styles.click_a} onClick={this.Goto.bind(this, 'download', text)}>下载资料</a>*/}
                       <a className={styles.click_a} onClick={this.Goto.bind(this, 'setNum', text)}>商户号设置</a>
                     </span>
                   ) : (

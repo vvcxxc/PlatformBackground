@@ -116,32 +116,58 @@ class PayAudit extends Component {
   changeInfo = () => {
     let id = this.props.location.query.id
     const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img } = this.state
+    if(address,deal_cate_id&&contact_name&&legal_id_no&&legal_id_valid_date&&hand_hold_id_img&&legal_id_back_img&&
+      legal_id_front_img&&
+      corn_bus_name&&
+      three_certs_in_one_no&&
+      three_certs_in_one_valid_date&&
+      three_certs_in_one_img&&
+      settle_bank_account_no&&
+      settle_bank&&
+      bank_name&&
+      bank_card_front_img&&
+      bank_card_back_img&&
+      bank_opening_permit){
+      request.put('/api/sq/update',{
+        data: {
+          supplier_id: id,
+          address,
+          deal_cate_id,
+          contact_name,
+          legal_id_no,
+          legal_id_valid_date,
+          hand_hold_id_img,
+          legal_id_back_img,
+          legal_id_front_img,
+          corn_bus_name,
+          three_certs_in_one_no,
+          three_certs_in_one_valid_date,
+          three_certs_in_one_img,
+          settle_bank_account_no,
+          settle_bank,
+          bank_name,
+          bank_card_front_img,
+          bank_card_back_img,
+        }
+      }).then(res => {
+        console.log(res)
+        if(res.status_code == 200){
+          notification.success({
+            message: res.message
+          })
+        }else{
+          notification.error({
+            message: res.message
+          })
+        }
 
-    request.put('/api/sq/update',{
-      data: {
-        supplier_id: id,
-        address,
-        deal_cate_id,
-        contact_name,
-        legal_id_no,
-        legal_id_valid_date,
-        hand_hold_id_img,
-        legal_id_back_img,
-        legal_id_front_img,
-        corn_bus_name,
-        three_certs_in_one_no,
-        three_certs_in_one_valid_date,
-        three_certs_in_one_img,
-        settle_bank_account_no,
-        settle_bank,
-        bank_name,
-        bank_card_front_img,
-        bank_card_back_img,
-        bank_opening_permit
-      }
-    }).then(res => {
-      console.log(res)
-    })
+      })
+    }else{
+      notification.error({
+        message: '请将信息填写完整'
+      })
+    }
+
   }
 
   render (){
