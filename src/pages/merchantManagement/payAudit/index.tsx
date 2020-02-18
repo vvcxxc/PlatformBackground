@@ -272,7 +272,6 @@ class PayAudit extends Component {
         </div>
         <InputBox label='备注原因' value={remarks} onChange={this.inputChange('remarks')} />
 
-
         <div className={styles.buttonBox}>
           <Button type='primary' className={styles.confirm} onClick={this.changeInfo}>保存修改</Button>
           <Button type='primary' className={styles.confirm} onClick={this.confirm}>确定</Button>
