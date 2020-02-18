@@ -24,7 +24,7 @@ function UploadBox(props: Props) {
     if (!data) {
       request.get('http://release.api.supplier.tdianyi.com/api/v2/up').then(res => {
         let { data } = res;
-        localStorage.setItem('oss_data', data)
+        localStorage.setItem('oss_data', JSON.stringify(data))
       });
     }
   }, [])
