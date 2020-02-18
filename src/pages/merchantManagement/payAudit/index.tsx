@@ -63,6 +63,7 @@ class PayAudit extends Component {
   }
 
   imageChange = (type: string) => (path: string) => {
+    console.log(type,path)
     this.setState({[type]: path})
   }
 
