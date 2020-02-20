@@ -69,10 +69,10 @@ class PayAudit extends Component {
 
   // 提交数据
   submit = () => {
-    let id = this.props.location.query.id
+    let phone = this.props.location.query.phone
     request.post('/api/sq',{
       data: {
-        supplier_id: id,
+        phone: phone,
         type: this.state.type
       }
     }).then(res => {
@@ -199,9 +199,9 @@ class PayAudit extends Component {
         </div>
 
         <div className={styles.radioBox}>
-          <Radio.Group onChange={this.radioChange('type')} value={this.state.type}>
+          <Radio.Group onChange={this.radioChange('type')} value={this.state.type} defaultValue={1}>
             <Radio value={1}>个人商户</Radio>
-            <Radio value={0}>企业商户</Radio>
+            {/*<Radio value={0}>企业商户</Radio>*/}
           </Radio.Group>
         </div>
 

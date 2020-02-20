@@ -110,7 +110,7 @@ export default Form.create()(
             router.push('/merchantManagement/storeAudit?id=' + info.id)
             break
           case 'viewPay':
-            router.push('/merchantManagement/payAudit?id=' + info.supplier_id)
+            router.push('/merchantManagement/payAudit?phone=' + info.mobile)
             break
           case 'viewCode':
             this.viewCode(info.id)
