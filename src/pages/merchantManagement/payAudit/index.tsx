@@ -33,9 +33,9 @@ class PayAudit extends Component {
   }
 
   componentDidMount(){
-    let id = this.props.location.query.id
+    let phone = this.props.location.query.phone
     request.get('/api/sq/',{
-      params: {supplier_id: id}
+      params: {phone}
     }).then(res => {
       console.log(res)
       if(res.data != []){
@@ -91,11 +91,11 @@ class PayAudit extends Component {
 
   //确定按钮
   confirm = () => {
-    let id = this.props.location.query.id
+    let phone = this.props.location.query.phone
     const {payment_status, remarks} = this.state
     request.post('/api/sq/examine',{
       data: {
-        supplier_id: id,
+        phone,
         payment_status,
         remarks
       }
@@ -115,40 +115,31 @@ class PayAudit extends Component {
 
   //修改数据
   changeInfo = () => {
-    let id = this.props.location.query.id
-    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img } = this.state
-    if(address,deal_cate_id&&contact_name&&legal_id_no&&legal_id_valid_date&&hand_hold_id_img&&legal_id_back_img&&
+    const {contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img,  settle_bank_account_no, settle_bank, bank_name, bank_card_back_img, bank_card_front_img } = this.state
+    if(contact_name&&
+      legal_id_no&&
+      legal_id_valid_date&&
+      hand_hold_id_img&&
+      legal_id_back_img&&
       legal_id_front_img&&
-      corn_bus_name&&
-      three_certs_in_one_no&&
-      three_certs_in_one_valid_date&&
-      three_certs_in_one_img&&
       settle_bank_account_no&&
       settle_bank&&
       bank_name&&
       bank_card_front_img&&
-      bank_card_back_img&&
-      bank_opening_permit){
+      bank_card_back_img){
       request.put('/api/sq/update',{
         data: {
-          supplier_id: id,
-          address,
-          deal_cate_id,
           contact_name,
           legal_id_no,
           legal_id_valid_date,
           hand_hold_id_img,
           legal_id_back_img,
           legal_id_front_img,
-          corn_bus_name,
-          three_certs_in_one_no,
-          three_certs_in_one_valid_date,
-          three_certs_in_one_img,
           settle_bank_account_no,
           settle_bank,
           bank_name,
           bank_card_front_img,
-          bank_card_back_img,
+          bank_card_back_img
         }
       }).then(res => {
         console.log(res)
