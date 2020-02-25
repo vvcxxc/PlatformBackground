@@ -162,8 +162,18 @@ class PayAudit extends Component {
 
   }
 
+  status (type: any){
+    switch (type) {
+      case 0: return '认证失败';
+      case 1: return '已认证';
+      case 2: return '未认证';
+      case 3: return '审核中';
+      case 4: return '未注册';
+    }
+  }
+
   render (){
-    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status } = this.state
+    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status, status } = this.state
 
     return (
       <div className={styles.page}>
@@ -185,8 +195,8 @@ class PayAudit extends Component {
           <Button type='primary' style={{marginLeft: 30}} onClick={this.submit}>提交数据</Button>
         </div>
         <div className={styles.layout}>
-          <div className={styles.status}>认证状态：认证失败</div>
-          <div className={styles.reason}>返回信息：组织结构代码证副本，编号错误</div>
+          <div className={styles.status}>认证状态：{this.status(status)}</div>
+          <div className={styles.reason}>返回信息：{remarks}</div>
         </div>
 
         <div className={styles.radioBox}>
