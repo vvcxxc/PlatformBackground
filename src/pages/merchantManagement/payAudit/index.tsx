@@ -197,23 +197,23 @@ class PayAudit extends Component {
         </div>
 
         {/* 门店信息 */}
-        <div className={styles.title}>门店信息</div>
-        <InputBox label='门店地址' onChange={this.inputChange('address')} value={address} />
-        {/* <InputBox label='行业/经营品类' onChange={this.inputChange('address')} value={address} /> */}
+        {/*<div className={styles.title}>门店信息</div>*/}
+        {/*<InputBox label='门店地址' onChange={this.inputChange('address')} value={address} />*/}
+        {/*/!* <InputBox label='行业/经营品类' onChange={this.inputChange('address')} value={address} /> *!/*/}
 
-        <div className={styles.layout} style={{ alignItems: 'center' }}>
-          <div className={styles.label}>行业/经营品类：</div>
-          <Select defaultValue='行业/经营品类' value={deal_cate_id} style={{ width: 120 }} onChange={this.inputChange('deal_cate_id')}>
-            {/* <Option value="1">待审核</Option>
-            <Option value="2">拒绝</Option>
-            <Option value="3">通过</Option> */}
-            {
-              typeList.map(item => {
-                return <Option key={item.id} value={item.id}>{item.name}</Option>
-              })
-            }
-          </Select>
-        </div>
+        {/*<div className={styles.layout} style={{ alignItems: 'center' }}>*/}
+        {/*  <div className={styles.label}>行业/经营品类：</div>*/}
+        {/*  <Select defaultValue='行业/经营品类' value={deal_cate_id} style={{ width: 120 }} onChange={this.inputChange('deal_cate_id')}>*/}
+        {/*    /!* <Option value="1">待审核</Option>*/}
+        {/*    <Option value="2">拒绝</Option>*/}
+        {/*    <Option value="3">通过</Option> *!/*/}
+        {/*    {*/}
+        {/*      typeList.map(item => {*/}
+        {/*        return <Option key={item.id} value={item.id}>{item.name}</Option>*/}
+        {/*      })*/}
+        {/*    }*/}
+        {/*  </Select>*/}
+        {/*</div>*/}
 
         {/* 身份证信息 */}
         <div className={styles.title}>身份证信息</div>
@@ -228,14 +228,14 @@ class PayAudit extends Component {
         </div>
 
         {/* 营业执照 */}
-        <div className={styles.title}>身份证信息</div>
-        <InputBox label='营业执照名称' onChange={this.inputChange('corn_bus_name')} value={corn_bus_name} />
-        <InputBox label='营业执照号' onChange={this.inputChange('three_certs_in_one_no')} value={three_certs_in_one_no} />
-        <InputBox label='有效期' onChange={this.inputChange('three_certs_in_one_valid_date')} value={three_certs_in_one_valid_date} />
-        <div className={styles.imageLayout}>
-          <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('three_certs_in_one_img')} title='营业执照图' imgUrl={three_certs_in_one_img}/>
-        </div>
+        {/*<div className={styles.title}>身份证信息</div>*/}
+        {/*<InputBox label='营业执照名称' onChange={this.inputChange('corn_bus_name')} value={corn_bus_name} />*/}
+        {/*<InputBox label='营业执照号' onChange={this.inputChange('three_certs_in_one_no')} value={three_certs_in_one_no} />*/}
+        {/*<InputBox label='有效期' onChange={this.inputChange('three_certs_in_one_valid_date')} value={three_certs_in_one_valid_date} />*/}
+        {/*<div className={styles.imageLayout}>*/}
+        {/*  <div className={styles.label}>证件照片：</div>*/}
+        {/*  <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('three_certs_in_one_img')} title='营业执照图' imgUrl={three_certs_in_one_img}/>*/}
+        {/*</div>*/}
 
         {/* 银行卡信息 */}
         <div className={styles.title}>银行卡信息</div>

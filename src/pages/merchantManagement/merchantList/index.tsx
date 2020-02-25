@@ -45,7 +45,9 @@ export default Form.create()(
           }
         }).then(res => {
           console.log(res)
-          this.setState({ dataList: res.data, loading: false, total: res.pagination.total, })
+          if(res.status_code == 200){
+            this.setState({ dataList: res.data, loading: false, total: res.pagination.total, })
+          }
         })
       }
 
