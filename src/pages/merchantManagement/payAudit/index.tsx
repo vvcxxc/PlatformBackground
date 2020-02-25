@@ -115,6 +115,7 @@ class PayAudit extends Component {
 
   //修改数据
   changeInfo = () => {
+    let phone = this.props.location.query.phone
     const {contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img,  settle_bank_account_no, settle_bank, bank_name, bank_card_back_img, bank_card_front_img } = this.state
     if(contact_name&&
       legal_id_no&&
@@ -139,7 +140,8 @@ class PayAudit extends Component {
           settle_bank,
           bank_name,
           bank_card_front_img,
-          bank_card_back_img
+          bank_card_back_img,
+          phone
         }
       }).then(res => {
         console.log(res)
