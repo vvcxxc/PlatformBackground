@@ -28,7 +28,7 @@ class PayAudit extends Component {
     bank_card_back_img: '',
     bank_opening_permit: '',
     typeList: [],
-    type: 0,
+    type: 1,
     remarks: ''
   }
 
