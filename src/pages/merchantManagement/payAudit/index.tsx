@@ -171,6 +171,7 @@ class PayAudit extends Component {
       case 2: return '未认证';
       case 3: return '审核中';
       case 4: return '未注册';
+      default: return ''
     }
   }
 
