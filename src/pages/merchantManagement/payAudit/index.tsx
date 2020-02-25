@@ -188,8 +188,8 @@ class PayAudit extends Component {
         <div className={styles.radioBox}>
           <Radio.Group defaultValue="a" buttonStyle="solid" onChange={this.radioChange('channel')}>
             <Radio.Button value="a">双乾通道</Radio.Button>
-            <Radio.Button value="b">服务商通道</Radio.Button>
-            <Radio.Button value="c">小微通道</Radio.Button>
+            {/*<Radio.Button value="b">服务商通道</Radio.Button>*/}
+            {/*<Radio.Button value="c">小微通道</Radio.Button>*/}
           </Radio.Group>
         </div>
         <div className={styles.layout}>
