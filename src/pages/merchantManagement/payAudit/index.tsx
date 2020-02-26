@@ -32,17 +32,19 @@ class PayAudit extends Component {
     remarks: ''
   }
 
-  componentDidMount(){
+  async componentWillMount(){
     let phone = this.props.location.query.phone
-    request.get('/api/sq/',{
-      params: {phone}
-    }).then(res => {
-      console.log(res)
-      if(res.data != []){
+    // request.get('/api/sq/',{
+    //   params: {phone}
+    // }).then(res => {
+    //   if(res.data != []){
+    //     this.setState({...res.data})
+    //   }
+    // })
+    let res = await  request.get('/api/sq/',{ params: {phone}})
+        if(res.data != []){
         this.setState({...res.data})
       }
-    })
-
     request.get('http://api.supplier.tdianyi.com/v3/manage_type').then(res => {
       this.setState({
         typeList: res.data
