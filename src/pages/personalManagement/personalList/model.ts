@@ -12,7 +12,7 @@ const Model = {
     currentPageSize: 10
   },
   reducers: {
-    setSearchState (state: any, {payload}: any){
+    setSearchState(state: any, { payload }: any) {
       let created = undefined
       if (payload.start_date && payload.end_date) {
         created = moment(payload.start_date).format('YYYY-MM-DD') + '/' + moment(payload.end_date).format('YYYY-MM-DD')
@@ -25,9 +25,26 @@ const Model = {
         end_date: payload.end_date,
         status: payload.status,
         type: payload.type,
-
       }
-    }
+    },
+    resetFussySearch(state: any) {
+      return {
+        ...state,
+        name: undefined,
+        mobile: undefined,
+        start_date: undefined,
+        end_date: undefined,
+        status: undefined,
+        type: undefined,
+      };
+    },
+    setPaginationCurrent(state: any, action: any) {
+      return {
+        ...state,
+        currentPage: action.payload.currentPage,
+        currentPageSize: action.payload.currentPageSize,
+      };
+    },
   }
 }
 
