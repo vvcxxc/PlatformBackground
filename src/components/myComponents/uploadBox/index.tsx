@@ -6,7 +6,7 @@ interface Props {
   imgUrl?: string;
   onChange: (path: string) => any;
   title?: string;
-  style?: object
+  style?: object;
 }
 
 /**
@@ -18,7 +18,9 @@ interface Props {
 function UploadBox(props: Props) {
   const [imgLoading, setLoading] = useState(false)
   const [imageUrl, setImgUrl] = useState()
-
+  const [previewVisible, setVisible] = useState(false)
+  const [previewImage, setPreview] = useState('')
+  const [fileList, setFile] = useState([])
   useEffect(() => {
     let data = localStorage.getItem('oss_data')
     if (!data) {
@@ -28,6 +30,17 @@ function UploadBox(props: Props) {
       });
     }
   }, [])
+
+  useEffect(()=> {
+    if(props.imgUrl){
+      setFile([{
+        uid: '-1',
+        name: 'image.png',
+        status: 'done',
+        url: 'http://tmwl.oss-cn-shenzhen.aliyuncs.com/' + props.imgUrl,
+      }])
+    }
+  },[props.imgUrl])
 
   // 随机数
   const randomString = (len: any) => {
@@ -52,17 +65,21 @@ function UploadBox(props: Props) {
     });
   }
 
-  const imageChange = async (info: any) => {
+  const imageChange = (info: any) => {
+    let fileList = [...info.fileList];
     if (info.file.status === 'uploading') {
       setLoading(true)
-      return;
+      // return;
     }
     if (info.file.status === 'done') {
-      let imageUrl = await getBase64(info.file.originFileObj)
+      console.log(412412123)
+      // let imageUrl = await getBase64(info.file.originFileObj)
       setLoading(false)
-      setImgUrl(imageUrl)
+      // setImgUrl(info.fileList)
+      setFile(fileList)
       props.onChange(info.file.response.data.path)
     }
+    setFile(fileList)
   };
 
   const getData = (file: any) => {
@@ -91,17 +108,42 @@ function UploadBox(props: Props) {
     </div>
   );
 
+  const handlePreview = async (file: any) => {
+    if (!file.url && !file.preview) {
+      file.preview = await getBase64(file.originFileObj);
+    }
+    setVisible(true)
+    setPreview(file.url || file.preview)
+
+  };
+
+  const handleCancel = () => setVisible(false);
+  const handleRemove = () => {
+    setFile([])
+  }
+
+  // const fileList = [{
+  //   uid: '-1',
+  //   name: 'image.png',
+  //   status: 'done',
+  //   url: 'http://tmwl.oss-cn-shenzhen.aliyuncs.com/'+props.imgUrl,
+  // },]
+
   return (
     <div style={props.style ? props.style : undefined}>
       <Upload
         className={styles.upload}
         listType="picture-card"
-        showUploadList={false}
+        // showUploadList={false}
+        fileList={fileList}
         onChange={imageChange}
+        showUploadList={{ showDownloadIcon: false }}
         data={getData}
+        onPreview={handlePreview}
+        onRemove={handleRemove}
         action="http://tmwl.oss-cn-shenzhen.aliyuncs.com/"
       >
-        {props.imgUrl ?  (
+        {/* {props.imgUrl ?  (
           <img
             src={'http://tmwl.oss-cn-shenzhen.aliyuncs.com/'+props.imgUrl}
             alt="avatar"
@@ -115,11 +157,15 @@ function UploadBox(props: Props) {
           />
         ) : (
             uploadButton
-          )}
+          )} */}
+        {fileList.length >= 1 ? null : uploadButton}
       </Upload>
       {
         props.title ? <div className={styles.title}>{props.title}</div> : null
       }
+      <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
+        <img alt="example" style={{ width: '100%' }} src={previewImage} />
+      </Modal>
 
     </div>
   )
