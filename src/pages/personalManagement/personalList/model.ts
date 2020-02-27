@@ -25,6 +25,7 @@ const Model = {
         end_date: payload.end_date,
         status: payload.status,
         type: payload.type,
+        currentPage: 1,
       }
     },
     resetFussySearch(state: any) {

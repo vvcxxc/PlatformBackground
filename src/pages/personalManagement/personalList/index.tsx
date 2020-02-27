@@ -4,6 +4,7 @@ import request from '@/utils/request';
 import { Row, Col, Form, Input, DatePicker, Button, Select, Table, Modal } from 'antd'
 import { connect } from "dva";
 import moment from "moment";
+import { router } from "umi";
 const FormItem = Form.Item;
 const { Option } = Select;
 interface Props {
@@ -120,6 +121,14 @@ export default Form.create()(
         this.getListData(currentPage, currentPageSize, name, mobile, time, status, type);
       }
 
+      handlePayAuditing = (text: any) => {
+        router.push(`/merchantManagement/payAudit?phone=${text.phone}`)
+      }
+
+      handleLookPay = (text: any) => {
+        router.push(`/merchantManagement/payAudit?phone=${text.phone}`)
+      }
+
       render() {
         const { getFieldDecorator } = this.props.form;
         const { dataList, loading, total } = this.state;
@@ -171,13 +180,13 @@ export default Form.create()(
                   (text.operation == 0) ? (
                     <span>
                       {
-                        text.button_effective == 1 ? (<a>支付审核</a>) : (<a style={{ color: '#ccc' }}>支付审核</a>)
+                        text.button_effective == 1 ? (<a onClick={this.handlePayAuditing.bind(this, text)}>支付审核</a>) : (<a style={{ color: '#ccc' }}>支付审核</a>)
                       }
                     </span>
                   ) : (
                       <span>
                         {
-                          text.button_effective == 1 ? (<a>查看支付</a>) : (<a style={{ color: '#ccc' }}>查看支付</a>)
+                          text.button_effective == 1 ? (<a onClick={this.handleLookPay.bind(this, text)}>查看支付</a>) : (<a style={{ color: '#ccc' }}>查看支付</a>)
                         }
                       </span>
                     )
