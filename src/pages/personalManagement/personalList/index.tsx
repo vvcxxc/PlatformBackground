@@ -85,7 +85,7 @@ export default Form.create()(
             name,
             mobile,
             time,
-            status,
+            payment_status: status,
             type
           }
         }).then(res => {
