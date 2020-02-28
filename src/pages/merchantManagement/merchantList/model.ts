@@ -10,7 +10,7 @@ const Model = {
     mobile: undefined,
     status: undefined,
     paystatus: undefined,
-    currentPage: 1, // 当前页
+    page: 1, // 当前页
     currentPageSize: 10, // 每页数量
   },
   reducers: {

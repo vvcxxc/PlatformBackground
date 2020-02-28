@@ -32,7 +32,7 @@ export default Form.create()(
         this.setState({
           loading: true,
         });
-        const { accountname, created, name, mobile, status, paystatus, currentPage } = this.props.merchantList
+        const { accountname, created, name, mobile, status, paystatus, page } = this.props.merchantList
         request.get('/api/v1/store', {
           params: {
             accountname,
@@ -41,7 +41,7 @@ export default Form.create()(
             mobile,
             status,
             paystatus,
-            currentPage
+            page
           }
         }).then(res => {
           console.log(res)
@@ -128,7 +128,7 @@ export default Form.create()(
         await this.props.dispatch({
           type: 'merchantList/setPage',
           payload: {
-            currentPage: pagination.current,
+            page: pagination.current,
           }
         });
         this.getList()
@@ -139,7 +139,7 @@ export default Form.create()(
       render() {
         const { getFieldDecorator } = this.props.form;
         const { dataList, loading, total } = this.state
-        const { currentPage, currentPageSize, accountname, name, created, mobile, status, paystatus, start_date, end_date } = this.props.merchantList
+        const { page, currentPageSize, accountname, name, created, mobile, status, paystatus, start_date, end_date } = this.props.merchantList
         const columns = [
           {
             title: '入驻时间',
@@ -336,7 +336,7 @@ export default Form.create()(
               loading={loading}
               onChange={this.handleChange}
               pagination={{
-                current: currentPage,
+                current: page,
                 defaultPageSize: currentPageSize,
                 showSizeChanger: false,
                 showQuickJumper: true,
