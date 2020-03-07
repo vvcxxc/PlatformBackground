@@ -160,14 +160,14 @@ export default Form.create()(
           },
           {
             title: '账户状态',
-            dataIndex: 'status',
-            key: 'status',
+            dataIndex: 'payment_status',
+            key: 'payment_status',
             width: 100
           },
           {
             title: '双乾认证状态',
-            dataIndex: 'payment_status',
-            key: 'payment_status',
+            dataIndex: 'status',
+            key: 'status',
             width: 100
           },
           {
@@ -264,9 +264,9 @@ export default Form.create()(
                       <Select placeholder="全部状态" style={{
                         width: '174px'
                       }}>
-                        <Option value={0}>待审核</Option>
-                        <Option value={1}>通过</Option>
+                        <Option value={1}>待审核</Option>
                         <Option value={2}>拒绝</Option>
+                        <Option value={3}>通过</Option>
                       </Select>
                     )}
                   </FormItem>
