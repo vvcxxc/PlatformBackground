@@ -65,6 +65,7 @@ class StoreAudit extends Component {
         notification.success({
           message: res.message,
         });
+        router.goBack()
       }else{
         notification.error({
           message: res.message,
