@@ -35,6 +35,7 @@ class PayAudit extends Component {
 
   async componentWillMount(){
     let phone = this.props.location.query.phone
+    let type = this.props.location.query.type
     // request.get('/api/sq/',{
     //   params: {phone}
     // }).then(res => {
@@ -42,7 +43,7 @@ class PayAudit extends Component {
     //     this.setState({...res.data})
     //   }
     // })
-    let res = await  request.get('/api/sq/',{ params: {phone}})
+    let res = await  request.get('/api/sq/',{ params: {phone, type}})
         if(res.data != []){
         this.setState({...res.data})
       }
