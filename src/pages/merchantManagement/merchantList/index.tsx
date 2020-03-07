@@ -33,6 +33,7 @@ export default Form.create()(
           loading: true,
         });
         const { accountname, created, name, mobile, status, paystatus, page } = this.props.merchantList
+        console.log(page)
         request.get('/api/v1/store', {
           params: {
             accountname,
@@ -125,6 +126,7 @@ export default Form.create()(
       }
 
       handleChange = async (pagination: any) => {
+        console.log(pagination)
         await this.props.dispatch({
           type: 'merchantList/setPage',
           payload: {

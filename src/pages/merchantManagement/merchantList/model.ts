@@ -34,7 +34,7 @@ const Model = {
     setPage(state: any, action: any) {
       return {
         ...state,
-        currentPage: action.payload.currentPage
+        page: action.payload.page
       }
     },
     reset(state: any) {
