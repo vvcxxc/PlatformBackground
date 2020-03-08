@@ -34,16 +34,23 @@ class StoreAudit extends Component {
 
   componentDidMount() {
     request.get('http://api.supplier.tdianyi.com/v3/manage_type').then(res => {
-      this.setState({
-        typeList: res.data
-      })
+      if(res.code == 200){
+        this.setState({
+          typeList: res.data
+        })
+      }
+
     })
     let id = this.props.location.query.id
     request.get('/api/v1/store/toExamine/'+ id).then(res => {
-      this.setState({ ...res.data })
+      if(res.status_code == 200){
+        this.setState({ ...res.data })
+      }
     })
     request.get('/api/common/area').then(res => {
-      this.setState({ area_list: res.data });
+      if(res.status_code == 200){
+        this.setState({ area_list: res.data });
+      }
     });
 
   }

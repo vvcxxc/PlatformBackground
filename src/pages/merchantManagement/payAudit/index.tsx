@@ -33,7 +33,7 @@ class PayAudit extends Component {
     payment_status: '1'
   }
 
-  async componentWillMount(){
+  async componentWillMount() {
     let phone = this.props.location.query.phone
     let type = this.props.location.query.type
     // request.get('/api/sq/',{
@@ -43,21 +43,23 @@ class PayAudit extends Component {
     //     this.setState({...res.data})
     //   }
     // })
-    let res = await  request.get('/api/sq/',{ params: {phone, type}})
-        if(res.data != []){
-        this.setState({...res.data})
-      }
+    let res = await request.get('/api/sq/', { params: { phone, type } })
+    if (res.data != []) {
+      this.setState({ ...res.data })
+    }
     request.get('http://api.supplier.tdianyi.com/v3/manage_type').then(res => {
-      this.setState({
-        typeList: res.data
-      })
+      if (res.code == 200) {
+        this.setState({
+          typeList: res.data
+        })
+      }
     })
   }
 
 
   radioChange = (type: string) => (e: any) => {
-    if(type == 'type'){
-      this.setState({type: e.target.value})
+    if (type == 'type') {
+      this.setState({ type: e.target.value })
     }
     console.log(e.target.value)
   }
@@ -67,26 +69,26 @@ class PayAudit extends Component {
   }
 
   imageChange = (type: string) => (path: string) => {
-    console.log(type,path)
-    this.setState({[type]: path})
+    console.log(type, path)
+    this.setState({ [type]: path })
   }
 
   // 提交数据
   submit = () => {
     let phone = this.props.location.query.phone
-    request.post('/api/sq',{
+    request.post('/api/sq', {
       data: {
         phone: phone,
         type: this.state.type
       }
     }).then(res => {
       console.log(res)
-      if(res.status_code == 200){
+      if (res.status_code == 200) {
         notification.success({
           message: res.message,
         });
         router.goBack()
-      }else {
+      } else {
         notification.error({
           message: res.message,
         });
@@ -97,8 +99,8 @@ class PayAudit extends Component {
   //确定按钮
   confirm = () => {
     let phone = this.props.location.query.phone
-    const {payment_status, remarks} = this.state
-    request.post('/api/sq/examine',{
+    const { payment_status, remarks } = this.state
+    request.post('/api/sq/examine', {
       data: {
         phone,
         payment_status,
@@ -106,12 +108,12 @@ class PayAudit extends Component {
       }
     }).then(res => {
       console.log(res)
-      if(res.status_code == 200){
+      if (res.status_code == 200) {
         notification.success({
           message: res.message,
         });
         router.goBack()
-      }else{
+      } else {
         notification.error({
           message: res.message,
         });
@@ -122,19 +124,19 @@ class PayAudit extends Component {
   //修改数据
   changeInfo = () => {
     let phone = this.props.location.query.phone
-    const {contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img,  settle_bank_account_no, settle_bank, bank_name, bank_card_back_img, bank_card_front_img } = this.state
-    if(contact_name&&
-      legal_id_no&&
-      legal_id_valid_date&&
-      hand_hold_id_img&&
-      legal_id_back_img&&
-      legal_id_front_img&&
-      settle_bank_account_no&&
-      settle_bank&&
-      bank_name&&
-      bank_card_front_img&&
-      bank_card_back_img){
-      request.put('/api/sq/update',{
+    const { contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, settle_bank_account_no, settle_bank, bank_name, bank_card_back_img, bank_card_front_img } = this.state
+    if (contact_name &&
+      legal_id_no &&
+      legal_id_valid_date &&
+      hand_hold_id_img &&
+      legal_id_back_img &&
+      legal_id_front_img &&
+      settle_bank_account_no &&
+      settle_bank &&
+      bank_name &&
+      bank_card_front_img &&
+      bank_card_back_img) {
+      request.put('/api/sq/update', {
         data: {
           contact_name,
           legal_id_no,
@@ -151,19 +153,19 @@ class PayAudit extends Component {
         }
       }).then(res => {
         console.log(res)
-        if(res.status_code == 200){
+        if (res.status_code == 200) {
           notification.success({
             message: res.message
           })
           router.goBack()
-        }else{
+        } else {
           notification.error({
             message: res.message
           })
         }
 
       })
-    }else{
+    } else {
       notification.error({
         message: '请将信息填写完整'
       })
@@ -171,7 +173,7 @@ class PayAudit extends Component {
 
   }
 
-  status (type: any){
+  status(type: any) {
     switch (type) {
       case 0: return '认证失败';
       case 1: return '已认证';
@@ -182,8 +184,8 @@ class PayAudit extends Component {
     }
   }
 
-  render (){
-    const { address,deal_cate_id, contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status, status } = this.state
+  render() {
+    const { address, deal_cate_id, contact_name,message, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status, status, sub_status } = this.state
 
     return (
       <div className={styles.page}>
@@ -201,12 +203,12 @@ class PayAudit extends Component {
           </Radio.Group>
         </div>
         <div className={styles.layout}>
-          <div>提交双乾审核：已提交</div>
-          <Button type='primary' style={{marginLeft: 30}} onClick={this.submit}>提交数据</Button>
+    <div>提交双乾审核：{sub_status ? '已提交' : '未提交'}</div>
+          <Button type='primary' style={{ marginLeft: 30 }} onClick={this.submit}>提交数据</Button>
         </div>
         <div className={styles.layout}>
-          <div className={styles.status}>认证状态：{this.status(status)}</div>
-          <div className={styles.reason}>返回信息：{remarks}</div>
+          <div className={styles.status}>认证状态：{this.status(sub_status)}</div>
+          <div className={styles.reason}>返回信息：{message}</div>
         </div>
 
         <div className={styles.radioBox}>
@@ -242,9 +244,9 @@ class PayAudit extends Component {
         <InputBox label='有效期' onChange={this.inputChange('legal_id_valid_date')} value={legal_id_valid_date} />
         <div className={styles.imageLayout}>
           <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('legal_id_front_img')} title='身份证正面' imgUrl={legal_id_front_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('legal_id_back_img')} title='身份证反面' imgUrl={legal_id_back_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('hand_hold_id_img')} title='手持身份证' imgUrl={hand_hold_id_img}/>
+          <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('legal_id_front_img')} title='身份证正面' imgUrl={legal_id_front_img} />
+          <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('legal_id_back_img')} title='身份证反面' imgUrl={legal_id_back_img} />
+          <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('hand_hold_id_img')} title='手持身份证' imgUrl={hand_hold_id_img} />
         </div>
 
         {/* 营业执照 */}
@@ -264,17 +266,17 @@ class PayAudit extends Component {
         <InputBox label='支行' onChange={this.inputChange('bank_name')} value={bank_name} />
         <div className={styles.imageLayout}>
           <div className={styles.label}>证件照片：</div>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_card_front_img')} title='银行卡正面' imgUrl={bank_card_front_img}/>
-          <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_card_back_img')} title='银行卡反面' imgUrl={bank_card_back_img}/>
+          <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('bank_card_front_img')} title='银行卡正面' imgUrl={bank_card_front_img} />
+          <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('bank_card_back_img')} title='银行卡反面' imgUrl={bank_card_back_img} />
           {
-            this.state.type ? null : <UploadBox style={{margin: '0 20px'}} onChange={this.imageChange('bank_opening_permit')} title='银行卡户许可' imgUrl={bank_opening_permit}/>
+            this.state.type ? null : <UploadBox style={{ margin: '0 20px' }} onChange={this.imageChange('bank_opening_permit')} title='银行卡户许可' imgUrl={bank_opening_permit} />
           }
 
         </div>
 
         {/* 审核设置 */}
         <div className={styles.title}>审核设置</div>
-        <div className={styles.layout} style={{alignItems: 'center'}}>
+        <div className={styles.layout} style={{ alignItems: 'center' }}>
           <div className={styles.label}>审核状态：</div>
           <Select defaultValue="设置状态" style={{ width: 120 }} value={payment_status} onChange={this.inputChange('payment_status')}>
             <Option value={0}>未提交资料</Option>
