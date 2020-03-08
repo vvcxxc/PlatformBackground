@@ -122,11 +122,11 @@ export default Form.create()(
       }
 
       handlePayAuditing = (text: any) => {
-        router.push(`/merchantManagement/payAudit?phone=${text.phone}type=2`)
+        router.push(`/merchantManagement/payAudit?phone=${text.phone}&type=2`)
       }
 
       handleLookPay = (text: any) => {
-        router.push(`/merchantManagement/payAudit?phone=${text.phone}type=2`)
+        router.push(`/merchantManagement/payAudit?phone=${text.phone}&type=2`)
       }
 
       render() {
