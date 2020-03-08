@@ -207,7 +207,7 @@ class PayAudit extends Component {
           <Button type='primary' style={{ marginLeft: 30 }} onClick={this.submit}>提交数据</Button>
         </div>
         <div className={styles.layout}>
-          <div className={styles.status}>认证状态：{this.status(sub_status)}</div>
+          <div className={styles.status}>认证状态：{this.status(status)}</div>
           <div className={styles.reason}>返回信息：{message}</div>
         </div>
 
