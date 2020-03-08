@@ -30,7 +30,7 @@ class PayAudit extends Component {
     typeList: [],
     type: 1,
     remarks: '',
-    payment_status: 1
+    payment_status: '1'
   }
 
   async componentWillMount(){
@@ -277,10 +277,10 @@ class PayAudit extends Component {
         <div className={styles.layout} style={{alignItems: 'center'}}>
           <div className={styles.label}>审核状态：</div>
           <Select defaultValue="设置状态" style={{ width: 120 }} value={payment_status} onChange={this.inputChange('payment_status')}>
-            <Option value="0">未提交资料</Option>
-            <Option value="1">审核中</Option>
-            <Option value="2">拒绝</Option>
-            <Option value="3">通过</Option>
+            <Option value={0}>未提交资料</Option>
+            <Option value={1}>审核中</Option>
+            <Option value={2}>拒绝</Option>
+            <Option value={3}>通过</Option>
           </Select>
         </div>
         <InputBox label='备注原因' value={remarks} onChange={this.inputChange('remarks')} />
