@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import styles from './index.less'
-import { Breadcrumb, Radio, notification, Select, Button } from 'antd'
+import { Breadcrumb, Radio, notification, Select, Button, Spin } from 'antd'
 import InputBox from '@/components/myComponents/InputBox'
 import UploadBox from '@/components/myComponents/uploadBox'
 import router from 'umi/router'
@@ -30,7 +30,8 @@ class PayAudit extends Component {
     typeList: [],
     type: 1,
     remarks: '',
-    payment_status: '1'
+    payment_status: '1',
+    Loading: false
   }
 
   async componentWillMount() {
@@ -76,6 +77,7 @@ class PayAudit extends Component {
   // 提交数据
   submit = () => {
     let phone = this.props.location.query.phone
+    this.setState({Loading: true})
     request.post('/api/sq', {
       data: {
         phone: phone,
@@ -83,6 +85,7 @@ class PayAudit extends Component {
       }
     }).then(res => {
       console.log(res)
+      this.setState({Loading: false})
       if (res.status_code == 200) {
         notification.success({
           message: res.message,
@@ -93,7 +96,7 @@ class PayAudit extends Component {
           message: res.message,
         });
       }
-    })
+    }).catch(err => this.setState({Loading: false}))
   }
 
   //确定按钮
@@ -187,7 +190,7 @@ class PayAudit extends Component {
   }
 
   render() {
-    const { address, deal_cate_id, contact_name,message, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status, status, sub_status } = this.state
+    const { address, deal_cate_id, Loading, contact_name,message, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, corn_bus_name, three_certs_in_one_no, three_certs_in_one_valid_date, three_certs_in_one_img, settle_bank_account_no, settle_bank, bank_name, bank_opening_permit, bank_card_back_img, bank_card_front_img, typeList, remarks, payment_status, status, sub_status } = this.state
 
     return (
       <div className={styles.page}>
@@ -195,7 +198,7 @@ class PayAudit extends Component {
           <Breadcrumb.Item><a onClick={() => router.goBack()}>商家审核</a></Breadcrumb.Item>
           <Breadcrumb.Item>支付审核</Breadcrumb.Item>
         </Breadcrumb>
-
+        <Spin spinning={Loading}>
         <div className={styles.title}>基本信息</div>
         <div className={styles.radioBox}>
           <Radio.Group defaultValue="a" buttonStyle="solid" onChange={this.radioChange('channel')}>
@@ -294,6 +297,7 @@ class PayAudit extends Component {
           <Button type='primary' className={styles.confirm} onClick={this.confirm}>确定</Button>
           <Button>取消</Button>
         </div>
+        </Spin>
       </div>
     )
   }
