@@ -99,12 +99,14 @@ class PayAudit extends Component {
   //确定按钮
   confirm = () => {
     let phone = this.props.location.query.phone
+    let type = this.props.location.query.type
     const { payment_status, remarks } = this.state
     request.post('/api/sq/examine', {
       data: {
         phone,
         payment_status,
-        remarks
+        remarks,
+        type
       }
     }).then(res => {
       console.log(res)
