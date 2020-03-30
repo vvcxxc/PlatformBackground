@@ -160,7 +160,7 @@ class StoreAudit extends Component {
 
         <div className={styles.buttonBox}>
           <Button type='primary' className={styles.confirm} onClick={this.submit}>确定</Button>
-          <Button>取消</Button>
+          <Button onClick={()=> router.goBack()}>取消</Button>
         </div>
       </div>
     )

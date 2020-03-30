@@ -129,6 +129,7 @@ class PayAudit extends Component {
   //修改数据
   changeInfo = () => {
     let phone = this.props.location.query.phone
+    let type = this.props.location.query.type
     const { contact_name, legal_id_no, legal_id_valid_date, hand_hold_id_img, legal_id_back_img, legal_id_front_img, settle_bank_account_no, settle_bank, bank_name, bank_card_back_img, bank_card_front_img } = this.state
     if (contact_name &&
       legal_id_no &&
@@ -143,6 +144,7 @@ class PayAudit extends Component {
       bank_card_back_img) {
       request.put('/api/sq/update', {
         data: {
+          type,
           contact_name,
           legal_id_no,
           legal_id_valid_date,
@@ -295,7 +297,7 @@ class PayAudit extends Component {
         <div className={styles.buttonBox}>
           <Button type='primary' className={styles.confirm} onClick={this.changeInfo}>保存修改</Button>
           <Button type='primary' className={styles.confirm} onClick={this.confirm}>确定</Button>
-          <Button>取消</Button>
+          <Button onClick={()=> router.goBack()}>取消</Button>
         </div>
         </Spin>
       </div>
