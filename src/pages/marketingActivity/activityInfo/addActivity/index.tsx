@@ -167,6 +167,7 @@ export default class AddActivity extends Component {
 
   // 上传图片
   imageChange = (info: any) => {
+    console.log(info)
     if (info.file.status === 'uploading') {
       this.setState({ loading: true });
       return;

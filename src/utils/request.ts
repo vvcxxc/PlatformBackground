@@ -29,6 +29,7 @@ const codeMessage = {
  */
 const errorHandler = (error: { response: Response }): Response => {
   const { response } = error;
+  console.log(response)
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -59,8 +60,8 @@ const request = extend({
 
 // request拦截器, 改变url 或 options.
 request.interceptors.request.use((url, options) => {
-
-  let API = configs[process.env.API_ENV].API || 'http://platform-admin.api.tdianyi.com';
+  console.log(process.env.API_ENV)
+  let API = configs[process.env.API_ENV].API || 'http://test.platform_admin_api.tdianyi.com';
   let token = localStorage.getItem('token');
   let Url = '';
   if (url.includes('http')) {
