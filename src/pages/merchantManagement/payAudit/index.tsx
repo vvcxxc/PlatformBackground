@@ -30,7 +30,7 @@ class PayAudit extends Component {
     typeList: [],
     type: 1,
     remarks: '',
-    payment_status: '1',
+    payment_status: null,
     Loading: false
   }
 
