@@ -242,6 +242,28 @@ export default {
               ]
             },
             {
+              path: '/userCenter',
+              name: 'userCenter',
+              routes: [
+                {
+                  path: '/userCenter/doubleDry',
+                  name: 'doubleDry',
+                  routes: [
+                    {
+                      path: '/userCenter/doubleDry/pay-details',
+                      name: 'pay-details',
+                      component: './userCenter/doubleDry/pay-details'
+                    },
+                    {
+                      path: '/userCenter/doubleDry/doubleDryList',
+                      name: 'doubleDryList',
+                      component: './userCenter/doubleDry/doubleDryList'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',

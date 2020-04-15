@@ -140,7 +140,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           component: './personalManagement/personalList'
         }
       ]
-    }
+    },
+    {
+      path: '/userCenter',
+      name: '用户中心',
+      children: [
+        {
+          path: '/userCenter/doubleDry/doubleDryList',
+          name: '双乾审核',
+          component: './userCenter/doubleDry/doubleDryList'
+        }
+      ]
+    },
   ];
   useEffect(() => {
     // if (dispatch) {
