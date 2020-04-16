@@ -180,30 +180,6 @@ export default Form.create()(
             width: 100
           },
           {
-            title: '双乾支付',
-            dataIndex: 'double_money_status',
-            key: 'double_money_status',
-            width: 100
-          },
-          {
-            title: '微信支付',
-            dataIndex: 'wx_money_status',
-            key: 'wx_money_status',
-            width: 100
-          },
-          {
-            title: '小微支付',
-            dataIndex: 'small_wei_money_status',
-            key: 'small_wei_money_status',
-            width: 100
-          },
-          {
-            title: '支付宝支付',
-            dataIndex: 'zfb_money_status',
-            key: 'zfb_money_status',
-            width: 100
-          },
-          {
             title: '操作',
             key: 'operation',
             width: 200,

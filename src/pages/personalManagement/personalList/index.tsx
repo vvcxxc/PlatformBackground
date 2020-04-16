@@ -165,18 +165,12 @@ export default Form.create()(
             width: 100
           },
           {
-            title: '双乾认证状态',
-            dataIndex: 'status',
-            key: 'status',
-            width: 100
-          },
-          {
             title: '操作',
             key: 'operation',
             width: 200,
             render: (text: any, record: any) => (
               <span>
-                {
+                {/* {
                   (text.operation == 0) ? (
                     <span>
                       {
@@ -190,7 +184,8 @@ export default Form.create()(
                         }
                       </span>
                     )
-                }
+                } */}
+                <a onClick={this.handleLookPay.bind(this, text)}>查看支付</a>
               </span>
             )
           }

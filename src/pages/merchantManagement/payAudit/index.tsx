@@ -18,8 +18,12 @@ class PayAudit extends Component {
   async componentWillMount() {
     let phone = this.props.location.query.phone
     request.get('/api/v2/sq/examine', { params: { phone } }).then(res => {
-      console.log(res)
-      this.setState({status: res.data.sq.status, message: res.data.sq.message})
+      console.log(res,res.data)
+      if(res.status_code == 200 && res.data.length != 0){
+        this.setState({status: res.data.sq.status, message: res.data.sq.message})
+      }else{
+        // notification.error({message:res.message})
+      }
     })
   }
 
