@@ -142,7 +142,7 @@ export default Form.create()(
             title: '绑卡状态',
             dataIndex: 'bind_card_status',
             key: 'bind_card_status',
-            // width: 160
+            // width: 160 
           },
           {
             title: '开通转账状态',
