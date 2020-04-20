@@ -4,6 +4,7 @@ import { connect } from "dva";
 import moment from "moment";
 import styles from './index.less'
 import request from '@/utils/request';
+import { router } from 'umi';
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -156,7 +157,7 @@ export default Form.create()(
             width: 200,
             render: (text:any,record: any) => (
               <span>
-                <a>查看支付</a>
+                <a onClick={()=> router.push(`/userCenter/doubleDry/pay-details?phone=${record.phone}&channel_id=${record.channel_id}`)}>查看支付</a>
               </span>
             )
           }
