@@ -79,9 +79,11 @@ export default class PayDetails extends Component {
   submit = () => {
     let phone = this.props.location.query.phone
     this.setState({ Loading: true })
+    const channel_id = this.props.location.query.channel_id
     request.post('/api/v2/sq', {
       data: {
         phone: phone,
+        channel_id
       }
     }).then(res => {
       this.setState({ Loading: false })
