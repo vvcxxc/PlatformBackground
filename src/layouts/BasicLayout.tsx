@@ -157,9 +157,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       name: '社群管理',
       children: [
         {
-          path: '/communityManagement/audit-details',
+          path: '/communityManagement/community-list',
           name: '社群列表',
-          component: './communityManagement/audit-details'
+          component: './communityManagement/community-list'
         }
       ]
     },
