@@ -21,7 +21,10 @@ class PayAudit extends Component {
     request.get('/api/v2/sq/examine', { params: { phone,channel_id } }).then(res => {
       console.log(res,res.data)
       if(res.status_code == 200 && res.data.length != 0){
-        this.setState({status: res.data.sq.status, message: res.data.sq.message})
+        if(res.data.sq){
+          this.setState({status: res.data.sq.status, message: res.data.sq.message, })
+        }
+        this.setState({remarks: res.data.refuse_reason, payment_status: res.data.payment_status})
       }else{
         // notification.error({message:res.message})
       }
