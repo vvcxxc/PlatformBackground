@@ -17,10 +17,14 @@ class PayAudit extends Component {
 
   async componentWillMount() {
     let phone = this.props.location.query.phone
-    request.get('/api/v2/sq/examine', { params: { phone } }).then(res => {
+    let channel_id = this.props.location.query.channel_id
+    request.get('/api/v2/sq/examine', { params: { phone,channel_id } }).then(res => {
       console.log(res,res.data)
       if(res.status_code == 200 && res.data.length != 0){
-        this.setState({status: res.data.sq.status, message: res.data.sq.message})
+        if(res.data.sq){
+          this.setState({status: res.data.sq.status, message: res.data.sq.message, })
+        }
+        this.setState({remarks: res.data.refuse_reason, payment_status: res.data.payment_status})
       }else{
         // notification.error({message:res.message})
       }
@@ -41,14 +45,14 @@ class PayAudit extends Component {
   //确定按钮
   confirm = () => {
     let phone = this.props.location.query.phone
-    let type = this.props.location.query.type
+    let channel_id = this.props.location.query.channel_id
     const { payment_status, remarks } = this.state
     request.post('/api/v2/sq/examine', {
       data: {
         phone,
         payment_status,
         remarks,
-        type
+        channel_id
       }
     }).then(res => {
       console.log(res)

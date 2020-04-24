@@ -129,8 +129,8 @@ export default Form.create()(
           },
           {
             title: '注册角色',
-            dataIndex: 'channel_id',
-            key: 'channel_id',
+            dataIndex: 'channel',
+            key: 'channel',
             // width: 160
           },
           {
@@ -143,7 +143,7 @@ export default Form.create()(
             title: '绑卡状态',
             dataIndex: 'bind_card_status',
             key: 'bind_card_status',
-            // width: 160 
+            // width: 160
           },
           {
             title: '开通转账状态',
