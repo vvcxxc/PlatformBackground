@@ -222,7 +222,7 @@ export default Form.create()(
                     <FormItem label='双乾状态'>
                       {getFieldDecorator('doubledryStatus', { initialValue: doubledryStatus })(
                         <Select placeholder="全部状态" style={{ width: '100%' }}>
-                          <Option value={4}>未提交</Option>
+                          {/* <Option value={4}>未提交</Option> */}
                           <Option value={3}>已提交</Option>
                           <Option value={2}>未认证</Option>
                           <Option value={1}>已认证</Option>
