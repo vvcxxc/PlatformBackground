@@ -18,6 +18,18 @@ const Model = {
         ...state,
         ...payload
       }
+    },
+    resetFussySearch (){
+      return {
+        dataList: [],
+        name: '',
+        created_at: '',
+        mobile: '',
+        examine_status: '',
+        user_add_at: '',
+        page: 1,
+        total: null
+      }
     }
   },
   effects: {

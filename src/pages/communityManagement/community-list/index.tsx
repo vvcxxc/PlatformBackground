@@ -3,6 +3,7 @@ import { Breadcrumb, Row, Col, Form, Button, Select, Input, DatePicker, Table } 
 import { connect } from 'dva';
 import moment from 'moment';
 import styles from './index.less';
+import { router } from 'umi';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker, } = DatePicker;
@@ -88,6 +89,19 @@ export default Form.create()(
         this.props.dispatch({ type: 'communityList/getList', payload })
       }
 
+      goto = (id: string) => {
+        router.push('/communityManagement/audit-details?id='+id)
+      }
+
+      handleFormReset = async () => {
+        const { form, dispatch } = this.props;
+        form.resetFields();
+        await dispatch({
+          type: 'communityList/resetFussySearch',
+        });
+        this.props.dispatch({ type: 'communityList/getList', payload: {page: 1, count: 10} })
+      };
+
       render() {
         const { getFieldDecorator } = this.props.form;
         const { loading } = this.state;
@@ -130,7 +144,7 @@ export default Form.create()(
             key: 'examine_status',
             width: 100,
             render: (res: any) => {
-              return <div>{res == 1 ? '通过' : res == 2 ? '拒绝' : null}</div>
+              return <div>{res == 1 ? '通过' : res == 2 ? '拒绝' : res == 0 ? '待审核' : null}</div>
             }
           },
           {
@@ -143,7 +157,9 @@ export default Form.create()(
                 {
                   record.examine_status == 1 ? <Button type="link" disabled>
                     审核申请
-              </Button> : record.examine_status == 2 ? <Button type="link">
+              </Button> : record.examine_status == 2 ? <Button type="link" onClick={this.goto.bind(this,record.id)}>
+                      审核申请
+              </Button> : record.examine_status == 0 ? <Button type="link" onClick={this.goto.bind(this,record.id)}>
                       审核申请
               </Button> : null
                 }
@@ -202,6 +218,9 @@ export default Form.create()(
                 <Col md={5} sm={26}>
                   <Button type="primary" htmlType="submit">
                     查询
+              </Button>
+              <Button onClick={this.handleFormReset}>
+                    重置
               </Button>
                 </Col>
               </Row>
