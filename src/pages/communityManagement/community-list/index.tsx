@@ -93,6 +93,15 @@ export default Form.create()(
         router.push('/communityManagement/audit-details?id='+id)
       }
 
+      handleFormReset = async () => {
+        const { form, dispatch } = this.props;
+        form.resetFields();
+        await dispatch({
+          type: 'communityList/resetFussySearch',
+        });
+        this.props.dispatch({ type: 'communityList/getList', payload: {page: 1, count: 10} })
+      };
+
       render() {
         const { getFieldDecorator } = this.props.form;
         const { loading } = this.state;
@@ -209,6 +218,9 @@ export default Form.create()(
                 <Col md={5} sm={26}>
                   <Button type="primary" htmlType="submit">
                     查询
+              </Button>
+              <Button onClick={this.handleFormReset}>
+                    重置
               </Button>
                 </Col>
               </Row>
