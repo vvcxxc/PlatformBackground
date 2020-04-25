@@ -114,8 +114,8 @@ export default Form.create()(
           },
           {
             title: '社群角色',
-            dataIndex: 'role',
-            key: 'role',
+            dataIndex: 'grade',
+            key: 'grade',
             width: 100
           },
           {
