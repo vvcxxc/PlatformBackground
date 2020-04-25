@@ -210,10 +210,10 @@ export default Form.create()(
                     <FormItem label='角色类型' >
                       {getFieldDecorator('categoryType', { initialValue: categoryType })(
                         <Select placeholder="全部状态" style={{ width: '100%' }}>
-                          <Option value={1}>商家</Option>
-                          <Option value={2}>创客</Option>
-                          <Option value={3}>会长</Option>
-                          <Option value={4}>代理</Option>
+                          <Option value={10000}>商家</Option>
+                          <Option value={20000}>创客</Option>
+                          {/* <Option value={3}>会长</Option> */}
+                          <Option value={30000}>代理商</Option>
                         </Select>
                       )}
                     </FormItem>
@@ -222,11 +222,11 @@ export default Form.create()(
                     <FormItem label='双乾状态'>
                       {getFieldDecorator('doubledryStatus', { initialValue: doubledryStatus })(
                         <Select placeholder="全部状态" style={{ width: '100%' }}>
-                          <Option value={1}>未提交</Option>
-                          <Option value={2}>已提交</Option>
-                          <Option value={3}>未认证</Option>
-                          <Option value={4}>已认证</Option>
-                          <Option value={5}>认证失败</Option>
+                          <Option value={4}>未提交</Option>
+                          <Option value={3}>已提交</Option>
+                          <Option value={2}>未认证</Option>
+                          <Option value={1}>已认证</Option>
+                          <Option value={0}>认证失败</Option>
                         </Select>
                       )}
                     </FormItem>
