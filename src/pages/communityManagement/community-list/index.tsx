@@ -180,7 +180,7 @@ export default Form.create()(
               >
                 <Col md={8} sm={24}>
                   <FormItem label='注册时间'>
-                  {getFieldDecorator('created_at', { initialValue: created_at })(
+                  {getFieldDecorator('user_add_at', { initialValue: user_add_at })(
                       <RangePicker />
                     )}
 
@@ -188,7 +188,7 @@ export default Form.create()(
                 </Col>
                 <Col md={8} sm={24}>
                   <FormItem label='申请时间'>
-                  {getFieldDecorator('user_add_at', { initialValue: user_add_at })(
+                  {getFieldDecorator('created_at', { initialValue: created_at })(
                       <RangePicker />
                     )}
                   </FormItem>
