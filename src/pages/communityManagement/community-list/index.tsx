@@ -157,7 +157,7 @@ export default Form.create()(
                 {
                   record.examine_status == 1 ? <Button type="link" disabled>
                     审核申请
-              </Button> : record.examine_status == 2 ? <Button type="link" onClick={this.goto.bind(this,record.id)}>
+              </Button> : record.examine_status == 2 ? <Button type="link" onClick={this.goto.bind(this,record.id)} disabled>
                       审核申请
               </Button> : record.examine_status == 0 ? <Button type="link" onClick={this.goto.bind(this,record.id)}>
                       审核申请
