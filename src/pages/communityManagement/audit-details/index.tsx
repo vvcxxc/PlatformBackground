@@ -103,8 +103,8 @@ export default class AuditDetails extends Component {
             <div className={styles.layout_label}>提交内容：</div>
             <div className={styles.layout_img}>
               {
-                imgs.length ? imgs.map(item => {
-                  return <img onClick={this.showModal} src="https://dss0.baidu.com/73x1bjeh1BF3odCf/it/u=489293176,3448257280&fm=85&s=CDC1AC440C06077412C18D980300C08B" alt="" />
+                imgs.length ? JSON.parse(imgs).map((item:string, index: number) => {
+                  return <img key={index} onClick={this.showModal} src={'http://oss.tdianyi.com/'+item} alt="" />
                 }) : null
               }
             </div>
