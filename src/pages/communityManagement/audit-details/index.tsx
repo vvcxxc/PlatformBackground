@@ -19,7 +19,8 @@ export default class AuditDetails extends Component {
     upgrade_role: '',
     user_group: [],
     grade: '',
-    invitation_code: ''
+    invitation_code: '',
+    modal_image: ''
   }
 
   componentDidMount() {
@@ -34,9 +35,10 @@ export default class AuditDetails extends Component {
     this.setState({ [type]: value })
   }
 
-  showModal = () => {
+  showModal = (image: any) => {
     this.setState({
       visible: true,
+      modal_image: image
     });
   };
 
@@ -105,7 +107,7 @@ export default class AuditDetails extends Component {
             <div className={styles.layout_img}>
               {
                 imgs.length ? JSON.parse(imgs).map((item:string, index: number) => {
-                  return <img key={index} onClick={this.showModal} src={'http://oss.tdianyi.com/'+item} alt="" />
+                  return <img key={index} onClick={this.showModal.bind(this,'http://oss.tdianyi.com/'+item)} src={'http://oss.tdianyi.com/'+item} alt="" />
                 }) : null
               }
             </div>
@@ -133,7 +135,7 @@ export default class AuditDetails extends Component {
             footer={null}
             onCancel={this.handleOk}
           >
-            <img src="https://dss0.baidu.com/73x1bjeh1BF3odCf/it/u=489293176,3448257280&fm=85&s=CDC1AC440C06077412C18D980300C08B" alt="" />
+            <img src={this.state.modal_image} alt="" />
           </Modal>
 
 
