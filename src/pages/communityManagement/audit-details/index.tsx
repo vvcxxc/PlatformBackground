@@ -48,13 +48,14 @@ export default class AuditDetails extends Component {
 
 
   submit = () => {
-    const {remarks, examine_status, id, grade,invitation_code} = this.state
+    const {remarks, examine_status, id, grade,invitation_code, mobile} = this.state
     const data = {
       remarks,
       examine_status,
       upgrade_role: grade,
       id,
-      invitation_code
+      invitation_code,
+      mobile
     }
     putAuditDetails(id, data).then (res => {
       console.log(res)
@@ -92,7 +93,7 @@ export default class AuditDetails extends Component {
                 <Option value="4">合伙人</Option> */}
                 {
                   user_group.map(item => {
-                    return <Option key={item.layerLevel} value={item.layerLevel}>{item.name}</Option>
+                    return <Option key={item.id} value={item.id}>{item.name}</Option>
                   })
                 }
               </Select>
