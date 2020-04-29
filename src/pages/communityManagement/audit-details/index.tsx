@@ -86,6 +86,10 @@ export default class AuditDetails extends Component {
             <div className={styles.layout_main}>{active_value}</div>
           </div>
           <div className={styles.layout_box}>
+            <div className={styles.layout_label}>当前等级：</div>
+            <div className={styles.layout_main}>{grade == 5 ? '注册会员' : grade == 6 ? '超级创客' : grade == 7 ? '普通创客' : grade == 8 ? '合伙人' : null}</div>
+          </div>
+          <div className={styles.layout_box}>
             <div className={styles.layout_label}>社群等级：</div>
             <div className={styles.layout_main}>
               <Select value={grade} style={{ width: 120 }} onChange={this.inputChange('grade')}>
