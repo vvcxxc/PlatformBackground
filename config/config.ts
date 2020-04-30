@@ -33,11 +33,11 @@ const plugins: IPlugin[] = [
       },
       pwa: pwa
         ? {
-            workboxPluginMode: 'InjectManifest',
-            workboxOptions: {
-              importWorkboxFrom: 'local',
-            },
-          }
+          workboxPluginMode: 'InjectManifest',
+          workboxOptions: {
+            importWorkboxFrom: 'local',
+          },
+        }
         : false, // default close dll, because issue https://github.com/ant-design/ant-design-pro/issues/4665
       // dll features https://webpack.js.org/plugins/dll-plugin/
       // dll: {
@@ -258,6 +258,39 @@ export default {
                       path: '/userCenter/doubleDry/doubleDryList',
                       name: 'doubleDryList',
                       component: './userCenter/doubleDry/doubleDryList'
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              path: '/memberManagement',
+              name: 'memberManagement',
+              routes: [
+                {
+                  path: '/memberManagement/formalMember',
+                  name: 'formalMember',
+                  routes: [
+                    {
+                      path: '/memberManagement/formalMember/memberList',
+                      name: 'memberList',
+                      component: './memberManagement/formalMember/memberList'
+                    },
+                    {
+                      path: '/memberManagement/formalMember/memberDetail',
+                      name: 'memberDetail',
+                      component: './memberManagement/formalMember/memberDetail'
+                    }
+                  ]
+                },
+                {
+                  path: '/memberManagement/visitorMember',
+                  name: 'visitorMember',
+                  routes: [
+                    {
+                      path: '/memberManagement/visitorMember/memberList',
+                      name: 'memberList',
+                      component: './memberManagement/visitorMember/memberList'
                     }
                   ]
                 }

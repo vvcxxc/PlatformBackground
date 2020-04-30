@@ -152,6 +152,22 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         }
       ]
     },
+    {
+      path: '/memberManagement',
+      name: '会员管理',
+      children: [
+        {
+          path: '/memberManagement/formalMember/memberList',
+          name: '正式会员',
+          component: './memberManagement/formalMember/memberList'
+        },
+        {
+          path: '/memberManagement/visitorMember/memberList',
+          name: '游客会员',
+          component: './memberManagement/visitorMember/memberList'
+        }
+      ]
+    }
   ];
   useEffect(() => {
     // if (dispatch) {
@@ -209,8 +225,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           return first ? (
             <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
           ) : (
-            <span>{route.breadcrumbName}</span>
-          );
+              <span>{route.breadcrumbName}</span>
+            );
         }}
         // footerRender={footerRender}
 
