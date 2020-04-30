@@ -242,6 +242,22 @@ export default {
               ]
             },
             {
+              path: '/communityManagement',
+              name: 'communityManagement',
+              routes: [
+                {
+                  path: '/communityManagement/audit-details',
+                  name: 'audit-details',
+                  component: './communityManagement/audit-details',
+                },
+                {
+                  path: '/communityManagement/community-list',
+                  name: 'community-list',
+                  component: './communityManagement/community-list',
+                }
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
