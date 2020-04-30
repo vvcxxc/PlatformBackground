@@ -80,11 +80,15 @@ export default class AuditDetails extends Component {
           <Breadcrumb.Item>审核详情</Breadcrumb.Item>
         </Breadcrumb>
         <div className={styles.main}>
-          <InputBox label='用户姓名' value={name} onChange={this.inputChange('name')} />
-          <InputBox label='手机账号' value={mobile} onChange={this.inputChange('mobile')} />
+          {/* <InputBox label='用户姓名' value={name} onChange={this.inputChange('name')} />
+          <InputBox label='手机账号' value={mobile} onChange={this.inputChange('mobile')} /> */}
           <div className={styles.layout_box}>
-            <div className={styles.layout_label}>活跃度：</div>
-            <div className={styles.layout_main}>{active_value}</div>
+            <div className={styles.layout_label}>用户姓名：</div>
+            <div className={styles.layout_main}>{name}</div>
+          </div>
+          <div className={styles.layout_box}>
+            <div className={styles.layout_label}>手机账号：</div>
+            <div className={styles.layout_main}>{mobile}</div>
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>当前等级：</div>

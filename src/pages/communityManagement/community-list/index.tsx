@@ -26,18 +26,18 @@ export default Form.create()(
 
       componentDidMount() {
         // 获取列表
-        this.props.dispatch({ type: 'communityList/getList', payload: {page: 1, count: 10} })
+        this.props.dispatch({ type: 'communityList/getList', payload: { page: 1, count: 10 } })
       }
 
-      handleChange = (pagination: any,) => {
+      handleChange = (pagination: any, ) => {
         console.log(pagination)
         const page = pagination.current
         let { name, mobile, created_at, user_add_at } = this.props.communityList;
-        if(created_at){
-          created_at =`${moment(created_at[0]).format('YYYY-MM-DD')}/${moment(created_at[1]).format('YYYY-MM-DD')}`
+        if (created_at) {
+          created_at = `${moment(created_at[0]).format('YYYY-MM-DD')}/${moment(created_at[1]).format('YYYY-MM-DD')}`
         }
-        if(user_add_at){
-         user_add_at =`${moment(user_add_at[0]).format('YYYY-MM-DD')}/${moment(user_add_at[1]).format('YYYY-MM-DD')}`
+        if (user_add_at) {
+          user_add_at = `${moment(user_add_at[0]).format('YYYY-MM-DD')}/${moment(user_add_at[1]).format('YYYY-MM-DD')}`
         }
 
         const payload = {
@@ -64,33 +64,36 @@ export default Form.create()(
         let mobile = this.props.form.getFieldValue('mobile');
         let created_at = this.props.form.getFieldValue('created_at');
         let user_add_at = this.props.form.getFieldValue('user_add_at');
+        let examine_status = this.props.form.getFieldValue('examine_status');
         this.props.dispatch({
           type: 'communityList/setState',
           payload: {
             name,
             mobile,
             created_at,
-            user_add_at
+            user_add_at,
+            examine_status
           }
         })
-        if(created_at){
-          created_at =`${moment(created_at[0]).format('YYYY-MM-DD')}/${moment(created_at[1]).format('YYYY-MM-DD')}`
+        if (created_at) {
+          created_at = `${moment(created_at[0]).format('YYYY-MM-DD')}/${moment(created_at[1]).format('YYYY-MM-DD')}`
         }
-        if(user_add_at){
-         user_add_at =`${moment(user_add_at[0]).format('YYYY-MM-DD')}/${moment(user_add_at[1]).format('YYYY-MM-DD')}`
+        if (user_add_at) {
+          user_add_at = `${moment(user_add_at[0]).format('YYYY-MM-DD')}/${moment(user_add_at[1]).format('YYYY-MM-DD')}`
         }
         const payload = {
           name: name ? name : undefined,
           mobile: mobile ? mobile : undefined,
           created_at: created_at ? created_at : undefined,
           user_add_at: user_add_at ? user_add_at : undefined,
+          examine_status: examine_status,
           count: 10
         }
         this.props.dispatch({ type: 'communityList/getList', payload })
       }
 
       goto = (id: string) => {
-        router.push('/communityManagement/audit-details?id='+id)
+        router.push('/communityManagement/audit-details?id=' + id)
       }
 
       handleFormReset = async () => {
@@ -99,14 +102,14 @@ export default Form.create()(
         await dispatch({
           type: 'communityList/resetFussySearch',
         });
-        this.props.dispatch({ type: 'communityList/getList', payload: {page: 1, count: 10} })
+        this.props.dispatch({ type: 'communityList/getList', payload: { page: 1, count: 10 } })
       };
 
       render() {
         const { getFieldDecorator } = this.props.form;
         const { loading } = this.state;
-        const { dataList, name, user_add_at, created_at, mobile,page, total } = this.props.communityList;
-        console.log(created_at,'created_at')
+        const { dataList, name, user_add_at, created_at, mobile, page, total, examine_status } = this.props.communityList;
+        console.log(created_at, 'created_at')
         const columns = [
           {
             title: '提交审核时间',
@@ -157,10 +160,10 @@ export default Form.create()(
                 {
                   record.examine_status == 1 ? <Button type="link" disabled>
                     审核申请
-              </Button> : record.examine_status == 2 ? <Button type="link" onClick={this.goto.bind(this,record.id)} disabled>
+              </Button> : record.examine_status == 2 ? <Button type="link" onClick={this.goto.bind(this, record.id)} disabled>
                       审核申请
-              </Button> : record.examine_status == 0 ? <Button type="link" onClick={this.goto.bind(this,record.id)}>
-                      审核申请
+              </Button> : record.examine_status == 0 ? <Button type="link" onClick={this.goto.bind(this, record.id)}>
+                        审核申请
               </Button> : null
                 }
               </div>
@@ -180,7 +183,7 @@ export default Form.create()(
               >
                 <Col md={8} sm={24}>
                   <FormItem label='注册时间'>
-                  {getFieldDecorator('user_add_at', { initialValue: user_add_at })(
+                    {getFieldDecorator('user_add_at', { initialValue: user_add_at })(
                       <RangePicker />
                     )}
 
@@ -188,14 +191,14 @@ export default Form.create()(
                 </Col>
                 <Col md={8} sm={24}>
                   <FormItem label='申请时间'>
-                  {getFieldDecorator('created_at', { initialValue: created_at })(
+                    {getFieldDecorator('created_at', { initialValue: created_at })(
                       <RangePicker />
                     )}
                   </FormItem>
                 </Col>
                 <Col md={6} sm={24}>
                   <FormItem label='手机号'>
-                  {getFieldDecorator('mobile', { initialValue: mobile })(
+                    {getFieldDecorator('mobile', { initialValue: mobile })(
                       <Input />
                     )}
                   </FormItem>
@@ -210,18 +213,29 @@ export default Form.create()(
               >
                 <Col md={6} sm={24}>
                   <FormItem label='个人名称'>
-                  {getFieldDecorator('name', { initialValue: name })(
+                    {getFieldDecorator('name', { initialValue: name })(
                       <Input />
+                    )}
+                  </FormItem>
+                </Col>
+                <Col md={6} sm={24}>
+                  <FormItem label='审核状态'>
+                    {getFieldDecorator('examine_status', { initialValue: examine_status })(
+                      <Select value={examine_status} style={{width: 150}}>
+                        <Option value={0}>待审核</Option>
+                        <Option value={1}>通过</Option>
+                        <Option value={2}>拒绝</Option>
+                      </Select>
                     )}
                   </FormItem>
                 </Col>
                 <Col md={5} sm={26}>
                   <Button type="primary" htmlType="submit">
                     查询
-              </Button>
-              <Button onClick={this.handleFormReset}>
+                  </Button>
+                  <Button onClick={this.handleFormReset}>
                     重置
-              </Button>
+                  </Button>
                 </Col>
               </Row>
             </Form>
