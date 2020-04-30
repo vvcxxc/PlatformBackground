@@ -88,7 +88,7 @@ export default class AuditDetails extends Component {
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>当前等级：</div>
-            <div className={styles.layout_main}>{level == 5 ? '注册会员' : level == 6 ? '超级创客' : level == 7 ? '普通创客' : level == 8 ? '合伙人' : null}</div>
+            <div className={styles.layout_main}>{level == 5 ? '注册会员' : level == 6 ? '普通创客' : level == 7 ? '超级创客' : level == 8 ? '合伙人' : null}</div>
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>社群等级：</div>
