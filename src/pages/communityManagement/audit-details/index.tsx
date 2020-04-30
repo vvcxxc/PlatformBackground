@@ -121,7 +121,7 @@ export default class AuditDetails extends Component {
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>审核状态：</div>
             <div className={styles.layout_main}>
-              <Select value={examine_status} style={{ width: 120 }} onChange={this.inputChange('examine_status')}>
+              <Select value={examine_status ? examine_status : '请选择状态'} style={{ width: 120 }} onChange={this.inputChange('examine_status')}>
                 <Option value={1}>通过</Option>
                 <Option value={2}>拒绝</Option>
               </Select>
@@ -139,6 +139,7 @@ export default class AuditDetails extends Component {
             visible={this.state.visible}
             footer={null}
             onCancel={this.handleOk}
+            style={{width: 'auto'}}
           >
             <img src={this.state.modal_image} alt="" />
           </Modal>
