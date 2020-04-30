@@ -6,7 +6,7 @@
   "scripts": {
     "analyze": "cross-env ANALYZE=1 umi build",
     "build": "cross-env API_ENV=master umi build",
-    "build:test": "cross-env API_ENV=test umi build",
+    "build:test": "cross-env API_ENV=master umi build",
     "build:master": "cross-env API_ENV=master umi build",
     "deploy": "npm run site && npm run gh-pages",
     "fetch:blocks": "pro fetch-blocks && npm run prettier",
