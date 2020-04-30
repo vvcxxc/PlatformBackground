@@ -20,14 +20,15 @@ export default class AuditDetails extends Component {
     user_group: [],
     grade: '',
     invitation_code: '',
-    modal_image: ''
+    modal_image: '',
+    level: 0
   }
 
   componentDidMount() {
     const id = this.props.location.query.id
     getAuditDetails(id).then(res => {
       console.log(res)
-      this.setState({...res.data})
+      this.setState({...res.data,level:res.data.grade})
     })
   }
 
@@ -71,7 +72,7 @@ export default class AuditDetails extends Component {
   }
 
   render() {
-    const {active_value, examine_status, imgs, mobile, name, remarks, user_group,upgrade_role ,grade} = this.state
+    const {active_value, examine_status, imgs, mobile, name, remarks, user_group,upgrade_role ,grade,level} = this.state
     return (
       <div className={styles.auditPage}>
         <Breadcrumb>
@@ -87,7 +88,7 @@ export default class AuditDetails extends Component {
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>当前等级：</div>
-            <div className={styles.layout_main}>{grade == 5 ? '注册会员' : grade == 6 ? '超级创客' : grade == 7 ? '普通创客' : grade == 8 ? '合伙人' : null}</div>
+            <div className={styles.layout_main}>{level == 5 ? '注册会员' : level == 6 ? '超级创客' : level == 7 ? '普通创客' : level == 8 ? '合伙人' : null}</div>
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>社群等级：</div>
