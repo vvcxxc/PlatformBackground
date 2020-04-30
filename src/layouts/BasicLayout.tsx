@@ -167,7 +167,18 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
           component: './memberManagement/visitorMember/memberList'
         }
       ]
-    }
+    },
+    {
+      path: '/communityManagement',
+      name: '社群管理',
+      children: [
+        {
+          path: '/communityManagement/community-list',
+          name: '社群列表',
+          component: './communityManagement/community-list'
+        }
+      ]
+    },
   ];
   useEffect(() => {
     // if (dispatch) {
