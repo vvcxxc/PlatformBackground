@@ -313,6 +313,22 @@ export default {
               ]
             },
             {
+              path: '/giftManagement',
+              name: 'giftManagement',
+              routes: [
+                {
+                  path: '/giftManagement/add-gift',
+                  name: 'add-gift',
+                  component: './giftManagement/add-gift',
+                },
+                {
+                  path: '/giftManagement/gift-details',
+                  name: 'gift-details',
+                  component: './giftManagement/gift-details',
+                },
+              ]
+            },
+            {
               path: '/admin',
               name: 'admin',
               icon: 'crown',
