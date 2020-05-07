@@ -326,6 +326,11 @@ export default {
                   name: 'gift-details',
                   component: './giftManagement/gift-details',
                 },
+                {
+                  path: '/giftManagement/gift-list',
+                  name: 'gift-list',
+                  component: './giftManagement/gift-list',
+                },
               ]
             },
             {

@@ -179,6 +179,17 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         }
       ]
     },
+    {
+      path: '/giftManagement',
+      name: '礼品管理',
+      children: [
+        {
+          path: '/giftManagement/gift-list',
+          name: '礼品列表',
+          component: './giftManagement/gift-list'
+        }
+      ]
+    },
   ];
   useEffect(() => {
     // if (dispatch) {
