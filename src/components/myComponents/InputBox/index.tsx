@@ -6,8 +6,9 @@ interface Props {
   value: any;
   onChange: (value: any) => any;
   placeholder?: string;
+  suffix?: any; // 单位
 }
-function InputBox ({label, value, onChange, placeholder}: Props ){
+function InputBox ({label, value, onChange, placeholder, suffix}: Props ){
   const inputChange = ( e: any ) =>{
     onChange(e.target.value)
   }
@@ -21,6 +22,7 @@ function InputBox ({label, value, onChange, placeholder}: Props ){
         // size='small'
         onChange={inputChange}
         placeholder={placeholder}
+        suffix={suffix}
       />
     </div>
   )
