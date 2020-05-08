@@ -137,9 +137,9 @@ export default class ruleBox extends Component<Props> {
 
   addRuleChange = ({ target: { value } }) => {
     console.log(value.length)
-    if(value.length){
+    // if(value.length){
       this.setState({ value });
-    }
+    // }
   }
 
   render () {
