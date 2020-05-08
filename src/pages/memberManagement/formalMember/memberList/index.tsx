@@ -163,7 +163,7 @@ export default Form.create()(
                             <span>
                                 <a onClick={() => router.push(`/memberManagement/formalMember/memberDetail?id=${record.id}`)}>查看信息</a>
                                 <Divider type="vertical" />
-                                <a>编辑信息</a>
+                                {/* <a onClick={() => router.push(`/memberManagement/formalMember/memberEdit?id=${record.id}`)}>编辑信息</a> */}
                             </span>
                         )
                     },

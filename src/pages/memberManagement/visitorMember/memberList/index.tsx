@@ -3,6 +3,7 @@ import { Row, Col, Form, Input, Button, Select, Table, } from 'antd'
 import { connect } from "dva";
 import styles from './index.less';
 import request from '@/utils/request';
+import { router } from 'umi';
 import moment from 'moment';
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -160,7 +161,7 @@ export default Form.create()(
                         key: 'operation',
                         render: (text: any, record: any) => (
                             <span>
-                                <a>编辑信息</a>
+                                <a onClick={() => router.push(`/memberManagement/visitorMember/memberEdit?id=${record.id}`)}>编辑信息</a>
                             </span>
                         )
                     },

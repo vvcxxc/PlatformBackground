@@ -1,22 +1,59 @@
 import React, { Component } from 'react';
-import { Upload, Icon, message } from 'antd';
+import { Upload, Icon, message, Input, Select, DatePicker, Radio, Cascader, Button } from 'antd';
 import styles from './index.less';
 import request from '@/utils/request';
+import areaOpts from './dataCity';
+import moment from 'moment';
+interface Props {
+    location: any
+}
 
 
-export default class MemberDetail extends Component {
+const { Option } = Select;
 
-    componentDidMount() {
-        this.getOSSData();
-        // console.log(this.props);
-    }
+export default class MemberEdit extends Component<Props> {
 
     state = {
         imageUrl: '',
         loading: false,
         oss_data: {}, // oss参数
-        cover_image: ""
+        cover_image: "",
+
+
+        userName: "",
+        sex: 0,  // 0 女 1 男
+        byear: 0,
+        bmonth: 0,
+        bday: 0,
+        countStatus: 0,   //1 - 正常 0 - 冻结
+        data: {}
     }
+
+    componentDidMount() {
+        this.getOSSData();
+        // console.log(this.props);
+
+        let id = this.props.location.query.id;
+        request(`/api/v1/users/edit/${id}`, {
+            method: "GET"
+        }).then((res: any) => {
+            if (res.status_code == 200) {
+                this.setState({
+                    imageUrl: res.data.avatar,
+                    cover_image: res.data.avatar,
+                    userName: res.data.user_name,
+                    data: res.data,
+                    sex: res.data.sex,
+                    byear: res.data.byear,
+                    bmonth: res.data.bmonth,
+                    bday: res.data.bday,
+                    countStatus: res.data.is_effect
+                })
+            }
+        })
+    }
+
+
 
 
     // 将图片转为base64
@@ -98,8 +135,34 @@ export default class MemberDetail extends Component {
         });
     };
 
+    handleChangeUserName = (e: any) => {
+        this.setState({
+            userName: e.target.value
+        })
+    }
+
+    handleChangeSex = (e: any) => {
+        this.setState({
+            sex: e
+        })
+    }
+
+    handleChangeBirthday = (date: any, dateString: any) => {
+        console.log(moment(date).toObject())
+    }
+
+    handleChangeArea = (v, k) => {
+        console.log(v, k)
+    }
+
+    handleChangeStatus = (e: any) => {
+        this.setState({
+            countStatus: e.target.value
+        })
+    }
+
     render() {
-        const { imageUrl, oss_data } = this.state;
+        const { imageUrl, oss_data, userName, sex, countStatus } = this.state;
         const uploadButton = (
             <div>
                 <Icon type={this.state.loading ? 'loading' : 'plus'} />
@@ -115,9 +178,10 @@ export default class MemberDetail extends Component {
             beforeUpload: this.beforeUpload,
         };
 
+
         return (
             <div className={styles.member_detail}>
-                <div className={styles.header}>查看活动奖池</div>
+                <div className={styles.header}>查看会员信息</div>
                 <div className={styles.main}>
                     <div className={styles.title}>会员基本信息</div>
                     <div className={styles.item_layout}>
@@ -143,46 +207,54 @@ export default class MemberDetail extends Component {
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>会员昵称</div>
-                        <div>实物奖品</div>
-                    </div>
-                    <div className={styles.item_layout}>
-                        <div className={styles.item_title}>手机号码</div>
-                        <div>232</div>
+                        <div>
+                            <Input placeholder="请输入会员昵称" value={userName} onChange={this.handleChangeUserName} />
+                        </div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>性别</div>
-                        <div>232</div>
+                        <div>
+                            <Select value={sex} style={{ width: 120 }} onChange={this.handleChangeSex}>
+                                <Option value={1}>男</Option>
+                                <Option value={0}>女</Option>
+                            </Select>
+
+                        </div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>生日</div>
-                        <div>232</div>
+                        <div>
+                            <DatePicker onChange={this.handleChangeBirthday} />
+                        </div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>所属地区</div>
-                        <div>232</div>
+                        <div>
+                            <Cascader
+                                // defaultValue={['zhejiang', 'hangzhou', 'xihu']}
+                                options={areaOpts}
+                                onChange={this.handleChangeArea}
+                                style={{ width: '300px' }}
+                            />
+                        </div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>账号状态</div>
-                        <div>232</div>
+                        <div>
+                            <Radio.Group value={countStatus} onChange={this.handleChangeStatus}>
+                                <Radio value={1}>正常</Radio>
+                                <Radio value={0}>冻结</Radio>
+                            </Radio.Group>
+                        </div>
                     </div>
-                </div>
 
-                <div className={styles.main}>
-                    <div className={styles.title}>会员基本信息</div>
-                    <div className={styles.item_layout}>
-                        <div className={styles.item_title}>微信公众号open-id</div>
-                        <div>1</div>
-                    </div>
-                    <div className={styles.item_layout}>
-                        <div className={styles.item_title}>微信小城open-id</div>
-                        <div>实物奖品</div>
-                    </div>
-                    <div className={styles.item_layout}>
-                        <div className={styles.item_title}>支付宝user-id</div>
-                        <div>232</div>
-                    </div>
+
                 </div>
-            </div>
+                <div style={{ marginTop: 30 }}>
+                    <Button type="danger" style={{ width: "100px", marginRight: "80px" }} >返回列表页</Button>
+                    <Button type="danger" style={{ width: "100px" }} >提交修改</Button>
+                </div>
+            </div >
         )
     }
 }

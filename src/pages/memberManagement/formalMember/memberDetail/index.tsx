@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { Upload, Icon, message, Button } from 'antd';
+import { Upload, Icon, message, Button, Modal, Input } from 'antd';
 import styles from './index.less';
 import request from '@/utils/request';
 import { router } from 'umi';
+
+const { confirm } = Modal;
+const { TextArea } = Input;
 
 interface Props {
     location: any
@@ -56,7 +59,50 @@ export default class MemberDetail extends Component<Props> {
 
 
 
+    handleShowID = (title: any, idString: any) => {
+        // console.log(idString);
+        // confirm({
+        //     title,
+        //     content: '检测到你还有修改信息未提交，是否不做保存继续退出。',
+        //     okText: '确认退出',
+        //     okType: 'danger',
+        //     cancelText: '取消',
+        //     onOk() {
 
+        //     },
+        //     onCancel() {
+
+        //     },
+        // });
+
+        if (idString) {
+            confirm({
+                title,
+                content: <TextArea rows={4} value={idString} readOnly id="linkUrl" />,
+                okText: '复制并关闭',
+                okType: 'danger',
+                cancelText: '关闭',
+                onOk() {
+                    let ele = document.getElementById('linkUrl');
+                    ele.select();
+                    document.execCommand("copy");
+                    message.success('复制成功');
+                },
+                onCancel() { },
+            });
+        } else {
+            Modal.info({
+                title,
+                content: (
+                    <div>
+                        <p>暂无绑定记录</p>
+                    </div>
+                ),
+                okText: "关闭",
+                onOk() { },
+            });
+        }
+    }
 
 
 
@@ -110,16 +156,16 @@ export default class MemberDetail extends Component<Props> {
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>性别</div>
-                        <div>{sex == 0 ? "女" : "男"}</div>
+                        <div>{sex == 0 ? "女" : sex == -1 ? "未填写" : "男"}</div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>生日</div>
                         <div>{byear + "/" + bmonth + "/" + bday}</div>
                     </div>
-                    <div className={styles.item_layout}>
+                    {/* <div className={styles.item_layout}>
                         <div className={styles.item_title}>所属地区</div>
                         <div>{province_id} {city_id} {address_detail}</div>
-                    </div>
+                    </div> */}
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>账号状态</div>
                         <div>{is_effect == 0 ? "冻结" : "正常"}</div>
@@ -131,24 +177,24 @@ export default class MemberDetail extends Component<Props> {
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>微信公众号open-id</div>
                         <div>
-                            <a >{wx_openid == "" ? "未绑定" : "已绑定"}</a>
+                            <a onClick={this.handleShowID.bind(this, "微信公众号open-id", wx_openid)}>{wx_openid == "" ? "未绑定" : "已绑定"}</a>
                         </div>
                     </div>
                     <div className={styles.item_layout}>
-                        <div className={styles.item_title}>微信小城open-id</div>
+                        <div className={styles.item_title}>微信小程序open-id</div>
                         <div>
-                            <a >{xcx_openid == "" ? "未绑定" : "已绑定"}</a>
+                            <a onClick={this.handleShowID.bind(this, "微信小程序open-id", xcx_openid)}>{xcx_openid == "" ? "未绑定" : "已绑定"}</a>
                         </div>
                     </div>
                     <div className={styles.item_layout}>
                         <div className={styles.item_title}>支付宝user-id</div>
                         <div>
-                            <a >{ali_user_id == "" ? "未绑定" : "已绑定"}</a>
+                            <a onClick={this.handleShowID.bind(this, "支付宝user-id", ali_user_id)}>{ali_user_id == "" ? "未绑定" : "已绑定"}</a>
                         </div>
                     </div>
                 </div>
 
-                <div style={{ marginTop: 10 }}>
+                <div style={{ marginTop: 30 }}>
                     <Button type="danger" style={{ width: "100px" }} onClick={() => router.goBack()}>关闭</Button>
                 </div>
             </div>

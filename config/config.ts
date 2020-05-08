@@ -280,6 +280,11 @@ export default {
                       path: '/memberManagement/formalMember/memberDetail',
                       name: 'memberDetail',
                       component: './memberManagement/formalMember/memberDetail'
+                    },
+                    {
+                      path: '/memberManagement/formalMember/memberEdit',
+                      name: 'memberEdit',
+                      component: './memberManagement/formalMember/memberEdit'
                     }
                   ]
                 },
@@ -291,6 +296,11 @@ export default {
                       path: '/memberManagement/visitorMember/memberList',
                       name: 'memberList',
                       component: './memberManagement/visitorMember/memberList'
+                    },
+                    {
+                      path: '/memberManagement/visitorMember/memberEdit',
+                      name: 'memberEdit',
+                      component: './memberManagement/visitorMember/memberEdit'
                     }
                   ]
                 }
