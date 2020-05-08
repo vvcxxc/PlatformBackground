@@ -96,7 +96,7 @@ export default class GiftDetails extends Component {
   }
 
   render() {
-    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type, total_repertory_num, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type } = this.state;
+    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type, total_repertory_num, gift_original_money, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type } = this.state;
     const columns = [
       {
         title: 'id',
@@ -148,7 +148,7 @@ export default class GiftDetails extends Component {
             <div className={styles.block}>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>礼品类型：</div>
-                <div className={styles.item_main}>{gift_type == 1 ? '现金券' : gift_type == 2 ? '商品券' : gift_type == 3 ? '实物券' : null}</div>
+                <div className={styles.item_main}>{gift_type == 1 ? '现金券' : gift_type == 2 ? '商品券' : gift_type == 3 ? '实物券' : ''}</div>
               </div>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>礼品价格：</div>
@@ -156,7 +156,7 @@ export default class GiftDetails extends Component {
               </div>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>配送方式：</div>
-                <div className={styles.item_main}>{delivery_type == 1 ? '快递' : null}</div>
+                <div className={styles.item_main}>{delivery_type == 1 ? '快递' : ''}</div>
               </div>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>礼品图片：</div>
@@ -193,7 +193,7 @@ export default class GiftDetails extends Component {
             <div className={styles.block}>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>展示价格：</div>
-                <div className={styles.item_main}>{gift_type == 1 ? '现金券' : gift_type == 2 ? '商品券' : gift_type == 3 ? '实物券' : null}</div>
+                <div className={styles.item_main}>{gift_original_money}元</div>
               </div>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>发放方式：</div>
