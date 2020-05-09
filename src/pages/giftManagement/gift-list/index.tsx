@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Input, Button, Select, Table, Divider, } from 'antd'
+import { Row, Col, Form, Input, Button, Select, Table, Divider, Modal, InputNumber, message } from 'antd'
 import request from '@/utils/request';
 import { router } from 'umi';
 import { connect } from "dva";
@@ -18,7 +18,10 @@ export default Form.create()(
             state = {
                 total: 0,
                 loading: false,
-                dataList: []
+                dataList: [],
+                visible: false,
+                gift_id: 0,
+                add_repertory_num: 0
             }
 
 
@@ -62,6 +65,37 @@ export default Form.create()(
                 this.getListData(currentPage, currentPageSize);
             };
 
+            onChangeNumber = (e: any) => {
+                this.setState({
+                    add_repertory_num: e
+                })
+            }
+
+            handleOk = () => {
+                request('/api/v1/gift/updateGiftRepertoryNum', {
+                    method: "PUT",
+                    data: {
+                        gift_id: this.state.gift_id,
+                        add_repertory_num: this.state.add_repertory_num
+                    }
+                }).then(async (res: any) => {
+                    if (res.status_code == 200) {
+                        message.success(res.message);
+                        await this.setState({
+                            visible: false
+                        })
+                        const {
+                            currentPage,
+                            currentPageSize
+                        } = this.props.giftList;
+
+                        this.getListData(currentPage, currentPageSize);
+                    } else {
+                        message.error(res.message)
+                    }
+                })
+            }
+
             render() {
                 const columns = [
                     {
@@ -104,11 +138,11 @@ export default Form.create()(
                         key: 'operation',
                         render: (text: any, record: any) => (
                             <span>
-                                <a>查看详情</a>
+                                <a onClick={() => router.push({ pathname: '/giftManagement/gift-details', query: { id: record.id } })}>查看详情</a>
                                 <Divider type="vertical" />
-                                <a>增加库存</a>
-                                <Divider type="vertical" />
-                                <a>编辑</a>
+                                <a onClick={() => this.setState({ visible: true, gift_id: record.id })}>增加库存</a>
+                                {/* <Divider type="vertical" /> */}
+                                {/* <a>编辑</a> */}
                             </span>
                         )
                     },
@@ -117,6 +151,15 @@ export default Form.create()(
                 const { currentPage, currentPageSize } = this.props.giftList;
                 return (
                     <div>
+                        <Button
+                            type="primary"
+                            onClick={() => {
+                                router.push('/giftManagement/add-gift')
+                            }}
+                            style={{ marginBottom: "20px" }}
+                        >
+                            添加礼品
+                        </Button>
                         <Table
                             columns={columns}
                             dataSource={dataList}
@@ -133,6 +176,16 @@ export default Form.create()(
                                 },
                             }}
                         />
+                        <Modal
+                            title="请输入添加库存数"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={() => { this.setState({ visible: false }) }}
+                        >
+                            <InputNumber min={0} defaultValue={0}
+                                onChange={this.onChangeNumber}
+                            />
+                        </Modal>
                     </div>
                 )
             }
