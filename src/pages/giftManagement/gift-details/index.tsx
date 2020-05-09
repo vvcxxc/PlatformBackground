@@ -211,7 +211,7 @@ export default class GiftDetails extends Component {
                 <div className={styles.item_label}>多图详情：</div>
                 <div className={styles.item_main}>
                   <div className={styles.item_main_phone}>
-                    <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
+                  <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
                   </div>
                 </div>
               </div>
