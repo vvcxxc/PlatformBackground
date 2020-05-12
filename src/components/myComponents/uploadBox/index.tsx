@@ -39,6 +39,8 @@ function UploadBox(props: Props) {
         status: 'done',
         url: 'http://tmwl.oss-cn-shenzhen.aliyuncs.com/' + props.imgUrl,
       }])
+    }else {
+      setFile([])
     }
   },[props.imgUrl])
 
