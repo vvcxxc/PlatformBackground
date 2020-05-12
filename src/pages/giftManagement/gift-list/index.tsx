@@ -82,7 +82,8 @@ export default Form.create()(
                     if (res.status_code == 200) {
                         message.success(res.message);
                         await this.setState({
-                            visible: false
+                            visible: false,
+                            add_repertory_num: 0
                         })
                         const {
                             currentPage,
@@ -147,7 +148,7 @@ export default Form.create()(
                         )
                     },
                 ]
-                const { total, loading, dataList } = this.state;
+                const { total, loading, dataList, add_repertory_num } = this.state;
                 const { currentPage, currentPageSize } = this.props.giftList;
                 return (
                     <div>
@@ -180,9 +181,10 @@ export default Form.create()(
                             title="请输入添加库存数"
                             visible={this.state.visible}
                             onOk={this.handleOk}
-                            onCancel={() => { this.setState({ visible: false }) }}
+                            onCancel={() => { this.setState({ visible: false, add_repertory_num: 0 }) }}
                         >
-                            <InputNumber min={0} defaultValue={0}
+                            <InputNumber min={0}
+                                value={add_repertory_num}
                                 onChange={this.onChangeNumber}
                             />
                         </Modal>
