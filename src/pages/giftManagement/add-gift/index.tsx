@@ -9,6 +9,7 @@ import { addRealGift } from '../service'
 
 import 'braft-editor/dist/index.css'
 import styles from './index.less'
+import { router } from 'umi'
 export default class AddGift extends Component {
   state = {
     gift_name: '',
@@ -99,6 +100,7 @@ export default class AddGift extends Component {
       console.log(res)
       const {status_code, message} = res
       if(status_code == 201){
+        router.goBack()
         notification.success({message})
       }else {
         notification.error({message})

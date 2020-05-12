@@ -80,6 +80,19 @@ export default class ruleBox extends Component<Props> {
       row: DragableBodyRow,
     },
   };
+  componentWillReceiveProps(next){
+    if(next.value != this.props.value){
+      let rule = []
+      for (let i in next.value){
+        let a = {
+          name: next.value[i],
+          index: i
+        }
+        rule.push(a)
+      }
+      this.setState({rule})
+    }
+  }
 
 
    // 拖拽测试
