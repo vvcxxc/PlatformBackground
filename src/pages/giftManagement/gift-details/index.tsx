@@ -215,7 +215,7 @@ export default class GiftDetails extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.layout_box}>
+          {/* <div className={styles.layout_box}>
             <div className={styles.block}>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>多图详情：</div>
@@ -226,7 +226,7 @@ export default class GiftDetails extends Component {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className={styles.layout_box_column}>
             <div className={styles.block}>
               <div className={styles.block_item}>
