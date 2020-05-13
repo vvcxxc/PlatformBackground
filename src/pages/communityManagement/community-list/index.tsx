@@ -136,6 +136,12 @@ export default Form.create()(
             width: 100
           },
           {
+            title: '升级后角色',
+            dataIndex: 'upgrade_role',
+            key: 'upgrade_role',
+            width: 100
+          },
+          {
             title: '用户注册时间',
             dataIndex: 'user_add_at',
             key: 'user_add_at',

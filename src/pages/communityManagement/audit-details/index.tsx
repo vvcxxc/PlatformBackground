@@ -21,7 +21,9 @@ export default class AuditDetails extends Component {
     grade: '',
     invitation_code: '',
     modal_image: '',
-    level: 0
+    level: 0,
+    avatar: '',
+    invitation_user_name: ''
   }
 
   componentDidMount() {
@@ -72,7 +74,7 @@ export default class AuditDetails extends Component {
   }
 
   render() {
-    const {active_value, examine_status, imgs, mobile, name, remarks, user_group,upgrade_role ,grade,level} = this.state
+    const {active_value, examine_status, avatar, imgs, mobile, name, remarks, user_group,invitation_user_name ,grade,level} = this.state
     return (
       <div className={styles.auditPage}>
         <Breadcrumb>
@@ -89,6 +91,16 @@ export default class AuditDetails extends Component {
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>手机账号：</div>
             <div className={styles.layout_main}>{mobile}</div>
+          </div>
+          <div className={styles.layout_box}>
+            <div className={styles.layout_label}>邀请人名称：</div>
+            <div className={styles.layout_main}>{invitation_user_name}</div>
+          </div>
+          <div className={styles.layout_box}>
+            <div className={styles.layout_label}>头像：</div>
+            <div className={styles.layout_main}>
+              <img src={avatar} alt=""/>
+            </div>
           </div>
           <div className={styles.layout_box}>
             <div className={styles.layout_label}>当前等级：</div>
