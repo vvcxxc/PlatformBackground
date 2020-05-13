@@ -107,7 +107,7 @@ export default class GiftDetails extends Component {
         title: '商家名称',
         dataIndex: 'supplier',
         key: 'supplier',
-        render: (text: any, record: any) => (<text>{record.supplier.name}</text>)//测试，不一定可以
+        render: (text: any, record: any) => (<span>{record.supplier.name}</span>)//测试，不一定可以
       },
       {
         title: '活动名称',
