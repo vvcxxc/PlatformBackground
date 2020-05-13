@@ -130,6 +130,11 @@ export default Form.create()(
                         key: 'total_give_num',
                     },
                     {
+                        title: "剩余数量",
+                        dataIndex: 'total_surplus_num',
+                        key: 'total_surplus_num',
+                    },
+                    {
                         title: "创建时间",
                         dataIndex: 'created_at',
                         key: 'created_at',
