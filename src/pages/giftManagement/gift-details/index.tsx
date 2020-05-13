@@ -96,7 +96,7 @@ export default class GiftDetails extends Component {
   }
 
   render() {
-    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type,gift_original_money, total_repertory_num, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type, each_num } = this.state;
+    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type, gift_original_money, total_repertory_num, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type, each_num } = this.state;
     const columns = [
       {
         title: 'id',
@@ -121,14 +121,24 @@ export default class GiftDetails extends Component {
         key: 'repertory_num',
       },
       {
+        title: '剩余库存',
+        dataIndex: 'surplus_num',
+        key: 'surplus_num',
+      },
+      {
+        title: '已派发数量',
+        dataIndex: 'give_num',
+        key: 'give_num',
+      },
+      {
+        title: '已核销数量',
+        dataIndex: 'cancel_num',
+        key: 'cancel_num',
+      },
+      {
         title: '领用时间',
         dataIndex: 'created_at',
         key: 'created_at',
-      },
-      {
-        title: '已使用数量',
-        dataIndex: 'cancel_num',
-        key: 'cancel_num',
       },
       {
         title: '操作',
@@ -211,7 +221,7 @@ export default class GiftDetails extends Component {
                 <div className={styles.item_label}>多图详情：</div>
                 <div className={styles.item_main}>
                   <div className={styles.item_main_phone}>
-                  <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
+                    <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
                   </div>
                 </div>
               </div>
