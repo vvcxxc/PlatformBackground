@@ -202,6 +202,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     //     type: 'user/fetchCurrent',
     //   });
     // }
+
+
     setMenuData(data);
   }, []);
   /**
