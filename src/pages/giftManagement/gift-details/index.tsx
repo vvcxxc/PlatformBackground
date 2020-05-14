@@ -112,6 +112,34 @@ export default class GiftDetails extends Component {
         render: (text: any, record: any) => (<span>{record.supplier.name}</span>)//测试，不一定可以
       },
       {
+        title: '绑定类型',
+        dataIndex: 'binding_point_type',
+        key: 'binding_point_type',
+        render: (text: any, record: any) => (<span>{record.binding_point_type == 1 ? '拼团活动' : (record.binding_point_type == 2 ? '增值活动' : (record.binding_point_type == 3 ? '优惠券' : ''))}</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text: any, record: any) => (<span>{record.status == 1 ? '正常' : (record.status == 2 ? '关闭' : '')}</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
+        title: '赠送的阶段',
+        dataIndex: 'give_stage',
+        key: 'give_stage',
+        render: (text: any, record: any) => (<span>{
+          (record.binding_point_type == 1 && record.give_stage == 1) ? '开团' : (
+            (record.binding_point_type == 1 && record.give_stage == 2) ? '参团' : (
+              (record.binding_point_type == 1 && record.give_stage == 3) ? '成团' : (
+                ((record.binding_point_type == 1 && record.give_stage == 4) || (record.binding_point_type == 2 && record.give_stage == 3) || (record.binding_point_type == 3 && record.give_stage == 2)) ? '成交' : (
+                  ((record.binding_point_type == 2 && record.give_stage == 1) || (record.binding_point_type == 3 && record.give_stage == 1)) ? '购买' : (
+                    (record.binding_point_type == 2 && record.give_stage == 2) ? '助力' : ''
+                  )
+                )
+              )))
+        }</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
         title: '活动名称',
         dataIndex: 'binding',
         key: 'binding',
