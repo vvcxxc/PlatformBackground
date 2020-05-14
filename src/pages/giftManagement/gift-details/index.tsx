@@ -53,7 +53,8 @@ export default class GiftDetails extends Component {
     this.setState({ confirmLoading: true });
     changeGiftNum(this.props.location.query.id, this.state.add_repertory_num).then(res => {
       if (res.status_code == 200) {
-        this.setState({ dataList: res.data, loading: false, total: res.pagination.total, visible: false, confirmLoading: false })
+        let add = Number(this.state.total_surplus_num) + Number(this.state.add_repertory_num)
+        this.setState({ dataList: res.data, loading: false, total: res.pagination.total, visible: false, confirmLoading: false, total_surplus_num: add })
       } else {
         this.setState({ visible: false, confirmLoading: false })
         notification.open({
