@@ -125,9 +125,14 @@ export default Form.create()(
                         key: 'total_repertory_num',
                     },
                     {
-                        title: "已使用数量",
+                        title: "总派发数量",
                         dataIndex: 'total_give_num',
                         key: 'total_give_num',
+                    },
+                    {
+                        title: "已使用数量",
+                        dataIndex: 'total_obtain_num',
+                        key: 'total_obtain_num',
                     },
                     {
                         title: "剩余数量",

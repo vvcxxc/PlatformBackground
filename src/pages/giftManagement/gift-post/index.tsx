@@ -274,8 +274,8 @@ export default Form.create()(
                     // },
                     {
                         title: "发货时间",
-                        dataIndex: 'created_at',
-                        key: 'created_at',
+                        dataIndex: 'delivery_time',
+                        key: 'delivery_time',
                     },
                     {
                         title: "快递单号",
