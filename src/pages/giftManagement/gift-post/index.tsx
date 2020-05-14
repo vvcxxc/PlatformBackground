@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Row, Col, Form, Input, Button, Select, Table, Divider, Modal, InputNumber, message } from 'antd'
+import { Row, Col, Form, Input, Button, Select, Table, Divider, Modal, InputNumber, message, Timeline } from 'antd'
 import request from '@/utils/request';
 import { router } from 'umi';
 import { connect } from "dva";
@@ -26,7 +26,8 @@ export default Form.create()(
                 company: [],
 
                 delivery_company_id: 0,  //物流公司id	
-                delivery_sn: "", // 物流单号	
+                delivery_sn: "", // 物流单号
+                companyMsg: [],
             }
 
             componentDidMount() {
@@ -148,6 +149,48 @@ export default Form.create()(
                 });
             }
 
+
+            handleCompanyDetail = async (id: any, companyOrder: any) => {
+                await request('/api/v1/gift/getWuLiu', {
+                    method: "GET",
+                    params: {
+                        delivery_sn: companyOrder
+                    }
+                }).then((res: any) => {
+                    if (res.status_code == 200) {
+                        if (res.data.status == true) {
+                            this.setState({
+                                companyMsg: res.data.data.list
+                            }, () => {
+                                confirm({
+                                    title: '物流详情',
+                                    content: (
+                                        <div style={{ marginTop: "50px" }}>
+                                            <Timeline>
+                                                {
+                                                    this.state.companyMsg.map((item: any) => (
+                                                        <Timeline.Item key={item.time}>{item.time} {item.status}</Timeline.Item>
+                                                    ))
+                                                }
+
+                                            </Timeline>
+                                        </div>
+                                    ),
+                                    okText: '确定',
+                                    okType: 'danger',
+                                    cancelText: '取消',
+                                });
+                            })
+
+                        }else {
+                            message.error("暂无物流信息")
+                        }
+                    }
+
+                })
+
+            }
+
             render() {
                 const columns = [
                     {
@@ -229,15 +272,15 @@ export default Form.create()(
                     //     dataIndex: 'total_surplus_num',
                     //     key: 'total_surplus_num',
                     // },
-                    // {
-                    //     title: "发货时间",
-                    //     dataIndex: 'created_at',
-                    //     key: 'created_at',
-                    // },
+                    {
+                        title: "发货时间",
+                        dataIndex: 'created_at',
+                        key: 'created_at',
+                    },
                     {
                         title: "快递单号",
-                        dataIndex: 'delivery_company_sn',
-                        key: 'delivery_company_sn',
+                        dataIndex: 'delivery_sn',
+                        key: 'delivery_sn',
                     },
                     {
                         title: "快递公司",
@@ -260,7 +303,10 @@ export default Form.create()(
                                 {
                                     record.delivery_status == 0 ? (<a onClick={this.handleOrderNum.bind(this, record.id)}>填写单号</a>) : ""
                                 }
-                                <Divider type="vertical" />
+                                {/* <Divider type="vertical" /> */}
+                                {
+                                    record.delivery_status != 0 ? (<a onClick={this.handleCompanyDetail.bind(this, record.id, record.delivery_sn)}>物流详情</a>) : ""
+                                }
                             </span>
                         )
                     },
