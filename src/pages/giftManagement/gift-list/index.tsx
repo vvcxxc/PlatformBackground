@@ -125,14 +125,35 @@ export default Form.create()(
                         key: 'total_repertory_num',
                     },
                     {
-                        title: "已使用数量",
+                        title: "总派发数量",
                         dataIndex: 'total_give_num',
                         key: 'total_give_num',
+                    },
+                    {
+                        title: "已使用数量",
+                        dataIndex: 'total_obtain_num',
+                        key: 'total_obtain_num',
                     },
                     {
                         title: "剩余数量",
                         dataIndex: 'total_surplus_num',
                         key: 'total_surplus_num',
+                    },
+                    {
+                        title: "状态",
+                        dataIndex: 'status',
+                        key: 'status',
+                        render: (text: any, record: any) => (
+                            <span>{record.status == 1 ? "正常" : record.status == 2 ? "关闭" : ""}</span>
+                        )
+                    },
+                    {
+                        title: "关闭方式",
+                        dataIndex: 'shut_type',
+                        key: 'shut_type',
+                        render: (text: any, record: any) => (
+                            <span>{record.shut_type == 1 ? "自动关闭" : record.status == 2 ? "手动关闭" : "未关闭"}</span>
+                        )
                     },
                     {
                         title: "创建时间",
