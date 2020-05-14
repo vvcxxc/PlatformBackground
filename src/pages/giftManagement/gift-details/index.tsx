@@ -161,10 +161,15 @@ export default class GiftDetails extends Component {
         key: 'give_num',
       },
       {
-        title: '已核销数量',
-        dataIndex: 'cancel_num',
-        key: 'cancel_num',
+        title: '已获得数量',
+        dataIndex: 'obtain_num',
+        key: 'obtain_num',
       },
+      // {
+      //   title: '已核销数量',
+      //   dataIndex: 'cancel_num',
+      //   key: 'cancel_num',
+      // },
       {
         title: '领用时间',
         dataIndex: 'created_at',
