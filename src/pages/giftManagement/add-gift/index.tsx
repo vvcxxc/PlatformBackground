@@ -177,7 +177,7 @@ export default class AddGift extends Component {
             </div>
           </div>
 
-          <div className={styles.layout}>
+          {/* <div className={styles.layout}>
             <div className={styles.label}>多图详情：</div>
             <div className={styles.edit_main}>
               <BraftEditor
@@ -187,7 +187,7 @@ export default class AddGift extends Component {
                 extendControls={extendControls}
               />
             </div>
-          </div>
+          </div> */}
           <InputBox label='礼品总数量' value={total_repertory_num} onChange={this.inputChange('total_repertory_num')} suffix='个' />
           <InputBox
             label='发放方式'
