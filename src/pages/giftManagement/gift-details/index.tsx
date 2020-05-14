@@ -53,7 +53,9 @@ export default class GiftDetails extends Component {
     this.setState({ confirmLoading: true });
     changeGiftNum(this.props.location.query.id, this.state.add_repertory_num).then(res => {
       if (res.status_code == 200) {
-        this.setState({ dataList: res.data, loading: false, total: res.pagination.total, visible: false, confirmLoading: false })
+        let add = Number(this.state.total_surplus_num) + Number(this.state.add_repertory_num);
+        console.log('add', add)
+        this.setState({ total_surplus_num: add, loading: false, visible: false, confirmLoading: false })
       } else {
         this.setState({ visible: false, confirmLoading: false })
         notification.open({
@@ -96,7 +98,7 @@ export default class GiftDetails extends Component {
   }
 
   render() {
-    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type,gift_original_money, total_repertory_num, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type, each_num } = this.state;
+    const { dataList, loading, total, currentPage, currentPageSize, gift_name, gift_type, delivery_type, gift_original_money, total_repertory_num, gift_image, gift_money, gift_detail, rule_description, use_description, total_surplus_num, delivery_pay_type, each_num } = this.state;
     const columns = [
       {
         title: 'id',
@@ -110,6 +112,34 @@ export default class GiftDetails extends Component {
         render: (text: any, record: any) => (<span>{record.supplier.name}</span>)//测试，不一定可以
       },
       {
+        title: '绑定类型',
+        dataIndex: 'binding_point_type',
+        key: 'binding_point_type',
+        render: (text: any, record: any) => (<span>{record.binding_point_type == 1 ? '拼团活动' : (record.binding_point_type == 2 ? '增值活动' : (record.binding_point_type == 3 ? '优惠券' : ''))}</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render: (text: any, record: any) => (<span>{record.status == 1 ? '正常' : (record.status == 2 ? '关闭' : '')}</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
+        title: '赠送的阶段',
+        dataIndex: 'give_stage',
+        key: 'give_stage',
+        render: (text: any, record: any) => (<span>{
+          (record.binding_point_type == 1 && record.give_stage == 1) ? '开团' : (
+            (record.binding_point_type == 1 && record.give_stage == 2) ? '参团' : (
+              (record.binding_point_type == 1 && record.give_stage == 3) ? '成团' : (
+                ((record.binding_point_type == 1 && record.give_stage == 4) || (record.binding_point_type == 2 && record.give_stage == 3) || (record.binding_point_type == 3 && record.give_stage == 2)) ? '成交' : (
+                  ((record.binding_point_type == 2 && record.give_stage == 1) || (record.binding_point_type == 3 && record.give_stage == 1)) ? '购买' : (
+                    (record.binding_point_type == 2 && record.give_stage == 2) ? '助力' : ''
+                  )
+                )
+              )))
+        }</span>)//1拼团活动2增值活动3优惠券
+      },
+      {
         title: '活动名称',
         dataIndex: 'binding',
         key: 'binding',
@@ -121,14 +151,29 @@ export default class GiftDetails extends Component {
         key: 'repertory_num',
       },
       {
+        title: '剩余库存',
+        dataIndex: 'surplus_num',
+        key: 'surplus_num',
+      },
+      {
+        title: '已派发数量',
+        dataIndex: 'give_num',
+        key: 'give_num',
+      },
+      {
+        title: '已获得数量',
+        dataIndex: 'obtain_num',
+        key: 'obtain_num',
+      },
+      // {
+      //   title: '已核销数量',
+      //   dataIndex: 'cancel_num',
+      //   key: 'cancel_num',
+      // },
+      {
         title: '领用时间',
         dataIndex: 'created_at',
         key: 'created_at',
-      },
-      {
-        title: '已使用数量',
-        dataIndex: 'cancel_num',
-        key: 'cancel_num',
       },
       {
         title: '操作',
@@ -205,18 +250,18 @@ export default class GiftDetails extends Component {
               </div>
             </div>
           </div>
-          <div className={styles.layout_box}>
+          {/* <div className={styles.layout_box}>
             <div className={styles.block}>
               <div className={styles.block_item}>
                 <div className={styles.item_label}>多图详情：</div>
                 <div className={styles.item_main}>
                   <div className={styles.item_main_phone}>
-                  <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
+                    <div dangerouslySetInnerHTML={{ __html: gift_detail }} />
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className={styles.layout_box_column}>
             <div className={styles.block}>
               <div className={styles.block_item}>
