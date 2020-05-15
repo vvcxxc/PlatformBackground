@@ -7,6 +7,7 @@ import styles from './index.less';
 
 const { confirm } = Modal;
 const { Option } = Select;
+const FormItem = Form.Item;
 
 interface Props {
     form: any;
@@ -33,15 +34,19 @@ export default Form.create()(
             componentDidMount() {
                 const {
                     currentPage,
-                    currentPageSize
+                    currentPageSize,
+                    receiverName,
+                    receiverPhone,
+                    storeName,
+                    sendGoodStatus
                 } = this.props.giftPost;
 
-                this.getListData(currentPage, currentPageSize);
+                this.getListData(currentPage, currentPageSize, receiverName, receiverPhone, storeName, sendGoodStatus);
 
                 this.getAllCompany();
             }
 
-            getListData = (currentPage: any, currentPageSize: any) => {
+            getListData = (currentPage: any, currentPageSize: any, receiverName: any, receiverPhone: any, storeName: any, sendGoodStatus: any) => {
                 this.setState({
                     loading: true
                 })
@@ -49,7 +54,11 @@ export default Form.create()(
                     method: 'GET',
                     params: {
                         page: currentPage,
-                        count: currentPageSize
+                        count: currentPageSize,
+                        user_name: receiverName,
+                        user_phone: receiverPhone,
+                        supplier_name: storeName,
+                        delivery_status: sendGoodStatus
                     }
                 }).then(res => {
                     this.setState({
@@ -93,7 +102,11 @@ export default Form.create()(
                     },
                 });
                 const { currentPage, currentPageSize } = this.props.giftPost;
-                this.getListData(currentPage, currentPageSize);
+                let receiverName = this.props.form.getFieldValue('receiverName');
+                let receiverPhone = this.props.form.getFieldValue('receiverPhone');
+                let storeName = this.props.form.getFieldValue('storeName');
+                let sendGoodStatus = this.props.form.getFieldValue('sendGoodStatus');
+                this.getListData(currentPage, currentPageSize, receiverName, receiverPhone, storeName, sendGoodStatus);
             };
 
             handleOrderNum = (id: any) => {
@@ -134,10 +147,14 @@ export default Form.create()(
                                 message.success(res.message);
                                 const {
                                     currentPage,
-                                    currentPageSize
+                                    currentPageSize,
+                                    receiverName,
+                                    receiverPhone,
+                                    storeName,
+                                    sendGoodStatus
                                 } = _this.props.giftPost;
 
-                                _this.getListData(currentPage, currentPageSize);
+                                _this.getListData(currentPage, currentPageSize, receiverName, receiverPhone, storeName, sendGoodStatus);
                             } else {
                                 message.error(res.message);
                             }
@@ -182,7 +199,7 @@ export default Form.create()(
                                 });
                             })
 
-                        }else {
+                        } else {
                             message.error("暂无物流信息")
                         }
                     }
@@ -190,6 +207,34 @@ export default Form.create()(
                 })
 
             }
+
+            onSearch = async (e: any) => {
+                e.preventDefault();
+                let receiverName = this.props.form.getFieldValue('receiverName');
+                let receiverPhone = this.props.form.getFieldValue('receiverPhone');
+                let storeName = this.props.form.getFieldValue('storeName');
+                let sendGoodStatus = this.props.form.getFieldValue('sendGoodStatus');
+                await this.props.dispatch({
+                    type: 'giftPost/setSearchState',
+                    payload: {
+                        receiverName,
+                        receiverPhone,
+                        storeName,
+                        sendGoodStatus,
+                    },
+                });
+
+                const { currentPage, currentPageSize } = this.props.giftPost;
+                this.getListData(currentPage, currentPageSize, receiverName, receiverPhone, storeName, sendGoodStatus);
+            }
+
+            handleFormReset = async () => {
+                const { form, dispatch } = this.props;
+                form.resetFields();
+                await dispatch({
+                    type: 'giftPost/resetFussySearch',
+                });
+            };
 
             render() {
                 const columns = [
@@ -312,9 +357,69 @@ export default Form.create()(
                     },
                 ]
                 const { total, loading, dataList } = this.state;
-                const { currentPage, currentPageSize } = this.props.giftPost;
+                const { receiverName, receiverPhone, storeName, sendGoodStatus, currentPage, currentPageSize } = this.props.giftPost;
+
+                const { getFieldDecorator } = this.props.form;
                 return (
                     <div>
+                        <Form onSubmit={this.onSearch.bind(this)} layout="inline" style={{ marginBottom: '20px' }}>
+                            <Row
+                                gutter={{
+                                    md: 8,
+                                    lg: 24,
+                                    xl: 48,
+                                }}
+                            >
+                                <Col md={5} sm={20}>
+                                    <FormItem label='收货人'>
+                                        {getFieldDecorator('receiverName', { initialValue: receiverName })(
+                                            <Input placeholder="请输入" />,
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col md={5} sm={20}>
+                                    <FormItem label='收货人手机号'>
+                                        {getFieldDecorator('receiverPhone', { initialValue: receiverPhone })(
+                                            <Input placeholder="请输入" />,
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col md={5} sm={20}>
+                                    <FormItem label='商家名称'>
+                                        {getFieldDecorator('storeName', { initialValue: storeName })(
+                                            <Input placeholder="请输入" />,
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col md={5} sm={20}>
+                                    <FormItem label='发货状态'>
+                                        {getFieldDecorator('sendGoodStatus', { initialValue: sendGoodStatus })(
+                                            <Select placeholder="全部状态" style={{
+                                                width: '174px'
+                                            }}>
+                                                <Option value={0}>待接单</Option>
+                                                <Option value={2}>配送中</Option>
+                                                <Option value={3}>配送成功</Option>
+                                                <Option value={4}>配送失败</Option>
+                                            </Select>
+                                        )}
+                                    </FormItem>
+                                </Col>
+                                <Col md={4} sm={26}>
+                                    <Button type="primary" htmlType="submit">
+                                        查询
+                                    </Button>
+                                    <Button
+                                        style={{
+                                            marginLeft: 8,
+                                        }}
+                                        onClick={this.handleFormReset}
+                                    >
+                                        重置
+                                    </Button>
+                                </Col>
+                            </Row>
+                        </Form>
                         <Table
                             columns={columns}
                             dataSource={dataList}
