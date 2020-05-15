@@ -175,12 +175,12 @@ export default class GiftDetails extends Component {
         dataIndex: 'created_at',
         key: 'created_at',
       },
-      {
-        title: '操作',
-        dataIndex: 'id',
-        key: 'id',
-        render: (text: any, record: any) => (<a onClick={this.showLog.bind(this, record.id)}>配送记录</a>)
-      },
+      // {
+      //   title: '操作',
+      //   dataIndex: 'id',
+      //   key: 'id',
+      //   render: (text: any, record: any) => (<a onClick={this.showLog.bind(this, record.id)}>配送记录</a>)
+      // },
     ];
     return (
       <div className={styles.details_page}>
